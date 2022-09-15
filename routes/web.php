@@ -31,7 +31,13 @@ Route::get('/carburants',function (){
 Route::get('/voiture',function (){
    return view('voiture');
 });
+Route::get('/addVoiture','App\Http\Controllers\HomeController@createVoitureForm');
+Route::post('/addVoiture','App\Http\Controllers\HomeController@VoitureForm');
+
 
 Auth::routes();
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('voiture');
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/voiture/{id}', [App\Http\Controllers\VoitureController::class, 'charge'])->name('voitureData');
+Route::get('/voiture/', [App\Http\Controllers\VoitureController::class, 'charge']);
+
