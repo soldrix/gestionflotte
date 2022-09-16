@@ -17,7 +17,7 @@
         </div>
     @endif
 
-    <form method="post" action="{{ action('App\Http\Controllers\HomeController@createVoitureForm') }}" enctype="multipart/form-data">
+    <div >
 
         @csrf
 
@@ -111,6 +111,6 @@
         </div>
 
         <input type="submit" name="send" value="Submit" class="btn btn-dark btn-block">
-    </form>
+    </div>
 </div>
 

@@ -2,6 +2,10 @@
 
 @section('content')
 <div class="container-fluid">
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-primary float-end" data-bs-toggle="modal" data-bs-target="#btnAddVoiture">
+        Launch demo modal
+    </button>
     <div class="container d-flex flex-wrap pt-5 justify-content-center"  >
         @foreach($voiture as $data)
         <div class="col-2 d-flex flex-column  p-2 rounded m-2" style="background: #e4e4e4" id="{{$data->id}}" >

@@ -55,7 +55,10 @@
         <div id="block_info_voiture" class="tab-content">
             <div id="table_entretiens" class="tab-pane fade active show" role="tabpanel">
 
-
+                <!-- Button trigger modal -->
+                <button type="button" class="btn btn-primary float-end" data-bs-toggle="modal" data-bs-target="#btnAddEntretiens">
+                    Ajouter Entretien
+                </button>
                 <table id="DataTable_entretiens" class="table table-striped dataTable">
                     <thead>
                     <tr>
@@ -81,6 +84,10 @@
 
             </div>
             <div id="table_reparations" class="tab-pane fade" role="tabpanel">
+                <!-- Button trigger modal -->
+                <button type="button" class="btn btn-primary float-end" data-bs-toggle="modal" data-bs-target="#btnAddReparations">
+                    Ajouter Reparation
+                </button>
                 <table id="DataTable_reparations" class="table table-striped dataTable">
                     <thead>
                     <tr>
@@ -105,6 +112,10 @@
                 </table>
             </div>
             <div id="table_assurances" class="tab-pane fade " role="tabpanel">
+                <!-- Button trigger modal -->
+                <button type="button" class="btn btn-primary float-end" data-bs-toggle="modal" data-bs-target="#btnAddAssurance">
+                    Ajouter assurance
+                </button>
                 <table id="DataTable_assurances" class="table table-striped dataTable">
                     <thead>
                     <tr>
@@ -127,6 +138,10 @@
                 </table>
             </div>
             <div id="table_carburants" class="tab-pane fade" role="tabpanel">
+                <!-- Button trigger modal -->
+                <button type="button" class="btn btn-primary float-end" data-bs-toggle="modal" data-bs-target="#btnAddCarburant">
+                    Ajouter Carburant
+                </button>
                 <table id="DataTable_carburants" class="table table-striped dataTable">
                     <thead>
                     <tr>

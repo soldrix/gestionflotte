@@ -75,7 +75,72 @@ class HomeController extends Controller
             "carburant" => $validation['carburant'],
             "puissance" => $validation['puissance'],
         ]);
-
-        return back()->with('success', 'Les données ont été enregistrées avec succès.');
+        $immatriculation= $validation['immatriculation'];
+        $idVoiture = DB::table('voiture')->select("id")->where('immatriculation',"'$immatriculation'");
+        foreach ($idVoiture as $datas){
+            $voitureID = $datas->id;
+        }
+        if (isset($request->nomAssu)){
+            $validation = $request->validate([
+                "nomAssu" => "required",
+                "debutAssu" => "required",
+                "finAssu" => "required",
+                "frais" => "required",
+            ]);
+            DB::table('assurance')->insert([
+                "nomAssu" => $validation['nomAssu'],
+                "id_voiture" => $voitureID,
+                "debutAssu" => $validation['debutAssu'],
+                "finAssu" => $validation['finAssu'],
+                "frais" => $validation['frais'],
+            ]);
+        }
+        if (isset($request->typeEnt)){
+            $validation = $request->validate([
+                "typeEnt" => "required",
+                "dateEnt" => "required",
+                "montantEnt" => "required",
+                "garageEnt" => "required",
+            ]);
+            $note = (isset($request->noteEnt)) ? $request->noteEnt : "";
+            DB::table('entretiens')->insert([
+                "typeEnt" => $validation['typeEnt'],
+                "id_voiture" => $voitureID,
+                "dateEnt" => $validation['dateEnt'],
+                "montantEnt" => $validation['montantEnt'],
+                "garageEnt" => $validation['garageEnt'],
+                "noteEnt" => $note,
+            ]);
+        }
+        if (isset($request->typeRep)){
+            $validation = $request->validate([
+                "typeRep" => "required",
+                "dateRep" => "required",
+                "montantRep" => "required",
+                "garageRep" => "required",
+            ]);
+            $note = (isset($request->noteRep)) ? $request->noteRep : "";
+            DB::table('entretiens')->insert([
+                "typeRep" => $validation['typeEnt'],
+                "id_voiture" => $voitureID,
+                "dateRep" => $validation['dateEnt'],
+                "montantRep" => $validation['montantEnt'],
+                "garageRep" => $validation['garageEnt'],
+                "noteRep" => $note,
+            ]);
+        }
+        if (isset($request->montantCons)){
+            $validation = $request->validate([
+                "montantCons" => "required",
+                "litre" => "required",
+            ]);
+            DB::table('entretiens')->insert([
+                "montantCons" => $validation['montantCons'],
+                "id_voiture" => $voitureID,
+                "litre" => $validation['litre'],
+            ]);
+        }
+        $voiture = DB::select('select * from voiture');
+        return json_encode($voiture);
   }
 }
