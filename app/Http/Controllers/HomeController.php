@@ -75,26 +75,8 @@ class HomeController extends Controller
             "carburant" => $validation['carburant'],
             "puissance" => $validation['puissance'],
         ]);
-        $immatriculation= $validation['immatriculation'];
-        $idVoiture = DB::table('voiture')->select("id")->where('immatriculation',"'$immatriculation'");
-        foreach ($idVoiture as $datas){
-            $voitureID = $datas->id;
-        }
-        if (isset($request->nomAssu)){
-            $validation = $request->validate([
-                "nomAssu" => "required",
-                "debutAssu" => "required",
-                "finAssu" => "required",
-                "frais" => "required",
-            ]);
-            DB::table('assurance')->insert([
-                "nomAssu" => $validation['nomAssu'],
-                "id_voiture" => $voitureID,
-                "debutAssu" => $validation['debutAssu'],
-                "finAssu" => $validation['finAssu'],
-                "frais" => $validation['frais'],
-            ]);
-        }
+
+
         if (isset($request->typeEnt)){
             $validation = $request->validate([
                 "typeEnt" => "required",

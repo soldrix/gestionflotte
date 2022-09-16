@@ -34,6 +34,7 @@ Route::get('/voiture',function (){
 Route::get('/addVoiture','App\Http\Controllers\HomeController@createVoitureForm');
 Route::post('/addVoiture','App\Http\Controllers\HomeController@VoitureForm');
 
+Route::post('/Assurance', [App\Http\Controllers\AssuranceController::class, 'createAssurance'])->name('createAssurance.post');
 
 Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('voiture');

@@ -64,7 +64,9 @@ function modal(name)
 
                     <input type="date" name="finAssu" placeholder="Fin assurance">
 
-                    <input type="text" name="frais" placeholder="Frais assurance">`
+                    <input type="text" name="frais" placeholder="Frais assurance">
+
+                    <input type="text" name="immatriculation" placeholder="Immatriculation">`
         : (name === "entretiens") ?
                 `<h2>Entretiens</h2>
 
@@ -97,18 +99,41 @@ function modal(name)
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="VoitureModalLabel">Modal title</h5>
+                    <h5 class="modal-title" id="VoitureModalLabel">Modal ${name}</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     ${htmlModal}
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                    <button type="button" class="btn btn-primary" id="btnModal">Creer</button>
                 </div>
             </div>
         </div>
     </div>
     `)
+    $('#btnModal').on('click',function () {
+        $.ajaxSetup({
+            headers: {
+
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+
+            }
+        });
+
+        let array = {
+            "immatriculation" : $('immatriculation').val(),
+            "marque" : $('marque').val(),
+        }
+        $.ajax({
+            url:"{{ route('createAssurance.post') }}",
+            type:"POST",
+            data:{},
+            dataType:"json",
+            success:function (datas) {
+                console.log(datas)
+            }
+        })
+    })
 }
