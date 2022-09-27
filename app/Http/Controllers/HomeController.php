@@ -77,23 +77,7 @@ class HomeController extends Controller
         ]);
 
 
-        if (isset($request->typeEnt)){
-            $validation = $request->validate([
-                "typeEnt" => "required",
-                "dateEnt" => "required",
-                "montantEnt" => "required",
-                "garageEnt" => "required",
-            ]);
-            $note = (isset($request->noteEnt)) ? $request->noteEnt : "";
-            DB::table('entretiens')->insert([
-                "typeEnt" => $validation['typeEnt'],
-                "id_voiture" => $voitureID,
-                "dateEnt" => $validation['dateEnt'],
-                "montantEnt" => $validation['montantEnt'],
-                "garageEnt" => $validation['garageEnt'],
-                "noteEnt" => $note,
-            ]);
-        }
+
         if (isset($request->typeRep)){
             $validation = $request->validate([
                 "typeRep" => "required",
@@ -122,7 +106,11 @@ class HomeController extends Controller
                 "litre" => $validation['litre'],
             ]);
         }
-        $voiture = DB::select('select * from voiture');
-        return json_encode($voiture);
+
+        return redirect('/home')->with('dataSave','sucess');
   }
+    public function deleteVoiture(Request $request){
+        $row = $request->id_voiture;
+        DB::delete("DELETE FROM `voiture` WHERE id='$row'");
+    }
 }

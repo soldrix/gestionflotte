@@ -19,9 +19,7 @@ Route::get('/', function () {
 Route::get('/entretiens',function (){
    return view('entretiens');
 });
-Route::get('/assurance',function (){
-   return view('assurance');
-});
+
 Route::get('/reparation',function (){
    return view('reparation');
 });
@@ -31,13 +29,15 @@ Route::get('/carburants',function (){
 Route::get('/voiture',function (){
    return view('voiture');
 });
-Route::get('/addVoiture','App\Http\Controllers\HomeController@createVoitureForm');
 Route::post('/addVoiture','App\Http\Controllers\HomeController@VoitureForm');
 
-Route::post('/Assurance', [App\Http\Controllers\AssuranceController::class, 'createAssurance'])->name('createAssurance.post');
+Route::post('/addAssurance', [App\Http\Controllers\AssuranceController::class, 'createAssurance']);
+Route::post('/delAssurance', [App\Http\Controllers\AssuranceController::class, 'deleteAssurance']);
+Route::post('/delVoiture', [App\Http\Controllers\HomeController::class, 'deleteVoiture']);
 
 Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('voiture');
+Route::get('/assurance', [App\Http\Controllers\AssuranceController::class, 'charge']);
 
 Route::get('/voiture/{id}', [App\Http\Controllers\VoitureController::class, 'charge'])->name('voitureData');
 Route::get('/voiture/', [App\Http\Controllers\VoitureController::class, 'charge']);

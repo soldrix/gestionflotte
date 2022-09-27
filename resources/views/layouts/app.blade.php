@@ -11,8 +11,8 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}" defer></script>
     <script src="{{asset('js/fontawesome.js')}}" defer></script>
+    <script src="{{ asset('js/app.js') }}" defer></script>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
@@ -95,6 +95,64 @@
         <main class="py-4">
             @yield('content')
         </main>
+    </div>
+    <div class="modal fade" id="VoitureModal" tabindex="-1" aria-labelledby="VoitureModalLabel" aria-hidden="true">
+        <form class="modal-dialog modal-xl" method="post" enctype="multipart/form-data">
+            @csrf
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="VoitureModalLabel">Modal </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="col-6 align-self-center modal-body d-flex flex-column">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                    <button type="submit" class="btn btn-primary btnModal">Creer</button>
+                </div>
+            </div>
+        </form>
+    </div>
+        @if (session()->has('dataSave'))
+        <div class="toast-container position-absolute start-0 p-3 top-0 mt-5" >
+
+            <!-- Then put toasts within -->
+            <div id="toastNotice" class="toast show" role="alert">
+                <div class="toast-header">
+                    <strong class="me-auto">Enregistrement des données</strong>
+                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+                <div class="toast-body">
+                    Les données ont été enregistrées
+                </div>
+            </div>
+
+        </div>
+        @endif
+
+    <div class="modal" tabindex="-1" id="delModal">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Êtes-vous sûr de vouloir supprimer</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                    <button type="button" class="btn btn-primary" id="btnDelModal">Supprimer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="toastSupp" class="toast" role="alert">
+        <div class="toast-header">
+            <strong class="me-auto">Suppression données</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body">
+            Les données ont été supprimé
+        </div>
     </div>
 
 </body>

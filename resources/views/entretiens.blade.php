@@ -3,7 +3,7 @@
 @section('content')
     <div class="container-fluid">
         <!-- Button trigger modal -->
-        <button type="button" class="btn btn-primary float-end" data-bs-toggle="modal" data-bs-target="#btnAddEntretiens">
+        <button type="button" class="btn btn-primary float-end" data-bs-toggle="modal" data-bs-target="#VoitureModal" id="btnAddEntretiens">
             Ajouter Entretien
         </button>
         <div class="container">
