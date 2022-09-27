@@ -3,36 +3,36 @@
 @section('content')
     <div class="container-fluid">
         <!-- Button trigger modal -->
-        <button type="button" class="btn btn-primary float-end btnModalAssu" data-bs-toggle="modal" data-bs-target="#AssuranceModal">
+        <button type="button" class="btn btn-primary float-end btnAddModal" data-bs-toggle="modal" data-bs-target="#AssuranceModal">
             Ajouter Assurance
         </button>
         <div class="container">
             <h2>Page assurance</h2>
-        </div>
-        <table id="DataTable_assurances" class="table table-striped dataTable">
-            <thead>
-            <tr>
-                <th>Nom assurance</th>
-                <th>Debut assurance</th>
-                <th>Fin assurance</th>
-                <th>Frais</th>
-                <th>Immatriculation</th>
-            </tr>
-            </thead>
-            <tbody>
-            @foreach($assurance as $datasAssu)
-                <tr data-voiture="{{$datasAssu->id_voiture}}">
-                    <td>{{$datasAssu->nomAssu}}</td>
-                    <td>{{$datasAssu->debutAssu}}</td>
-                    <td>{{$datasAssu->finAssu}}</td>
-                    <td>{{$datasAssu->frais}}€</td>
-                    <td>{{$datasAssu->immatriculation}}
-                    <button class="btn btn-danger delButon">supprimer</button></td>
-                </tr>
-            @endforeach
-            </tbody>
-        </table>
 
+            <table id="DataTable_assurances" class="table table-striped dataTable">
+                <thead>
+                <tr>
+                    <th>Nom assurance</th>
+                    <th>Debut assurance</th>
+                    <th>Fin assurance</th>
+                    <th>Frais</th>
+                    <th>Immatriculation</th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach($assurance as $datasAssu)
+                    <tr data-voiture="{{$datasAssu->id_voiture}}">
+                        <td>{{$datasAssu->nomAssu}}</td>
+                        <td>{{$datasAssu->debutAssu}}</td>
+                        <td>{{$datasAssu->finAssu}}</td>
+                        <td>{{$datasAssu->frais}}€</td>
+                        <td>{{$datasAssu->immatriculation}}
+                        <button class="btn btn-danger delButon">supprimer</button></td>
+                    </tr>
+                @endforeach
+                </tbody>
+            </table>
+        </div>
     </div>
     <div class="modal fade" id="AssuranceModal" tabindex="-1" aria-labelledby="VoitureModalLabel" aria-hidden="true">
         <form class="modal-dialog modal-xl" method="post" enctype="multipart/form-data" action="/addAssurance">

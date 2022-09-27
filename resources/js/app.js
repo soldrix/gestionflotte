@@ -32,8 +32,8 @@ $(document).ready(function () {
         modal('reparations')
     }).on('click','#btnAddConsommation',function () {
         modal('consommation')
-    }).on('click','.btnModalAssu',function () {
-        $('#AssuranceModal').ready(function () {
+    }).on('click','.btnAddModal',function () {
+        $('.modal').ready(function () {
             $('.btnModal').prop('disabled', true);
             $('.inputForm').on('focusout',verifField)
             $('.inputForm').focus(disableBtn)
@@ -70,7 +70,7 @@ function verifField(){
         }
     }
     if (titleModal === "Modal entretiens" || titleModal === "Modal reparations"){
-        if($('.inputType').val() !=="" && $('.inputDate').val() !== "" && $('.inputMontant').val() !== "" && $('.inputNote').val() !== "" && $('.inputIm').val() !== ""){
+        if($('.inputType').val() !=="" && $('.inputDate').val() !== "" && $('.inputMontant').val() !== "" && $('.inputIm').val() !== ""){
             $('.btnModal').prop('disabled', false);
         }else{
             $('.btnModal').prop('disabled', true);
