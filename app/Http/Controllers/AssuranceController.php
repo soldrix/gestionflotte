@@ -21,7 +21,6 @@ class AssuranceController extends Controller
             "finAssu" => "required",
             "frais" => "required",
         ]);
-
         $assurance = DB::table('assurance')->insert([
             "nomAssu" => $validation['nomAssu'],
             "id_voiture" => $validation['id_voiture'],
@@ -31,8 +30,8 @@ class AssuranceController extends Controller
         ]);
         return redirect('/assurance')->with('dataSave','sucess');
     }
-    public function deleteAssurance(Request $request){
-        $row = $request->id_voiture;
-        DB::delete("DELETE FROM `assurance` WHERE id_voiture='$row'");
+    public function deleteAssurance(Request $request) : void{
+        $row = $request->id;
+        DB::delete("DELETE FROM `assurance` WHERE id='$row'");
     }
 }

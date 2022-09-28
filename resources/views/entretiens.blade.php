@@ -20,12 +20,12 @@
                 </thead>
                 <tbody>
                 @foreach($entretiens as $datasEnt)
-                    <tr>
+                    <tr data-voiture="{{$datasEnt->id}}">
                         <td>{{$datasEnt->garageEnt}}</td>
                         <td>{{$datasEnt->typeEnt}}</td>
                         <td>{{$datasEnt->montantEnt}}€</td>
                         <td>{{$datasEnt->dateEnt}}</td>
-                        <td>{{(isset($datasEnt->noteEnt)) ? $datasEnt->noteEnt : "aucune note"}}</td>
+                        <td>{{(isset($datasEnt->noteEnt)) ? $datasEnt->noteEnt : "aucune note"}}<button class="btn btn-danger delButon">supprimer</button></td>
                     </tr>
                 @endforeach
                 </tbody>
@@ -33,7 +33,7 @@
         </div>
     </div>
     <div class="modal fade" id="EntretiensModal" tabindex="-1" aria-hidden="true">
-        <form class="modal-dialog modal-xl" method="post" enctype="multipart/form-data" action="/addEntretiens">
+        <form class="modal-dialog modal-xl" method="post" action="/addEntretiens">
             @csrf
             <div class="modal-content">
                 <div class="modal-header">
@@ -42,9 +42,10 @@
                 </div>
                 <div class="col-6 align-self-center modal-body d-flex flex-column">
                     <h2>Entretiens</h2>
-                    <div class="d-flex">
+                    <div class="d-flex flex-wrap">
                         <input type="text" name="typeEnt" placeholder="Type ex:(vidange)" class="inputForm inputType" required>
                         <input type="date" name="dateEnt" placeholder="Date Entretiens" class="inputForm inputDate" required>
+                        <input type="text" name="garageEnt" placeholder="Garage" class="inputForm inputGarage" required>
                     </div>
 
                     <div class="d-flex">

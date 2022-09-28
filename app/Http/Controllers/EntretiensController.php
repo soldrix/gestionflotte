@@ -13,29 +13,29 @@ class EntretiensController extends Controller
         return  view('/entretiens',['voiture'=>$voiture,'entretiens'=>$entretiens]);
     }
     public function createEntretiens(Request $request){
-
-            $validation = $request->validate([
+        $validation = $request->validate([
                 "typeEnt" => "required",
                 "dateEnt" => "required",
                 "montantEnt" => "required",
                 "garageEnt" => "required",
-                "id_voiture" => "required",
+                "id_voiture" => "required"
             ]);
-            error_log($validation);
-            $note = (isset($request->noteEnt)) ? $request->noteEnt : null;
-            DB::table('entretiens')->insert([
+
+        $note = (isset($request->noteEnt)) ? $request->noteEnt : null;
+        DB::table('entretiens')->insert([
                 "typeEnt" => $validation['typeEnt'],
                 "id_voiture" => $validation['id_voiture'],
                 "dateEnt" => $validation['dateEnt'],
                 "montantEnt" => $validation['montantEnt'],
                 "garageEnt" => $validation['garageEnt'],
-                "noteEnt" => $note,
-            ]);
-            return redirect('/entretiens')->with('dataSave','sucess');
+                "noteEnt" => $note
+        ]);
+
+        return redirect('/entretiens')->with('dataSave','success');
     }
-    public function deleteEntretiens(Request $request){
-        $row = $request->id_voiture;
-        DB::delete("DELETE FROM `entretiens` WHERE id_voiture='$row'");
+    public function deleteEntretiens(Request $request) : void{
+        $row = $request->id;
+        DB::delete("DELETE FROM `entretiens` WHERE id='$row'");
     }
 
 }

@@ -3,7 +3,7 @@ window.bootstrap = require('bootstrap/dist/js/bootstrap.bundle.js');
 require('jquery-mask-plugin/dist/jquery.mask.js')
 $(document).ready(function () {
 
-    if ( $('#DataTable_entretiens').length > 0){
+    if ( $('.dataTable').length > 0){
         $('.dataTable').DataTable({
             "language": {
                 "lengthMenu": "Afficher _MENU_ entrées",
@@ -172,7 +172,7 @@ function supModal(row){
     myModal.show();
     $('#btnDelModal').on('click',function () {
 
-        let url =(window.location.pathname === '/assurance') ? '/delAssurance' : (window.location.pathname === '/entretiens') ? '/delEntretiens' : (window.location.pathname === '/reparations') ? '/delReparations' : (window.location.pathname === '/consommation') ? '/delConsommation' : (window.location.pathname === '/home') ? '/delVoiture' :  '';
+        let url =(window.location.pathname === '/assurance') ? '/delAssurance' : (window.location.pathname === '/entretiens') ? '/delEntretiens' : (window.location.pathname === '/reparation') ? '/delReparation' : (window.location.pathname === '/consommation') ? '/delConsommation' : (window.location.pathname === '/home') ? '/delVoiture' :  '';
         if(url !== '/delVoiture'){
             $("tr[data-voiture='"+data+"']").remove()
         }else{
@@ -187,7 +187,7 @@ function supModal(row){
             });
             $.ajax({
                 type:"POST",
-                data:{id_voiture:data},
+                data:{id:data},
                 url:url,
                 success:function () {
                     myModal.hide();
@@ -199,12 +199,14 @@ function supModal(row){
                         }
                     }
                     if ($('.dataTable').length > 0){
-                        if ($('.dataTable tbody tr').length < 1){
-                            $('.dataTable tbody').append(`
+                        for (let i = 0; i < $('.dataTable').length ; i++) {
+                            if ($('.dataTable tbody tr').eq(i).length < 1){
+                                $('.dataTable tbody').eq(i).append(`
                             <tr class="odd">
                                 <td colspan="5" class="dataTables_empty" valign="top">Aucune entrée correspondante trouvée</td>
                             </tr>
                         `)
+                            }
                         }
                     }
                 }

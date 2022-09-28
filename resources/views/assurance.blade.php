@@ -8,7 +8,6 @@
         </button>
         <div class="container">
             <h2>Page assurance</h2>
-
             <table id="DataTable_assurances" class="table table-striped dataTable">
                 <thead>
                 <tr>
