@@ -38,10 +38,10 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav me-auto">
-                        <a href="/entretiens" class="mx-2 text-dark text-decoration-none">Entretiens</a>
-                        <a href="/assurance" class="mx-2 text-dark text-decoration-none">Assurance</a>
-                        <a href="/reparation" class="mx-2 text-dark text-decoration-none">Reparation</a>
-                        <a href="/consommation" class="mx-2 text-dark text-decoration-none">Consommation</a>
+                        <a href="{{url('/entretiens')}}" class="mx-2 text-dark text-decoration-none">Entretiens</a>
+                        <a href="{{url('/assurance')}}" class="mx-2 text-dark text-decoration-none">Assurance</a>
+                        <a href="{{url('/reparation')}}" class="mx-2 text-dark text-decoration-none">Reparation</a>
+                        <a href="{{url('/consommation')}}" class="mx-2 text-dark text-decoration-none">Consommation</a>
                     </ul>
 
                     <!-- Right Side Of Navbar -->
