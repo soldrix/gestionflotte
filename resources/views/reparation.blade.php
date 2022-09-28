@@ -27,7 +27,8 @@
                         <td>{{$datas->montantRep}}€</td>
                         <td>{{$datas->dateRep}}</td>
                         <td>{{(isset($datas->noteRep)) ? $datas->noteRep : "aucune note"}}</td>
-                        <td>{{$datas->immatriculation}}</td>
+                        <td>{{$datas->immatriculation}}
+                            <button class="btn btn-danger delButon">supprimer</button></td>
                     </tr>
                 @endforeach
                 </tbody>

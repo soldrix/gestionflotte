@@ -21,7 +21,7 @@ class AssuranceController extends Controller
             "finAssu" => "required",
             "frais" => "required",
         ]);
-        $assurance = DB::table('assurance')->insert([
+        DB::table('assurance')->insert([
             "nomAssu" => $validation['nomAssu'],
             "id_voiture" => $validation['id_voiture'],
             "debutAssu" => $validation['debutAssu'],

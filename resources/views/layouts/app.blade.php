@@ -86,7 +86,7 @@
             @yield('content')
         </main>
     </div>
-    <div class="modal fade" id="VoitureModal" tabindex="-1" aria-labelledby="VoitureModalLabel" aria-hidden="true">
+    <div class="modal fade" id="AddModal" tabindex="-1" aria-labelledby="VoitureModalLabel" aria-hidden="true">
         <form class="modal-dialog modal-xl" method="post" enctype="multipart/form-data">
             @csrf
             <div class="modal-content">

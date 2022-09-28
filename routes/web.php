@@ -29,6 +29,12 @@ Route::post('/delVoiture', [App\Http\Controllers\HomeController::class, 'deleteV
 Route::post('/delReparation', [App\Http\Controllers\ReparationsController::class, 'deleteReparations']);
 Route::post('/delConsommation', [App\Http\Controllers\ConsommationController::class, 'delete']);
 
+Route::post('/voiture/addEntretien', [App\Http\Controllers\VoitureController::class, 'addEntretien']);
+Route::post('/voiture/addReparation', [App\Http\Controllers\VoitureController::class, 'addReparation']);
+Route::post('/voiture/addAssurance', [App\Http\Controllers\VoitureController::class, 'addAssurance']);
+Route::post('/voiture/addConsommation', [App\Http\Controllers\VoitureController::class, 'addConsommation']);
+
+
 Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('voiture');
 Route::get('/assurance', [App\Http\Controllers\AssuranceController::class, 'charge']);
@@ -37,5 +43,5 @@ Route::get('/reparation', [App\Http\Controllers\ReparationsController::class, 'c
 Route::get('/consommation', [App\Http\Controllers\ConsommationController::class, 'charge']);
 
 Route::get('/voiture/{id}', [App\Http\Controllers\VoitureController::class, 'charge'])->name('voitureData');
-Route::get('/voiture/', [App\Http\Controllers\VoitureController::class, 'charge']);
+
 
