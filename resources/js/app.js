@@ -291,7 +291,6 @@ function modal(name)
     })
 }
 var myModal = new bootstrap.Modal(document.getElementById('delModal'));
-
 function supModal(row){
     let data = (window.location.pathname !== '/home') ? $(row).parent().parent().attr('data-voiture') : $(row).parent().attr('data-voiture');
     myModal.show();

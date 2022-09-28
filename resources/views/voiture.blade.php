@@ -59,7 +59,7 @@
             <div id="table_entretiens" class="tab-pane fade active show" role="tabpanel">
 
                 <!-- Button trigger modal -->
-                <button type="button" class="btn btn-primary float-end" data-bs-toggle="modal" id="btnAddEntretiens">
+                <button type="button" class="btn btn-primary float-end" id="btnAddEntretiens">
                     Ajouter Entretien
                 </button>
                 <table id="DataTable_entretiens" class="table table-striped dataTable">
@@ -90,7 +90,7 @@
             </div>
             <div id="table_reparations" class="tab-pane fade" role="tabpanel">
                 <!-- Button trigger modal -->
-                <button type="button" class="btn btn-primary float-end" data-bs-toggle="modal" id="btnAddReparations">
+                <button type="button" class="btn btn-primary float-end" id="btnAddReparations">
                     Ajouter Reparation
                 </button>
                 <table id="DataTable_reparations" class="table table-striped dataTable">
@@ -120,7 +120,7 @@
             </div>
             <div id="table_assurances" class="tab-pane fade " role="tabpanel">
                 <!-- Button trigger modal -->
-                <button type="button" class="btn btn-primary float-end" data-bs-toggle="modal" id="btnAddAssurance">
+                <button type="button" class="btn btn-primary float-end" id="btnAddAssurance">
                     Ajouter assurance
                 </button>
                 <table id="DataTable_assurances" class="table table-striped dataTable">
@@ -148,7 +148,7 @@
             </div>
             <div id="table_carburants" class="tab-pane fade" role="tabpanel">
                 <!-- Button trigger modal -->
-                <button type="button" class="btn btn-primary float-end " data-bs-toggle="modal" id="btnAddConsommation">
+                <button type="button" class="btn btn-primary float-end " id="btnAddConsommation">
                     Ajouter Carburant
                 </button>
                 <table id="DataTable_carburants" class="table table-striped dataTable">

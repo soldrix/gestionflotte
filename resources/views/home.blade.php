@@ -3,7 +3,7 @@
 @section('content')
 <div class="container-fluid">
     <!-- Button trigger modal -->
-    <button type="button" class="btn btn-primary float-end" data-bs-toggle="modal" data-bs-target="#VoitureModal" id="btnAddVoiture">
+    <button type="button" class="btn btn-primary float-end"  id="btnAddVoiture">
         Launch demo modal
     </button>
     <div class="container d-flex flex-wrap pt-5 justify-content-center">
