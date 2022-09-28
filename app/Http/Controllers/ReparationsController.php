@@ -9,8 +9,8 @@ class ReparationsController extends Controller
 {
     public function charge(){
         $voiture = DB::select('select * from voiture');
-        $reparations = DB::select('SELECT reparations.*,voiture.immatriculation FROM `reparations` INNER JOIN voiture ON voiture.id = reparations.id_voiture ');
-        return  view('/reparation',['voiture'=>$voiture,'reparations'=>$reparations]);
+        $reparation = DB::select('SELECT reparations.*,voiture.immatriculation FROM `reparations` INNER JOIN voiture ON voiture.id = reparations.id_voiture');
+        return  view('/reparation',['voiture'=>$voiture,'reparation'=>$reparation]);
     }
     public function createReparations(Request $request){
         $validation = $request->validate([

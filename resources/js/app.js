@@ -144,7 +144,7 @@ function modal(name)
 
                     <input type="text" name="montantCons" placeholder="Montant total" class="inputForm inputMontant" required>
                     <input type="text" name="immatriculation" placeholder="Immatriculation" class="inputForm inputIm" required>
-                    <input type="date" name="litre" placeholder="Nombre de litre" class="inputForm inputDate" required>` :"";
+                    <input type="text" name="litre" placeholder="Nombre de litre" class="inputForm inputDate" required>` :"";
 
 
     $('#VoitureModal').find('.modal-body').html(htmlModal)

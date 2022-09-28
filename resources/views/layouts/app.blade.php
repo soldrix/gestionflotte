@@ -41,22 +41,12 @@
                         <a href="/entretiens" class="mx-2 text-dark text-decoration-none">Entretiens</a>
                         <a href="/assurance" class="mx-2 text-dark text-decoration-none">Assurance</a>
                         <a href="/reparation" class="mx-2 text-dark text-decoration-none">Reparation</a>
-                        <a href="/carburants" class="mx-2 text-dark text-decoration-none">Carburants</a>
+                        <a href="/consommation" class="mx-2 text-dark text-decoration-none">Consommation</a>
                     </ul>
 
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ms-auto">
                         <!-- Authentication Links -->
-                        <li class="me-5 pt-1">
-                            <div class="w-100 position-relative align-self-center bg-white" >
-                                <input type="text" class="w-100 rounded-pill border-dark ps-2 pe-5 border-1">
-                                <button type="button" style="border: none;background: none;position: absolute;right: 10px;top: 0">
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" style="height: 15px;width: 15px">
-                                        <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352c79.5 0 144-64.5 144-144s-64.5-144-144-144S64 128.5 64 208s64.5 144 144 144z"/>
-                                    </svg>
-                                </button>
-                            </div>
-                        </li>
                         @guest
                             @if (Route::has('login'))
                                 <li class="nav-item">

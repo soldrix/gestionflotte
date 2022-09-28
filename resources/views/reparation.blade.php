@@ -16,16 +16,18 @@
                     <th>Montant</th>
                     <th>Date</th>
                     <th>Note</th>
+                    <th>Immatriculation</th>
                 </tr>
                 </thead>
                 <tbody>
-                @foreach($reparations as $datas)
+                @foreach($reparation as $datas)
                     <tr data-voiture="{{$datas->id}}">
                         <td>{{$datas->garageRep}}</td>
                         <td>{{$datas->typeRep}}</td>
                         <td>{{$datas->montantRep}}€</td>
                         <td>{{$datas->dateRep}}</td>
-                        <td>{{(isset($datas->noteRep)) ? $datas->noteRep : "aucune note"}}<button class="btn btn-danger delButon">supprimer</button></td>
+                        <td>{{(isset($datas->noteRep)) ? $datas->noteRep : "aucune note"}}</td>
+                        <td>{{$datas->immatriculation}}</td>
                     </tr>
                 @endforeach
                 </tbody>
