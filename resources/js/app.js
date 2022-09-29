@@ -663,7 +663,7 @@ function updateDatas(datas,type){
                     $("tr[data-voiture="+datas.id+"] td").eq(0).html(datas.garageRep);
                     $("tr[data-voiture="+datas.id+"] td").eq(1).html(datas.typeRep);
                     $("tr[data-voiture="+datas.id+"] td").eq(2).html(datas.montantRep);
-                    $("tr[data-voiture="+datas.id+"] td").eq(3).html(datas.daterep);
+                    $("tr[data-voiture="+datas.id+"] td").eq(3).html(datas.dateRep);
                     $("tr[data-voiture="+datas.id+"] td").eq(4).html((datas.noteRep !== "") ? datas.noteRep : 'aucune note');
 
                 }
