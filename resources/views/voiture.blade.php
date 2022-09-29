@@ -19,7 +19,7 @@
                 <p class="mx-2"><i class="fa-solid fa-gas-pump fa-xl text-info"></i> <span> {{$datasnb->nbCons}} </span> assurances</p>
                 @endforeach
             </div>
-            <div class="col-6 mt-5 d-flex">
+            <div class="col-6 mt-5 d-flex" data-voiture="{{$datas->id}}" data-db="voiture">
                 <div class="col-auto mx-2">
                     <h2 class="text-primary">Marque : </h2>
                     <h2 class="text-primary">Model : </h2>
@@ -33,6 +33,7 @@
                     <h2 class="text-muted">{{$datas->circulation}}</h2>
                     <h2 class="text-muted">{{$datas->statut}}</h2>
                     <h2 class="text-muted">{{$datas->puissance}}</h2>
+                    <button class="btn btn-info editButton">modifier</button>
                 </div>
             </div>
         </div>
@@ -74,14 +75,14 @@
                     </thead>
                     <tbody>
                     @foreach($entretiens as $datasEnt)
-                    <tr data-voiture="{{{$datasEnt->id}}}">
+                    <tr data-voiture="{{{$datasEnt->id}}}" data-db="entretiens">
                         <td>{{$datasEnt->garageEnt}}</td>
                         <td>{{$datasEnt->typeEnt}}</td>
                         <td>{{$datasEnt->montantEnt}}€</td>
                         <td>{{$datasEnt->dateEnt}}</td>
                         <td>{{(isset($datasEnt->noteEnt)) ? $datasEnt->noteEnt : "aucune note"}}
-                            <button class="btn btn-info editButon">modifier</button>
-                            <button class="btn btn-danger delButon">supprimer</button></td>
+                            <button class="btn btn-info editButton">modifier</button>
+                            <button class="btn btn-danger delButton">supprimer</button></td>
                     </tr>
                     @endforeach
                     </tbody>
@@ -105,14 +106,14 @@
                     </thead>
                     <tbody>
                     @foreach($reparations as $datasRep)
-                        <tr data-voiture="{{$datasRep->id}}">
+                        <tr data-voiture="{{$datasRep->id}}" data-db="reparations">
                             <td>{{$datasRep->garageRep}}</td>
                             <td>{{$datasRep->typeRep}}</td>
                             <td>{{$datasRep->montantRep}}€</td>
                             <td>{{$datasRep->dateRep}}</td>
                             <td>{{(isset($datasRep->noteRep)) ? $datasRep->noteRep : "aucune note"}}
-                                <button class="btn btn-info editButon">modifier</button>
-                                <button class="btn btn-danger delButon">supprimer</button></td>
+                                <button class="btn btn-info editButton">modifier</button>
+                                <button class="btn btn-danger delButton">supprimer</button></td>
                         </tr>
                     @endforeach
                     </tbody>
@@ -134,13 +135,13 @@
                     </thead>
                     <tbody>
                     @foreach($assurance as $datasAssu)
-                        <tr data-voiture="{{$datasAssu->id}}">
+                        <tr data-voiture="{{$datasAssu->id}}" data-db="assurance">
                             <td>{{$datasAssu->nomAssu}}</td>
                             <td>{{$datasAssu->debutAssu}}</td>
                             <td>{{$datasAssu->finAssu}}</td>
                             <td>{{$datasAssu->frais}}€
-                                <button class="btn btn-info editButon">modifier</button>
-                                <button class="btn btn-danger delButon">supprimer</button></td>
+                                <button class="btn btn-info editButton">modifier</button>
+                                <button class="btn btn-danger delButton">supprimer</button></td>
                         </tr>
                     @endforeach
                     </tbody>
@@ -161,12 +162,12 @@
                     </thead>
                     <tbody>
                     @foreach($consommation as $datasCons)
-                        <tr data-voiture="{{$datasCons->id}}">
+                        <tr data-voiture="{{$datasCons->id}}" data-db="consommation">
                             <td>{{$datasCons->litre}}</td>
                             <td>{{$datasCons->montantCons}}€</td>
                             <td>{{round($datasCons->montantCons/$datasCons->litre,3)}}€
-                                <button class="btn btn-info editButon">modifier</button>
-                                <button class="btn btn-danger delButon">supprimer</button></td>
+                                <button class="btn btn-info editButton">modifier</button>
+                                <button class="btn btn-danger delButton">supprimer</button></td>
                         </tr>
                     @endforeach
                     </tbody>

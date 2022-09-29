@@ -40,5 +40,9 @@ class EntretiensController extends Controller
         $row = $request->id;
         DB::delete("DELETE FROM `entretiens` WHERE id='$row'");
     }
-
+    public function getEntretiens(Request $request){
+        $id = $request->id;
+        $data =  DB::select("SELECT * from entretiens where id='$id'");
+        return json_encode($data);
+    }
 }

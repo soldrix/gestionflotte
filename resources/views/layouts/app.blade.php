@@ -68,7 +68,7 @@
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
-                                        {{ __('Logout') }}
+                                        {{ __('Déconnexion') }}
                                     </a>
 
                                     <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
@@ -87,7 +87,7 @@
         </main>
     </div>
     <div class="modal fade" id="AddModal" tabindex="-1" aria-labelledby="VoitureModalLabel" aria-hidden="true">
-        <form class="modal-dialog modal-xl" method="post" enctype="multipart/form-data">
+        <div class="modal-dialog modal-xl">
             @csrf
             <div class="modal-content">
                 <div class="modal-header">
@@ -102,7 +102,7 @@
                     <button type="submit" class="btn btn-primary btnModal">Creer</button>
                 </div>
             </div>
-        </form>
+        </div>
     </div>
         @if (session()->has('dataSave'))
         <div class="toast-container position-absolute start-0 p-3 top-0 mt-5" >

@@ -20,13 +20,14 @@
                 </thead>
                 <tbody>
                 @foreach($assurance as $datasAssu)
-                    <tr data-voiture="{{$datasAssu->id_voiture}}">
+                    <tr data-voiture="{{$datasAssu->id}}" data-db="assurance">
                         <td>{{$datasAssu->nomAssu}}</td>
                         <td>{{$datasAssu->debutAssu}}</td>
                         <td>{{$datasAssu->finAssu}}</td>
                         <td>{{$datasAssu->frais}}€</td>
                         <td>{{$datasAssu->immatriculation}}
-                        <button class="btn btn-danger delButon">supprimer</button></td>
+                            <button class="btn btn-info editButton">modifier</button>
+                        <button class="btn btn-danger delButton">supprimer</button></td>
                     </tr>
                 @endforeach
                 </tbody>

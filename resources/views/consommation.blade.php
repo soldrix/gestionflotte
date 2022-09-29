@@ -19,12 +19,13 @@
                 </thead>
                 <tbody>
                 @foreach($consommation as $datasCons)
-                    <tr data-voiture="{{$datasCons->id}}">
+                    <tr data-voiture="{{$datasCons->id}}" data-db="consommation">
                         <td>{{$datasCons->litre}}</td>
                         <td>{{$datasCons->montantCons}}€</td>
                         <td>{{round($datasCons->montantCons/$datasCons->litre,3)}}€</td>
                         <td>{{$datasCons->immatriculation}}
-                            <button class="btn btn-danger delButon">supprimer</button></td>
+                            <button class="btn btn-info editButton">modifier</button>
+                            <button class="btn btn-danger delButton">supprimer</button></td>
                     </tr>
                 @endforeach
                 </tbody>

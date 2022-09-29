@@ -20,12 +20,14 @@
                 </thead>
                 <tbody>
                 @foreach($entretiens as $datasEnt)
-                    <tr data-voiture="{{$datasEnt->id}}">
+                    <tr data-voiture="{{$datasEnt->id}}" data-db="entretiens">
                         <td>{{$datasEnt->garageEnt}}</td>
                         <td>{{$datasEnt->typeEnt}}</td>
                         <td>{{$datasEnt->montantEnt}}€</td>
                         <td>{{$datasEnt->dateEnt}}</td>
-                        <td>{{(isset($datasEnt->noteEnt)) ? $datasEnt->noteEnt : "aucune note"}}<button class="btn btn-danger delButon">supprimer</button></td>
+                        <td>{{(isset($datasEnt->noteEnt)) ? $datasEnt->noteEnt : "aucune note"}}
+                            <button class="btn btn-info editButton">modifier</button>
+                            <button class="btn btn-danger delButton">supprimer</button></td>
                     </tr>
                 @endforeach
                 </tbody>

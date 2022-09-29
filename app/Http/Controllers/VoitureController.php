@@ -66,4 +66,9 @@ class VoitureController extends Controller
             ->get();
         return $ValueDB;
     }
+    public function getVoiture(Request $request){
+        $id = $request->id;
+        $data =  DB::select("SELECT * from voiture where id='$id'");
+        return json_encode($data);
+    }
 }

@@ -44,4 +44,9 @@ class AssuranceController extends Controller
         DB::table('assurance')->update($this->verifAssurance->dbDataRow($request));
         return $request;
     }
+    public function getAssurance(Request $request){
+        $id = $request->id;
+        $data =  DB::select("SELECT * from assurance where id='$id'");
+        return json_encode($data);
+    }
 }

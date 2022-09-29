@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\DB;
 
 class ReparationsController extends Controller
 {
-    public function insertDatas($datas){
+    public function verifDatas($datas){
         $validation = $datas->validate([
             "typeRep" => "required",
             "dateRep" => "required",
@@ -23,10 +23,15 @@ class ReparationsController extends Controller
             "garageRep" => $validation['garageRep'],
             "noteRep" => (isset($datas->noteRep)) ? $datas->noteRep : null
         ];
-        DB::table('reparations')->insert($tab);
         return $tab;
     }
 
+    public function insertDatas($datas){
+        return DB::table('reparations')->insert($this->verifDatas($datas));
+    }
+    public function updateDatas($datas){
+       return DB::table('reparations')->upddate($this->verifDatas($datas));
+    }
     public function charge(){
         $voiture = DB::select('select * from voiture');
         $reparation = DB::select('SELECT reparations.*,voiture.immatriculation FROM `reparations` INNER JOIN voiture ON voiture.id = reparations.id_voiture');
@@ -39,5 +44,10 @@ class ReparationsController extends Controller
     public function deleteReparations(Request $request) : void{
         $row = $request->id;
         DB::delete("DELETE FROM `reparations` WHERE id='$row'");
+    }
+    public function getReparations(Request $request){
+        $id = $request->id;
+        $data =  DB::select("SELECT * from reparations where id='$id'");
+        return json_encode($data);
     }
 }

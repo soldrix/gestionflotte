@@ -29,10 +29,23 @@ Route::post('/delVoiture', [App\Http\Controllers\HomeController::class, 'deleteV
 Route::post('/delReparation', [App\Http\Controllers\ReparationsController::class, 'deleteReparations']);
 Route::post('/delConsommation', [App\Http\Controllers\ConsommationController::class, 'delete']);
 
+Route::post('/updateAssurance', [App\Http\Controllers\AssuranceController::class, '']);
+Route::post('/updateEntretiens', [App\Http\Controllers\EntretiensController::class, '']);
+Route::post('/updateVoiture', [App\Http\Controllers\HomeController::class, '']);
+Route::post('/updateReparation', [App\Http\Controllers\ReparationsController::class, 'updateDatas']);
+Route::post('/updateConsommation', [App\Http\Controllers\ConsommationController::class, 'updateDatas']);
+
+
 Route::post('/voiture/addEntretien', [App\Http\Controllers\VoitureController::class, 'addEntretien']);
 Route::post('/voiture/addReparation', [App\Http\Controllers\VoitureController::class, 'addReparation']);
 Route::post('/voiture/addAssurance', [App\Http\Controllers\VoitureController::class, 'addAssurance']);
 Route::post('/voiture/addConsommation', [App\Http\Controllers\VoitureController::class, 'addConsommation']);
+
+Route::post('/getVoiture', [App\Http\Controllers\VoitureController::class, 'getVoiture']);
+Route::post('/getConsommation', [App\Http\Controllers\ConsommationController::class, 'getConsommation']);
+Route::post('/getEntretiens', [App\Http\Controllers\EntretiensController::class, 'getEntretiens']);
+Route::post('/getReparations', [App\Http\Controllers\ReparationsController::class, 'getReparations']);
+Route::post('/getAssurance', [App\Http\Controllers\AssuranceController::class, 'getAssurance']);
 
 
 Auth::routes();
