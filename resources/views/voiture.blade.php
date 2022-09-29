@@ -9,7 +9,7 @@
         <div class="col-4 border-dark border-3 border-opacity-25 p-4" style="border-right: solid">
             <img src="{{asset('storage/'.$datas->image)}}" alt="" class="w-100 rounded">
         </div>
-        <div class="col-8 px-2 mt-5">
+        <div class="col-8 px-2 mt-5" data-voiture="{{$datas->id}}" data-db="voiture">
             <h2 class="text-primary">Immatriculation : <span class="text-muted">{{$datas->immatriculation}}</span></h2>
             <div class="d-flex mt-5">
                 @foreach($nbData as $datasnb)
@@ -19,7 +19,7 @@
                 <p class="mx-2"><i class="fa-solid fa-gas-pump fa-xl text-info"></i> <span> {{$datasnb->nbCons}} </span> assurances</p>
                 @endforeach
             </div>
-            <div class="col-6 mt-5 d-flex" data-voiture="{{$datas->id}}" data-db="voiture">
+            <div class="col-6 mt-5 d-flex">
                 <div class="col-auto mx-2">
                     <h2 class="text-primary">Marque : </h2>
                     <h2 class="text-primary">Model : </h2>
@@ -33,8 +33,8 @@
                     <h2 class="text-muted">{{$datas->circulation}}</h2>
                     <h2 class="text-muted">{{$datas->statut}}</h2>
                     <h2 class="text-muted">{{$datas->puissance}}</h2>
-                    <button class="btn btn-info editButton">modifier</button>
                 </div>
+                <button class="btn btn-info editButton align-self-center ms-5" style="height: fit-content">modifier</button>
             </div>
         </div>
 
