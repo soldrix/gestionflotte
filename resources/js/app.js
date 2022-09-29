@@ -218,6 +218,13 @@ function modal(name,type,url,dataid) {
                         }
                     }
                 })
+                $('.btnModal').on('click',function () {
+                    updateEntretiens(dataid,'consommation');
+                    myModal1.hide();
+                })
+                document.getElementById('AddModal').addEventListener('hide.bs.modal', function () {
+                    $('.modal input').val('');
+                })
             }
         })
     }
@@ -445,20 +452,20 @@ function verifDatas(datas,type){
         }
     }
     if (type === "consommation"){
-        if($('input[name=montantCons]').val() !=="" && $('input[name=litre]').val() !== ""){
-            tab['montantCons'] = $('input[name=montantCons]').val();
-            tab['litre'] = $('input[name=litre]').val();
-            tab['id_voiture'] = datas;
+        if($('.modal.fade.show input[name=montantCons]').val() !=="" && $('.modal.fade.show input[name=litre]').val() !== ""){
+            tab['montantCons'] = $('.modal.fade.show input[name=montantCons]').val();
+            tab['litre'] = $('.modal.fade.show input[name=litre]').val();
+            tab['id'] = datas;
         }else{
-            if($('input[name=montantCons]').val() ===""){
-                $('input[name=montantCons]').css('border','2px solid red')
-                $('input[name=montantCons]').parent().append(`
+            if($('.modal.fade.show input[name=montantCons]').val() ===""){
+                $('.modal.fade.show input[name=montantCons]').css('border','2px solid red')
+                $('.modal.fade.show input[name=montantCons]').parent().append(`
                     <p>Champ requis</p>
                 `)
             }
-            if($('input[name=litre]').val() === ""){
-                $('input[name=litre]').css('border','2px solid red')
-                $('input[name=litre]').parent().append(`
+            if($('.modal.fade.show input[name=litre]').val() === ""){
+                $('.modal.fade.show input[name=litre]').css('border','2px solid red')
+                $('.modal.fade.show input[name=litre]').parent().append(`
                     <p>Champ requis</p>
                 `)
             }
@@ -467,7 +474,7 @@ function verifDatas(datas,type){
     return tab;
 }
 function updateEntretiens(datas,type){
-    let dataVerif = verifDatas(type);
+    let dataVerif = verifDatas(datas,type);
     if (dataVerif !== undefined){
         $.ajaxSetup({
             headers: {
@@ -479,7 +486,15 @@ function updateEntretiens(datas,type){
                 type:'POST',
                 data:dataVerif,
                 url:'/updateConsommation',
-                dataType:'json'
+                dataType:'json',
+                success:function (datas) {
+                    console.log(datas.litre,'toto')
+
+                        $("tr[data-voiture="+datas.id+"] td").eq(0).html(datas.litre);
+                        $("tr[data-voiture="+datas.id+"] td").eq(1).html(datas.montantCons);
+                        $("tr[data-voiture="+datas.id+"] td").eq(2).html(Math.round(datas.montantCons / datas.litre)+'€');
+
+                }
             })
         }
     }
