@@ -54,6 +54,7 @@ function disableBtn(){
 }
 function verifField(){
     let titleModal =$('.modal.fade.show .modal-header h5').html();
+
     $('.btnModal').attr('type','button');
     if (titleModal === "Modal voiture"){
         if($('.inputMarque').val() !=="" && $('.inputModel').val() !== "" && $('.inputPuissance').val() !== "" && $('.inputCarbu').val()!=="" && $('.inputIm').val()!=="" && $('.inputFile').val()!==""){

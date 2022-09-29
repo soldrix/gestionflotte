@@ -5,16 +5,11 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
+
 class AssuranceController extends Controller
 {
-    public function charge(){
-        $voiture = DB::select('select * from voiture');
-        $assurance = DB::select('SELECT assurance.*,voiture.immatriculation FROM `assurance` INNER JOIN voiture ON voiture.id = assurance.id_voiture ');
-        return  view('/assurance',['voiture'=>$voiture,'assurance'=>$assurance]);
-    }
-    public function createAssurance(Request $request){
-
-        $validation = $request->validate([
+    public function insertDatas($datas){
+        $validation = $datas->validate([
             "id_voiture" => "required",
             "nomAssu" => "required",
             "debutAssu" => "required",
@@ -28,10 +23,25 @@ class AssuranceController extends Controller
             "finAssu" => $validation['finAssu'],
             "frais" => $validation['frais'],
         ]);
+        return $validation;
+    }
+    protected $verifAssurance;
+    public function charge(){
+        $voiture = DB::select('select * from voiture');
+        $assurance = DB::select('SELECT assurance.*,voiture.immatriculation FROM `assurance` INNER JOIN voiture ON voiture.id = assurance.id_voiture ');
+        return  view('/assurance',['voiture'=>$voiture,'assurance'=>$assurance]);
+    }
+
+    public function createAssurance(Request $request){
+        $this->insertDatas($request);
         return redirect('/assurance')->with('dataSave','sucess');
     }
     public function deleteAssurance(Request $request) : void{
         $row = $request->id;
         DB::delete("DELETE FROM `assurance` WHERE id='$row'");
+    }
+    public function modification(Request $request){
+        DB::table('assurance')->update($this->verifAssurance->dbDataRow($request));
+        return $request;
     }
 }

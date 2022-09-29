@@ -7,30 +7,33 @@ use Illuminate\Support\Facades\DB;
 
 class EntretiensController extends Controller
 {
+    public function insertDatas($datas){
+        $validation = $datas->validate([
+            "typeEnt" => "required",
+            "dateEnt" => "required",
+            "montantEnt" => "required",
+            "garageEnt" => "required",
+            "id_voiture" => "required"
+        ]);
+        $tab = [
+            "typeEnt" => $validation['typeEnt'],
+            "id_voiture" => $validation['id_voiture'],
+            "dateEnt" => $validation['dateEnt'],
+            "montantEnt" => $validation['montantEnt'],
+            "garageEnt" => $validation['garageEnt'],
+            "noteEnt" => (isset($datas->noteEnt)) ? $datas->noteEnt : null
+        ];
+        DB::table('entretiens')->insert($tab);
+        return $tab;
+    }
+
     public function charge(){
         $voiture = DB::select('select * from voiture');
         $entretiens = DB::select('SELECT entretiens.*,voiture.immatriculation FROM `entretiens` INNER JOIN voiture ON voiture.id = entretiens.id_voiture ');
         return  view('/entretiens',['voiture'=>$voiture,'entretiens'=>$entretiens]);
     }
     public function createEntretiens(Request $request){
-        $validation = $request->validate([
-                "typeEnt" => "required",
-                "dateEnt" => "required",
-                "montantEnt" => "required",
-                "garageEnt" => "required",
-                "id_voiture" => "required"
-            ]);
-
-        $note = (isset($request->noteEnt)) ? $request->noteEnt : null;
-        DB::table('entretiens')->insert([
-                "typeEnt" => $validation['typeEnt'],
-                "id_voiture" => $validation['id_voiture'],
-                "dateEnt" => $validation['dateEnt'],
-                "montantEnt" => $validation['montantEnt'],
-                "garageEnt" => $validation['garageEnt'],
-                "noteEnt" => $note
-        ]);
-
+        $this->insertDatas($request);
         return redirect('/entretiens')->with('dataSave','success');
     }
     public function deleteEntretiens(Request $request) : void{
