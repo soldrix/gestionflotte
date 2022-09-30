@@ -29,8 +29,29 @@ class ReparationsController extends Controller
     public function insertDatas($datas){
         return DB::table('reparations')->insert($this->verifDatas($datas));
     }
-    public function updateDatas($datas){
-       return DB::table('reparations')->upddate($this->verifDatas($datas));
+    public function updateDatas(Request $request){
+        $validation = $request->validate([
+            "typeRep" => "required",
+            "dateRep" => "required",
+            "montantRep" => "required",
+            "garageRep" => "required"
+        ]);
+        $id = $request->id;
+        DB::table('reparations')->where('id',$id)->update([
+            "typeRep" => $validation['typeRep'],
+            "dateRep" => $validation['dateRep'],
+            "montantRep" => $validation['montantRep'],
+            "garageRep" => $validation['garageRep'],
+            "noteRep" => (isset($request->noteRep)) ? $request->noteRep : 'aucune note'
+        ]);
+        $json = new \stdClass();
+        $json->id = $id;
+        $json->typeRep = $validation['typeRep'];
+        $json->montantRep = $validation['montantRep'];
+        $json->garageRep = $validation['garageRep'];
+        $json->dateRep = $validation['dateRep'];
+        $json->noteRep = (isset($request->noteRep)) ? $request->noteRep : 'aucune note';
+        return json_encode($json);
     }
     public function charge(){
         $voiture = DB::select('select * from voiture');

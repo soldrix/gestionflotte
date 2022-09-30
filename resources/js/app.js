@@ -217,7 +217,7 @@ function modal(name,type,url,dataid) {
                 })
                 $('.btnModal').on('click',function () {
                     updateDatas(dataid,name);
-                    $(this).prop('disabled',true)
+                    // $(this).prop('disabled',true)
                 })
                 document.getElementById('AddModal').addEventListener('hide.bs.modal', function () {
                     $('.modal input').val('');
@@ -414,17 +414,25 @@ function supModal(row){
 function verifDatas(datas,type){
     let tab = {};
     if (type === "voiture"){
-        if($('.modal.fade.show input[name=marque]').val() !=="" && $('.modal.fade.show input[name=model]').val() !== "" && $('.modal.fade.show input[name=puissance]').val() !== "" && $('.modal.fade.show input[name=carburant]').val()!=="" && $('.modal.fade.show input[name=immatriculation]').val()!==""){
+        if($('.modal.fade.show input[name=marque]').val() !=="" && $('.modal.fade.show input[name=model]').val() !== "" && $('.modal.fade.show input[name=puissance]').val() !== "" && $('.modal.fade.show input[name=carburant]').val()!=="" && $('.modal.fade.show input[name=immatriculation]').val()!=="" && $('.modal.fade.show input[name=circulation]').val()!==""){
             tab['id'] = datas;
             tab['marque'] = $('.modal.fade.show input[name=marque]').val();
             tab['model'] = $('.modal.fade.show input[name=model]').val();
             tab['puissance'] = $('.modal.fade.show input[name=puissance]').val();
             tab['carburant'] = $('.modal.fade.show input[name=carburant]').val();
             tab['immatriculation'] = $('.modal.fade.show input[name=immatriculation]').val();
+            tab['circulation'] = $('.modal.fade.show input[name=circulation]').val();
+            tab['status'] = $('.modal.fade.show select[name=status]').val();
         }else{
             if ($('.modal.fade.show input[name=marque]').val() === ""){
                 $('.modal.fade.show input[name=marque]').css('border','2px solid red')
                 $('.modal.fade.show input[name=marque]').parent().append(`
+                    <p>Champ requis</p>
+                `)
+            }
+            if ($('.modal.fade.show input[name=circulation]').val() === ""){
+                $('.modal.fade.show input[name=circulation]').css('border','2px solid red')
+                $('.modal.fade.show input[name=circulation]').parent().append(`
                     <p>Champ requis</p>
                 `)
             }
@@ -456,7 +464,7 @@ function verifDatas(datas,type){
     }
     if (type === "assurance"){
         if($('.modal.fade.show input[name=nomAssu]').val() !=="" && $('.modal.fade.show input[name=debutAssu]').val() !== "" && $('.modal.fade.show input[name=finAssu]').val() !== "" && $('.modal.fade.show input[name=frais]').val()!==""){
-            tab['id_voiture'] = datas;
+            tab['id'] = datas;
             tab['nomAssu'] = $('.modal.fade.show input[name=nomAssu]').val();
             tab['debutAssu'] = $('.modal.fade.show input[name=debutAssu]').val()
             tab['finAssu'] = $('.modal.fade.show input[name=finAssu]').val()
@@ -490,7 +498,7 @@ function verifDatas(datas,type){
     }
     if (type === "entretiens"){
         if($('.modal.fade.show input[name=typeEnt]').val() !=="" && $('.modal.fade.show input[name=dateEnt]').val() !== "" && $('.modal.fade.show input[name=montantEnt]').val() !== "" && $('.modal.fade.show input[name=garageEnt]').val() !== ""){
-            tab['id_voiture'] = datas;
+            tab['id'] = datas;
             tab['typeEnt'] = $('.modal.fade.show input[name=typeEnt]').val();
             tab['dateEnt'] = $('.modal.fade.show input[name=dateEnt]').val();
             tab['montantEnt'] = $('.modal.fade.show input[name=montantEnt]').val();
@@ -525,7 +533,7 @@ function verifDatas(datas,type){
     }
     if (type === "reparations"){
         if($('.modal.fade.show input[name=typeRep]').val() !=="" && $('.modal.fade.show input[name=dateRep]').val() !== "" && $('.modal.fade.show input[name=montantRep]').val() !== "" && $('.modal.fade.show input[name=garageRep]').val() !== ""){
-            tab['id_voiture'] = datas;
+            tab['id'] = datas;
             tab['typeRep'] = $('.modal.fade.show input[name=typeRep]').val();
             tab['dateRep'] = $('.modal.fade.show input[name=dateRep]').val();
             tab['montantRep'] = $('.modal.fade.show input[name=montantRep]').val();
@@ -582,6 +590,7 @@ function verifDatas(datas,type){
 }
 function updateDatas(datas,type){
     let dataVerif =verifDatas(datas,type);
+    console.log(dataVerif)
     if (dataVerif['id'] !== undefined){
 
         if (type === 'consommation'){
@@ -682,25 +691,35 @@ function updateDatas(datas,type){
                 dataType:'json',
                 success:function (datas) {
                     myModal1.hide();
-                    $("div[data-voiture="+datas.id+"] h2").eq(0).html(datas.immatriculation);
-                    $("div[data-voiture="+datas.id+"] div.col-6 div.col-auto h2").eq(0).html(datas.marque);
-                    $("div[data-voiture="+datas.id+"] div.col-6 div.col-auto h2").eq(1).html(datas.model);
-                    $("div[data-voiture="+datas.id+"] div.col-6 div.col-auto h2").eq(2).html(datas.status);
-                    $("div[data-voiture="+datas.id+"] div.col-6 div.col-auto h2").eq(3).html(datas.puissance);
+                    $("div[data-voiture="+datas.id+"] h2 span").eq(0).html(datas.immatriculation);
+                    $("div[data-voiture="+datas.id+"] div.col-6 div.col-auto:nth-child(2) h2").eq(0).html(datas.marque);
+                    $("div[data-voiture="+datas.id+"] div.col-6 div.col-auto:nth-child(2) h2").eq(1).html(datas.model);
+                    $("div[data-voiture="+datas.id+"] div.col-6 div.col-auto:nth-child(2) h2").eq(2).html(datas.circulation);
+                    $("div[data-voiture="+datas.id+"] div.col-6 div.col-auto:nth-child(2) h2").eq(3).html(datas.status);
+                    $("div[data-voiture="+datas.id+"] div.col-6 div.col-auto:nth-child(2) h2").eq(4).html(datas.puissance);
 
                 }
             })
-            //todo conroller upload immage , appel ajax img
-            $.ajax({
-                type:'POST',
-                data:dataVerif,
-                url:'/uploadImage',
-                dataType:'json',
-                success:function (datas) {
-                    myModal1.hide();
-                    $("div[data-voiture="+datas.id+"] div.col-6 div.col-auto h2").eq(0).html(datas.marque);
-                }
-            })
+            let files =  $('.modal.fade.show input[name=file]')[0].files;
+            if (files.length > 0){
+                let fd = new FormData();
+                fd.append('file',files[0]);
+                fd.append('id',dataVerif['id']);
+                fd.append('_token',$('meta[name="csrf-token"]').attr('content'));
+                $.ajax({
+                    type:'POST',
+                    data: fd,
+                    contentType:false,
+                    processData:false,
+                    url:'/uploadImage',
+                    dataType:'json',
+                    success:function (datas) {
+                        myModal1.hide();
+                        $("div[data-voiture="+datas.id+"]").parent().children().first().children().attr('src','http://127.0.0.1:8000/storage/'+datas.image);
+                    }
+                })
+            }
+
         }
     }
 }

@@ -21,12 +21,35 @@ class EntretiensController extends Controller
             "dateEnt" => $validation['dateEnt'],
             "montantEnt" => $validation['montantEnt'],
             "garageEnt" => $validation['garageEnt'],
-            "noteEnt" => (isset($datas->noteEnt)) ? $datas->noteEnt : null
+            "noteEnt" => (isset($datas->noteEnt)) ? $datas->noteEnt : 'aucune note'
         ];
         DB::table('entretiens')->insert($tab);
         return $tab;
     }
-
+    public function updateDatas(Request $request){
+        $validation = $request->validate([
+            "typeEnt" => "required",
+            "dateEnt" => "required",
+            "montantEnt" => "required",
+            "garageEnt" => "required"
+        ]);
+        $id = $request->id;
+        DB::table('entretiens')->where('id',$id)->update([
+            "typeEnt" => $validation['typeEnt'],
+            "dateEnt" => $validation['dateEnt'],
+            "montantEnt" => $validation['montantEnt'],
+            "garageEnt" => $validation['garageEnt'],
+            "noteEnt" => (isset($datas->noteEnt)) ? $datas->noteEnt : 'aucune note'
+        ]);
+        $json = new \stdClass();
+        $json->id = $id;
+        $json->typeEnt = $validation['typeEnt'];
+        $json->montantEnt = $validation['montantEnt'];
+        $json->garageEnt = $validation['garageEnt'];
+        $json->dateEnt = $validation['dateEnt'];
+        $json->noteEnt = (isset($request->noteEnt)) ? $request->noteEnt : 'aucune note';
+        return json_encode($json);
+    }
     public function charge(){
         $voiture = DB::select('select * from voiture');
         $entretiens = DB::select('SELECT entretiens.*,voiture.immatriculation FROM `entretiens` INNER JOIN voiture ON voiture.id = entretiens.id_voiture ');

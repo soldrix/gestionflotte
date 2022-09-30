@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+
 class VoitureController extends Controller
 {
     public function charge(Request $request){
@@ -70,5 +71,54 @@ class VoitureController extends Controller
         $id = $request->id;
         $data =  DB::select("SELECT * from voiture where id='$id'");
         return json_encode($data);
+    }
+
+    public function updateDatas(Request $request){
+        $validation = $request->validate([
+            'marque' => 'required',
+            'model'=>'required',
+            'circulation' => 'required',
+            'carburant' => 'required',
+            'immatriculation' => 'required',
+            'status' => 'required',
+            'puissance' => 'required'
+        ]);
+        $id = $request->id;
+        DB::table('voiture')->where('id',$id)->update([
+            "marque" => $validation['marque'],
+            "model" => $validation['model'],
+            "circulation" => $validation['circulation'],
+            "immatriculation" => $validation['immatriculation'],
+            "statut" => $validation['status'],
+            "carburant" => $validation['carburant'],
+            "puissance" => $validation['puissance'],
+        ]);
+        $json = new \stdClass();
+        $json->id = $id;
+        $json->marque = $validation['marque'];
+        $json->model = $validation['model'];
+        $json->circulation = $validation['circulation'];
+        $json->immatriculation = $validation['immatriculation'];
+        $json->status = $validation['status'];
+        $json->carburant = $validation['carburant'];
+        $json->puissance = $validation['puissance'];
+        return json_encode($json);
+    }
+    public function uploadImage(Request $request){
+
+            $file = $request->file('file');
+            $id = json_decode($request->id);
+            // Generate a file name with extension
+            $fileName = 'voiture-'.time().'.'.$file->getClientOriginalExtension();
+
+            // Save the file
+            $file->storeAs('/public/upload', $fileName);
+            $path = "upload/".$fileName;
+            DB::update("update voiture set image='$path' where id='$id'");
+            $json = new \stdClass();
+            $json->id = $id;
+            $json->image = $path;
+
+        return json_encode($json);
     }
 }

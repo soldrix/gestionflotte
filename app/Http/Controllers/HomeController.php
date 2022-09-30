@@ -63,36 +63,6 @@ class HomeController extends Controller
         ]);
 
 
-
-        if (isset($request->typeRep)){
-            $validation = $request->validate([
-                "typeRep" => "required",
-                "dateRep" => "required",
-                "montantRep" => "required",
-                "garageRep" => "required",
-            ]);
-            $note = (isset($request->noteRep)) ? $request->noteRep : "";
-            DB::table('entretiens')->insert([
-                "typeRep" => $validation['typeEnt'],
-                "id_voiture" => $voitureID,
-                "dateRep" => $validation['dateEnt'],
-                "montantRep" => $validation['montantEnt'],
-                "garageRep" => $validation['garageEnt'],
-                "noteRep" => $note,
-            ]);
-        }
-        if (isset($request->montantCons)){
-            $validation = $request->validate([
-                "montantCons" => "required",
-                "litre" => "required",
-            ]);
-            DB::table('entretiens')->insert([
-                "montantCons" => $validation['montantCons'],
-                "id_voiture" => $voitureID,
-                "litre" => $validation['litre'],
-            ]);
-        }
-
         return redirect('/home')->with('dataSave','success');
   }
     public function deleteVoiture(Request $request){

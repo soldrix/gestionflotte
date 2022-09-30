@@ -29,10 +29,10 @@ Route::post('/delVoiture', [App\Http\Controllers\HomeController::class, 'deleteV
 Route::post('/delReparation', [App\Http\Controllers\ReparationsController::class, 'deleteReparations']);
 Route::post('/delConsommation', [App\Http\Controllers\ConsommationController::class, 'delete']);
 
-Route::post('/updateAssurance', [App\Http\Controllers\AssuranceController::class, '']);
-Route::post('/updateEntretiens', [App\Http\Controllers\EntretiensController::class, '']);
-Route::post('/updateVoiture', [App\Http\Controllers\HomeController::class, '']);
-Route::post('/updateReparation', [App\Http\Controllers\ReparationsController::class, 'updateDatas']);
+Route::post('/updateAssurance', [App\Http\Controllers\AssuranceController::class, 'updateDatas']);
+Route::post('/updateEntretiens', [App\Http\Controllers\EntretiensController::class, 'updateDatas']);
+Route::post('/updateVoiture', [App\Http\Controllers\VoitureController::class, 'updateDatas']);
+Route::post('/updateReparations', [App\Http\Controllers\ReparationsController::class, 'updateDatas']);
 Route::post('/updateConsommation', [App\Http\Controllers\ConsommationController::class, 'updateDatas']);
 
 
@@ -46,6 +46,8 @@ Route::post('/getConsommation', [App\Http\Controllers\ConsommationController::cl
 Route::post('/getEntretiens', [App\Http\Controllers\EntretiensController::class, 'getEntretiens']);
 Route::post('/getReparations', [App\Http\Controllers\ReparationsController::class, 'getReparations']);
 Route::post('/getAssurance', [App\Http\Controllers\AssuranceController::class, 'getAssurance']);
+
+Route::post('/uploadImage', [App\Http\Controllers\VoitureController::class, 'uploadImage']);
 
 
 Auth::routes();

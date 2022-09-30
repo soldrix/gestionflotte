@@ -25,7 +25,28 @@ class AssuranceController extends Controller
         ]);
         return $validation;
     }
-    protected $verifAssurance;
+    public function updateDatas(Request $request){
+        $validation = $request->validate([
+            "nomAssu" => "required",
+            "debutAssu" => "required",
+            "finAssu" => "required",
+            "frais" => "required",
+        ]);
+        $id = $request->id;
+        DB::table('assurance')->where('id',$id)->update([
+            "nomAssu" => $validation['nomAssu'],
+            "debutAssu" => $validation['debutAssu'],
+            "finAssu" => $validation['finAssu'],
+            "frais" => $validation['frais'],
+        ]);
+        $json = new \stdClass();
+        $json->id = $id;
+        $json->nomAssu = $validation['nomAssu'];
+        $json->debutAssu = $validation['debutAssu'];
+        $json->finAssu = $validation['finAssu'];
+        $json->frais = $validation['frais'];
+        return json_encode($json);
+    }
     public function charge(){
         $voiture = DB::select('select * from voiture');
         $assurance = DB::select('SELECT assurance.*,voiture.immatriculation FROM `assurance` INNER JOIN voiture ON voiture.id = assurance.id_voiture ');
@@ -41,7 +62,7 @@ class AssuranceController extends Controller
         DB::delete("DELETE FROM `assurance` WHERE id='$row'");
     }
     public function modification(Request $request){
-        DB::table('assurance')->update($this->verifAssurance->dbDataRow($request));
+        DB::table('assurance')->update($this->dbDataRow($request));
         return $request;
     }
     public function getAssurance(Request $request){
