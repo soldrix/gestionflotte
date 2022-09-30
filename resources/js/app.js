@@ -21,7 +21,7 @@ $(document).ready(function () {
             }
         });
     }
-
+    //todo faire  insertion en ajax
     $(document).on('click','#btnAddVoiture',function () {
         modal('voiture')
     }).on('click',"#btnAddAssurance",function () {
@@ -32,12 +32,6 @@ $(document).ready(function () {
         modal('reparations')
     }).on('click','#btnAddConsommation',function () {
         modal('consommation')
-    }).on('click','.btnAddModal',function () {
-        $('.modal').ready(function () {
-            $('.btnModal').prop('disabled', true);
-            $('.inputForm').on('focusout',verifField)
-            $('.inputForm').focus(disableBtn)
-        })
     })
 
 
@@ -54,43 +48,6 @@ $(window).on('load',function () {
     })
 })
 
-function disableBtn(){
-    $('.btnModal').prop('disabled', true)
-}
-function verifField(){
-    let titleModal =$('.modal.fade.show .modal-header h5').html();
-
-    $('.btnModal').attr('type','button');
-    if (titleModal === "Modal voiture"){
-        if($('.inputMarque').val() !=="" && $('.inputModel').val() !== "" && $('.inputPuissance').val() !== "" && $('.inputCarbu').val()!=="" && $('.inputIm').val()!=="" && $('.inputFile').val()!==""){
-            $('.btnModal').prop('disabled', false);
-            $('.btnModal').attr('type','submit');
-        }else{
-            $('.btnModal').prop('disabled', true);
-        }
-    }
-    if (titleModal === "Modal assurance"){
-        if($('.inputAssu').val() !=="" && $('.assuDateD').val() !== "" && $('.assuDateF').val() !== "" && $('.inputFrais').val()!==""){
-            $('.btnModal').prop('disabled', false);
-        }else{
-            $('.btnModal').prop('disabled', true);
-        }
-    }
-    if (titleModal === "Modal entretiens" || titleModal === "Modal reparations"){
-        if($('.inputType').val() !=="" && $('.inputDate').val() !== "" && $('.inputMontant').val() !== "" && $('.inputGarage').val() !== ""){
-            $('.btnModal').prop('disabled', false);
-        }else{
-            $('.btnModal').prop('disabled', true);
-        }
-    }
-    if (titleModal === "Modal consommation"){
-        if($('.inputMontant').val() !=="" && $('.inputDate').val() !== ""){
-            $('.btnModal').prop('disabled', false);
-        }else{
-            $('.btnModal').prop('disabled', true);
-        }
-    }
-}
 let myModal1 = new bootstrap.Modal(document.getElementById('AddModal'));
 
 function modal(name,type,url,dataid) {
@@ -228,135 +185,7 @@ function modal(name,type,url,dataid) {
     }
     if (type !== "edit"){
         $('.btnModal').on('click', function () {
-            if ($(this).attr('type') === 'submit') {
-                $('.modal.fade.show form').attr("action", "/addVoiture");
-            } else {
-                $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    }
-                });
-                let id_voiture = window.location.pathname.replace('/voiture/', '');
-                if (name === 'assurance') {
-                    $.ajax({
-                        type: "POST",
-                        url: "/voiture/addAssurance",
-                        data: {
-                            nomAssu: $('input[name=nomAssu]').val(),
-                            debutAssu: $('input[name=debutAssu]').val(),
-                            finAssu: $('input[name=finAssu]').val(),
-                            frais: $('input[name=frais]').val(),
-                            id_voiture: id_voiture
-                        },
-                        success: function (row) {
-                            myModal1.hide();
-                            row.forEach(datas => {
-                                $('#DataTable_assurances tbody').prepend(`
-                                <tr data-voiture="${datas.id}">
-                                    <td>${datas.nomAssu}</td>
-                                    <td>${datas.debutAssu}</td>
-                                    <td>${datas.finAssu}</td>
-                                    <td>${datas.frais}€
-                                    <button class="btn btn-info editButon">modifier</button>
-                                    <button class="btn btn-danger delButton">supprimer</button></td>
-                                </tr>
-                            `)
-                            })
-                        }
-                    })
-                }
-                if (name === 'entretiens') {
-                    let note = ($('input[name=noteEnt]').val() !== '' && $('input[name=noteEnt]').val() !== undefined) ? $('input[name=noteEnt]').val() : 'aucune note';
-                    $.ajax({
-                        type: "POST",
-                        url: "/voiture/addEntretien",
-                        data: {
-                            noteEnt: note,
-                            typeEnt: $('input[name=typeEnt]').val(),
-                            dateEnt: $('input[name=dateEnt]').val(),
-                            montantEnt: $('input[name=montantEnt]').val(),
-                            garageEnt: $('input[name=garageEnt]').val(),
-                            id_voiture: id_voiture
-                        },
-                        dataType: "json",
-                        success: function (row) {
-                            myModal1.hide();
-                            row.forEach(datas => {
-                                $('#DataTable_entretiens tbody').prepend(`
-                                <tr data-voiture="${datas.id}">
-                                    <td>${datas.garageEnt}</td>
-                                    <td>${datas.typeEnt}</td>
-                                    <td>${datas.montantEnt}€</td>
-                                    <td>${datas.dateEnt}</td>
-                                    <td>${datas.noteEnt}
-                                    <button class="btn btn-info editButon">modifier</button>
-                                    <button class="btn btn-danger delButton">supprimer</button></td>
-                                </tr>
-                            `)
-                            })
-                        }
-                    })
-                }
-                if (name === 'reparations') {
-                    let note = ($('input[name=noteRep]').val() !== '' && $('input[name=noteRep]').val() !== undefined) ? $('input[name=noteRep]').val() : 'aucune note';
-                    $.ajax({
-                        type: "POST",
-                        url: "/voiture/addReparation",
-                        data: {
-                            noteRep: note,
-                            typeRep: $('input[name=typeRep]').val(),
-                            dateRep: $('input[name=dateRep]').val(),
-                            montantRep: $('input[name=montantRep]').val(),
-                            garageRep: $('input[name=garageRep]').val(),
-                            id_voiture: id_voiture
-                        },
-                        dataType: "json",
-                        success: function (row) {
-                            myModal1.hide();
-                            row.forEach(datas => {
-                                $('#DataTable_reparations tbody').prepend(`
-                                <tr data-voiture="${datas.id}">
-                                    <td>${datas.garageRep}</td>
-                                    <td>${datas.typeRep}</td>
-                                    <td>${datas.montantRep}€</td>
-                                    <td>${datas.dateRep}</td>
-                                    <td>${datas.noteRep}
-                                    <button class="btn btn-info editButon">modifier</button>
-                                    <button class="btn btn-danger delButton">supprimer</button></td>
-                                </tr>
-                            `)
-                            })
-                        }
-                    })
-                }
-                if (name === 'consommation') {
-                    $.ajax({
-                        type: "POST",
-                        url: "/voiture/addConsommation",
-                        data: {
-                            montantCons: $('input[name=montantCons]').val(),
-                            litre: $('input[name=litre]').val(),
-                            id_voiture: id_voiture
-                        },
-                        dataType: "json",
-                        success: function (row) {
-                            myModal1.hide();
-                            row.forEach(datas => {
-                                $('#DataTable_carburants tbody').prepend(`
-                                <tr data-voiture="${datas.id}">
-                                    <td>${datas.litre}</td>
-                                    <td>${datas.montantCons}€</td>
-                                    <td>${Math.round(datas.montantCons / datas.litre)}€
-                                    <button class="btn btn-info editButon">modifier</button>
-                                    <button class="btn btn-danger delButton">supprimer</button></td>
-                                </tr>
-                            `)
-                            })
-
-                        }
-                    })
-                }
-            }
+            addDatas(id_voiture,name)
         })
     }
 }
@@ -411,18 +240,28 @@ function supModal(row){
 
 }
 
-function verifDatas(datas,type){
+function verifDatas(datas,page,type){
     let tab = {};
-    if (type === "voiture"){
+    if (page === "voiture"){
         if($('.modal.fade.show input[name=marque]').val() !=="" && $('.modal.fade.show input[name=model]').val() !== "" && $('.modal.fade.show input[name=puissance]').val() !== "" && $('.modal.fade.show input[name=carburant]').val()!=="" && $('.modal.fade.show input[name=immatriculation]').val()!=="" && $('.modal.fade.show input[name=circulation]').val()!==""){
-            tab['id'] = datas;
-            tab['marque'] = $('.modal.fade.show input[name=marque]').val();
-            tab['model'] = $('.modal.fade.show input[name=model]').val();
-            tab['puissance'] = $('.modal.fade.show input[name=puissance]').val();
-            tab['carburant'] = $('.modal.fade.show input[name=carburant]').val();
-            tab['immatriculation'] = $('.modal.fade.show input[name=immatriculation]').val();
-            tab['circulation'] = $('.modal.fade.show input[name=circulation]').val();
-            tab['status'] = $('.modal.fade.show select[name=status]').val();
+            if (type === 'add' && $('.modal.fade.show input[name=file]')[0].files.length < 1){
+                if ($('.modal.fade.show input[name=file]').val() === ""){
+                    $('.modal.fade.show input[name=file]').css('border','2px solid red')
+                    $('.modal.fade.show input[name=file]').parent().append(`
+                        <p>Champ requis</p>
+                    `)
+                }
+            }else{
+                tab['id'] = datas;
+                tab['marque'] = $('.modal.fade.show input[name=marque]').val();
+                tab['model'] = $('.modal.fade.show input[name=model]').val();
+                tab['puissance'] = $('.modal.fade.show input[name=puissance]').val();
+                tab['carburant'] = $('.modal.fade.show input[name=carburant]').val();
+                tab['immatriculation'] = $('.modal.fade.show input[name=immatriculation]').val();
+                tab['circulation'] = $('.modal.fade.show input[name=circulation]').val();
+                tab['status'] = $('.modal.fade.show select[name=status]').val();
+            }
+
         }else{
             if ($('.modal.fade.show input[name=marque]').val() === ""){
                 $('.modal.fade.show input[name=marque]').css('border','2px solid red')
@@ -462,7 +301,7 @@ function verifDatas(datas,type){
             }
         }
     }
-    if (type === "assurance"){
+    if (page === "assurance"){
         if($('.modal.fade.show input[name=nomAssu]').val() !=="" && $('.modal.fade.show input[name=debutAssu]').val() !== "" && $('.modal.fade.show input[name=finAssu]').val() !== "" && $('.modal.fade.show input[name=frais]').val()!==""){
             tab['id'] = datas;
             tab['nomAssu'] = $('.modal.fade.show input[name=nomAssu]').val();
@@ -496,7 +335,7 @@ function verifDatas(datas,type){
             }
         }
     }
-    if (type === "entretiens"){
+    if (page === "entretiens"){
         if($('.modal.fade.show input[name=typeEnt]').val() !=="" && $('.modal.fade.show input[name=dateEnt]').val() !== "" && $('.modal.fade.show input[name=montantEnt]').val() !== "" && $('.modal.fade.show input[name=garageEnt]').val() !== ""){
             tab['id'] = datas;
             tab['typeEnt'] = $('.modal.fade.show input[name=typeEnt]').val();
@@ -531,7 +370,7 @@ function verifDatas(datas,type){
             }
         }
     }
-    if (type === "reparations"){
+    if (page === "reparations"){
         if($('.modal.fade.show input[name=typeRep]').val() !=="" && $('.modal.fade.show input[name=dateRep]').val() !== "" && $('.modal.fade.show input[name=montantRep]').val() !== "" && $('.modal.fade.show input[name=garageRep]').val() !== ""){
             tab['id'] = datas;
             tab['typeRep'] = $('.modal.fade.show input[name=typeRep]').val();
@@ -566,7 +405,7 @@ function verifDatas(datas,type){
             }
         }
     }
-    if (type === "consommation"){
+    if (page === "consommation"){
         if($('.modal.fade.show input[name=montantCons]').val() !=="" && $('.modal.fade.show input[name=litre]').val() !== ""){
             tab['montantCons'] = $('.modal.fade.show input[name=montantCons]').val();
             tab['litre'] = $('.modal.fade.show input[name=litre]').val();
@@ -588,9 +427,176 @@ function verifDatas(datas,type){
     }
     return tab;
 }
+function addDatas(datas,type){
+    let dataVerif =verifDatas(datas,type);
+    if (dataVerif['id'] !== undefined){
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+        if(name === 'voiture'){
+            $.ajax({
+                type:'POST',
+                data:dataVerif,
+                url:'/addVoiture',
+                dataType:'json',
+                success:function (datas) {
+                    myModal1.hide();
+                    $("div[data-voiture="+datas.id+"] h2 span").eq(0).html(datas.immatriculation);
+                    $("div[data-voiture="+datas.id+"] div.col-6 div.col-auto:nth-child(2) h2").eq(0).html(datas.marque);
+                    $("div[data-voiture="+datas.id+"] div.col-6 div.col-auto:nth-child(2) h2").eq(1).html(datas.model);
+                    $("div[data-voiture="+datas.id+"] div.col-6 div.col-auto:nth-child(2) h2").eq(2).html(datas.circulation);
+                    $("div[data-voiture="+datas.id+"] div.col-6 div.col-auto:nth-child(2) h2").eq(3).html(datas.status);
+                    $("div[data-voiture="+datas.id+"] div.col-6 div.col-auto:nth-child(2) h2").eq(4).html(datas.puissance);
+
+                }
+            })
+            let files =  $('.modal.fade.show input[name=file]')[0].files;
+            if (files.length > 0){
+                let fd = new FormData();
+                fd.append('file',files[0]);
+                fd.append('id',dataVerif['id']);
+                fd.append('_token',$('meta[name="csrf-token"]').attr('content'));
+                $.ajax({
+                    type:'POST',
+                    data: fd,
+                    contentType:false,
+                    processData:false,
+                    url:'/uploadImage',
+                    dataType:'json',
+                    success:function (datas) {
+                        myModal1.hide();
+                        $("div[data-voiture="+datas.id+"]").parent().children().first().children().attr('src','http://127.0.0.1:8000/storage/'+datas.image);
+                    }
+                })
+            }
+        }
+
+        if (name === 'assurance') {
+            $.ajax({
+                type: "POST",
+                url: "/voiture/addAssurance",
+                data: {
+                    nomAssu: $('input[name=nomAssu]').val(),
+                    debutAssu: $('input[name=debutAssu]').val(),
+                    finAssu: $('input[name=finAssu]').val(),
+                    frais: $('input[name=frais]').val(),
+                    id_voiture: id_voiture
+                },
+                success: function (row) {
+                    myModal1.hide();
+                    row.forEach(datas => {
+                        $('#DataTable_assurances tbody').prepend(`
+                            <tr data-voiture="${datas.id}">
+                                <td>${datas.nomAssu}</td>
+                                <td>${datas.debutAssu}</td>
+                                <td>${datas.finAssu}</td>
+                                <td>${datas.frais}€
+                                <button class="btn btn-info editButon">modifier</button>
+                                <button class="btn btn-danger delButton">supprimer</button></td>
+                            </tr>
+                        `)
+                    })
+                }
+            })
+        }
+        if (name === 'entretiens') {
+            let note = ($('input[name=noteEnt]').val() !== '' && $('input[name=noteEnt]').val() !== undefined) ? $('input[name=noteEnt]').val() : 'aucune note';
+            $.ajax({
+                type: "POST",
+                url: "/voiture/addEntretien",
+                data: {
+                    noteEnt: note,
+                    typeEnt: $('input[name=typeEnt]').val(),
+                    dateEnt: $('input[name=dateEnt]').val(),
+                    montantEnt: $('input[name=montantEnt]').val(),
+                    garageEnt: $('input[name=garageEnt]').val(),
+                    id_voiture: id_voiture
+                },
+                dataType: "json",
+                success: function (row) {
+                    myModal1.hide();
+                    row.forEach(datas => {
+                        $('#DataTable_entretiens tbody').prepend(`
+                            <tr data-voiture="${datas.id}">
+                                <td>${datas.garageEnt}</td>
+                                <td>${datas.typeEnt}</td>
+                                <td>${datas.montantEnt}€</td>
+                                <td>${datas.dateEnt}</td>
+                                <td>${datas.noteEnt}
+                                <button class="btn btn-info editButon">modifier</button>
+                                <button class="btn btn-danger delButton">supprimer</button></td>
+                            </tr>
+                        `)
+                    })
+                }
+            })
+        }
+        if (name === 'reparations') {
+            let note = ($('input[name=noteRep]').val() !== '' && $('input[name=noteRep]').val() !== undefined) ? $('input[name=noteRep]').val() : 'aucune note';
+            $.ajax({
+                type: "POST",
+                url: "/voiture/addReparation",
+                data: {
+                    noteRep: note,
+                    typeRep: $('input[name=typeRep]').val(),
+                    dateRep: $('input[name=dateRep]').val(),
+                    montantRep: $('input[name=montantRep]').val(),
+                    garageRep: $('input[name=garageRep]').val(),
+                    id_voiture: id_voiture
+                },
+                dataType: "json",
+                success: function (row) {
+                    myModal1.hide();
+                    row.forEach(datas => {
+                        $('#DataTable_reparations tbody').prepend(`
+                            <tr data-voiture="${datas.id}">
+                                <td>${datas.garageRep}</td>
+                                <td>${datas.typeRep}</td>
+                                <td>${datas.montantRep}€</td>
+                                <td>${datas.dateRep}</td>
+                                <td>${datas.noteRep}
+                                <button class="btn btn-info editButon">modifier</button>
+                                <button class="btn btn-danger delButton">supprimer</button></td>
+                            </tr>
+                        `)
+                    })
+                }
+            })
+        }
+        if (name === 'consommation') {
+            $.ajax({
+                type: "POST",
+                url: "/voiture/addConsommation",
+                data: {
+                    montantCons: $('input[name=montantCons]').val(),
+                    litre: $('input[name=litre]').val(),
+                    id_voiture: id_voiture
+                },
+                dataType: "json",
+                success: function (row) {
+                    myModal1.hide();
+                    row.forEach(datas => {
+                        $('#DataTable_carburants tbody').prepend(`
+                            <tr data-voiture="${datas.id}">
+                                <td>${datas.litre}</td>
+                                <td>${datas.montantCons}€</td>
+                                <td>${Math.round(datas.montantCons / datas.litre)}€
+                                <button class="btn btn-info editButon">modifier</button>
+                                <button class="btn btn-danger delButton">supprimer</button></td>
+                            </tr>
+                        `)
+                    })
+
+                }
+            })
+        }
+    }
+}
 function updateDatas(datas,type){
     let dataVerif =verifDatas(datas,type);
-    console.log(dataVerif)
     if (dataVerif['id'] !== undefined){
 
         if (type === 'consommation'){
