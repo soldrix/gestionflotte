@@ -9,12 +9,15 @@
         <div class="col-4 border-dark border-3 border-opacity-25 p-4" style="border-right: solid">
             <img src="{{asset('storage/'.$datas->image)}}" alt="" class="w-100 rounded">
         </div>
-        <div class="col-8 px-2 mt-5">
+        <div class="col-8 px-2 mt-5" data-voiture="{{$datas->id}}" data-db="voiture">
             <h2 class="text-primary">Immatriculation : <span class="text-muted">{{$datas->immatriculation}}</span></h2>
             <div class="d-flex mt-5">
-                <p class="mx-2"><i class="fa-solid fa-wrench fa-xl text-info"></i> <span> 1 </span> entretiens</p>
-                <p class="mx-2"><i class="fa-solid fa-gear fa-xl text-info"></i> <span> 1 </span> reparations</p>
-                <p class="mx-2"><i class="fa-solid fa-gear fa-xl text-info"></i> <span> 1 </span> assurances</p>
+                @foreach($nbData as $datasnb)
+                <p class="mx-2"><i class="fa-solid fa-wrench fa-xl text-info"></i> <span> {{$datasnb->nbEnt}} </span> entretiens</p>
+                <p class="mx-2"><i class="fa-solid fa-gear fa-xl text-info"></i> <span> {{$datasnb->nbRep}} </span> reparations</p>
+                <p class="mx-2"><i class="fa-solid fa-calendar-check fa-xl text-info"></i> <span> {{$datasnb->nbAssu}} </span> assurances</p>
+                <p class="mx-2"><i class="fa-solid fa-gas-pump fa-xl text-info"></i> <span> {{$datasnb->nbCons}} </span> assurances</p>
+                @endforeach
             </div>
             <div class="col-6 mt-5 d-flex">
                 <div class="col-auto mx-2">
@@ -31,6 +34,7 @@
                     <h2 class="text-muted">{{$datas->statut}}</h2>
                     <h2 class="text-muted">{{$datas->puissance}}</h2>
                 </div>
+                <button class="btn btn-info editButton align-self-center ms-5" style="height: fit-content">modifier</button>
             </div>
         </div>
 
@@ -55,7 +59,10 @@
         <div id="block_info_voiture" class="tab-content">
             <div id="table_entretiens" class="tab-pane fade active show" role="tabpanel">
 
-
+                <!-- Button trigger modal -->
+                <button type="button" class="btn btn-primary float-end" id="btnAddEntretiens">
+                    Ajouter Entretien
+                </button>
                 <table id="DataTable_entretiens" class="table table-striped dataTable">
                     <thead>
                     <tr>
@@ -68,12 +75,14 @@
                     </thead>
                     <tbody>
                     @foreach($entretiens as $datasEnt)
-                    <tr>
+                    <tr data-voiture="{{{$datasEnt->id}}}" data-db="entretiens">
                         <td>{{$datasEnt->garageEnt}}</td>
                         <td>{{$datasEnt->typeEnt}}</td>
                         <td>{{$datasEnt->montantEnt}}€</td>
                         <td>{{$datasEnt->dateEnt}}</td>
-                        <td>{{(isset($datasEnt->noteEnt)) ? $datasEnt->noteEnt : "aucune note"}}</td>
+                        <td>{{(isset($datasEnt->noteEnt)) ? $datasEnt->noteEnt : "aucune note"}}
+                            <button class="btn btn-info editButton">modifier</button>
+                            <button class="btn btn-danger delButton">supprimer</button></td>
                     </tr>
                     @endforeach
                     </tbody>
@@ -81,6 +90,10 @@
 
             </div>
             <div id="table_reparations" class="tab-pane fade" role="tabpanel">
+                <!-- Button trigger modal -->
+                <button type="button" class="btn btn-primary float-end" id="btnAddReparations">
+                    Ajouter Reparation
+                </button>
                 <table id="DataTable_reparations" class="table table-striped dataTable">
                     <thead>
                     <tr>
@@ -93,18 +106,24 @@
                     </thead>
                     <tbody>
                     @foreach($reparations as $datasRep)
-                        <tr>
+                        <tr data-voiture="{{$datasRep->id}}" data-db="reparations">
                             <td>{{$datasRep->garageRep}}</td>
                             <td>{{$datasRep->typeRep}}</td>
                             <td>{{$datasRep->montantRep}}€</td>
                             <td>{{$datasRep->dateRep}}</td>
-                            <td>{{(isset($datasRep->noteRep)) ? $datasRep->noteRep : "aucune note"}}</td>
+                            <td>{{(isset($datasRep->noteRep)) ? $datasRep->noteRep : "aucune note"}}
+                                <button class="btn btn-info editButton">modifier</button>
+                                <button class="btn btn-danger delButton">supprimer</button></td>
                         </tr>
                     @endforeach
                     </tbody>
                 </table>
             </div>
             <div id="table_assurances" class="tab-pane fade " role="tabpanel">
+                <!-- Button trigger modal -->
+                <button type="button" class="btn btn-primary float-end" id="btnAddAssurance">
+                    Ajouter assurance
+                </button>
                 <table id="DataTable_assurances" class="table table-striped dataTable">
                     <thead>
                     <tr>
@@ -116,17 +135,23 @@
                     </thead>
                     <tbody>
                     @foreach($assurance as $datasAssu)
-                        <tr>
+                        <tr data-voiture="{{$datasAssu->id}}" data-db="assurance">
                             <td>{{$datasAssu->nomAssu}}</td>
                             <td>{{$datasAssu->debutAssu}}</td>
                             <td>{{$datasAssu->finAssu}}</td>
-                            <td>{{$datasAssu->frais}}€</td>
+                            <td>{{$datasAssu->frais}}€
+                                <button class="btn btn-info editButton">modifier</button>
+                                <button class="btn btn-danger delButton">supprimer</button></td>
                         </tr>
                     @endforeach
                     </tbody>
                 </table>
             </div>
             <div id="table_carburants" class="tab-pane fade" role="tabpanel">
+                <!-- Button trigger modal -->
+                <button type="button" class="btn btn-primary float-end " id="btnAddConsommation">
+                    Ajouter Carburant
+                </button>
                 <table id="DataTable_carburants" class="table table-striped dataTable">
                     <thead>
                     <tr>
@@ -137,10 +162,12 @@
                     </thead>
                     <tbody>
                     @foreach($consommation as $datasCons)
-                        <tr>
+                        <tr data-voiture="{{$datasCons->id}}" data-db="consommation">
                             <td>{{$datasCons->litre}}</td>
                             <td>{{$datasCons->montantCons}}€</td>
-                            <td>{{round($datasCons->montantCons/$datasCons->litre,3)}}€</td>
+                            <td>{{round($datasCons->montantCons/$datasCons->litre,3)}}€
+                                <button class="btn btn-info editButton">modifier</button>
+                                <button class="btn btn-danger delButton">supprimer</button></td>
                         </tr>
                     @endforeach
                     </tbody>

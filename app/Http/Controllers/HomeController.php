@@ -29,20 +29,6 @@ class HomeController extends Controller
         return view('home',['voiture'=>$voiture]);
     }
 
-    public function upload(Request $request)
-    {
-        $file = $request->file('file');
-        // Generate a file name with extension
-        $fileName = 'voiture-'.time().'.'.$file->getClientOriginalExtension();
-
-        // Save the file
-        $file->storeAs('/public/upload', $fileName);
-        $path = "upload/".$fileName;
-        return $path;
-    }
-    public function createVoitureForm(Request $request) {
-        return view('addVoiture');
-    }
     public function VoitureForm(Request $request) {
 
         // Form validation
@@ -76,6 +62,11 @@ class HomeController extends Controller
             "puissance" => $validation['puissance'],
         ]);
 
-        return back()->with('success', 'Les données ont été enregistrées avec succès.');
+
+        return redirect('/home')->with('dataSave','success');
   }
+    public function deleteVoiture(Request $request){
+        $row = $request->id_voiture;
+        DB::delete("DELETE FROM `voiture` WHERE id='$row'");
+    }
 }
