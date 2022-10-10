@@ -26,6 +26,7 @@
                     <h2 class="text-primary">Mise en circulation : </h2>
                     <h2 class="text-primary">Statut : </h2>
                     <h2 class="text-primary">Puissance : </h2>
+                    <h2 class="text-primary">Carburant : </h2>
                 </div>
                 <div class="col-auto mx-2">
                     <h2 class="text-muted">{{$datas->marque}}</h2>
@@ -33,6 +34,7 @@
                     <h2 class="text-muted">{{$datas->circulation}}</h2>
                     <h2 class="text-muted">{{$datas->statut}}</h2>
                     <h2 class="text-muted">{{$datas->puissance}}</h2>
+                    <h2 class="text-muted">{{$datas->carburant}}</h2>
                 </div>
                 <button class="btn btn-info editButton align-self-center ms-5" style="height: fit-content">modifier</button>
             </div>

@@ -74,6 +74,7 @@ class VoitureController extends Controller
     }
 
     public function updateDatas(Request $request){
+
         $validation = $request->validate([
             'marque' => 'required',
             'model'=>'required',
@@ -93,16 +94,18 @@ class VoitureController extends Controller
             "carburant" => $validation['carburant'],
             "puissance" => $validation['puissance'],
         ]);
-        $json = new \stdClass();
-        $json->id = $id;
-        $json->marque = $validation['marque'];
-        $json->model = $validation['model'];
-        $json->circulation = $validation['circulation'];
-        $json->immatriculation = $validation['immatriculation'];
-        $json->status = $validation['status'];
-        $json->carburant = $validation['carburant'];
-        $json->puissance = $validation['puissance'];
-        return json_encode($json);
+        if($request->file('file') !== null){
+            $file = $request->file('file');
+            // Generate a file name with extension
+            $fileName = 'voiture-'.time().'.'.$file->getClientOriginalExtension();
+
+            // Save the file
+            $file->storeAs('/public/upload', $fileName);
+            $path = "upload/".$fileName;
+            Db::table('voiture')->where('id', $id)->update(['image' => $path]);
+        }
+        $datasVoiture = $this->getVoiture($request);
+        return $datasVoiture;
     }
     public function uploadImage(Request $request){
 

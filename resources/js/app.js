@@ -37,15 +37,18 @@ $(document).ready(function () {
 
 
 })
-$(window).on('load',function () {
+function eventModif(){
     $(document).on('click','.delButton',function () {
         supModal(this)
     }).on('click','.editButton',function () {
         let db = $(this).parent().parent().attr('data-db');
-        let dataid = (window.location.pathname.includes('/voiture/')) ? window.location.pathname.replace('/voiture/','') : $(this).parent().parent().attr('data-voiture');
+        let dataid = $(this).parent().parent().attr('data-voiture');
         let url  = (db === 'voiture') ? '/getVoiture': (db === 'consommation') ? '/getConsommation' : (db === 'entretiens') ? '/getEntretiens' :(db === 'reparations') ? '/getReparations' :(db === 'assurance') ? '/getAssurance' :'';
         modal(db,'edit',url,dataid);
     })
+}
+$(window).on('load',function () {
+    eventModif()
 })
 
 let myModal1 = new bootstrap.Modal(document.getElementById('AddModal'));
@@ -174,7 +177,7 @@ function modal(name,type,url,dataid) {
                 })
                 $('.btnModal').on('click',function () {
                     updateDatas(dataid,name);
-                    // $(this).prop('disabled',true)
+                    $(this).prop('disabled',true)
                 })
                 document.getElementById('AddModal').addEventListener('hide.bs.modal', function () {
                     $('.modal input').val('');
@@ -185,17 +188,23 @@ function modal(name,type,url,dataid) {
     }
     if (type !== "edit"){
         $('.btnModal').on('click', function () {
-            addDatas(id_voiture,name)
+            updateDatas('',name,'add')
+            $(this).prop('disabled',true)
+        })
+        document.getElementById('AddModal').addEventListener('hide.bs.modal', function () {
+            $('.modal input').val('');
+            $('.btnModal').prop('disabled',false);
         })
     }
 }
 var myModal = new bootstrap.Modal(document.getElementById('delModal'));
 function supModal(row){
     let data = (window.location.pathname !== '/home') ? $(row).parent().parent().attr('data-voiture') : $(row).parent().attr('data-voiture');
+    let db = (window.location.pathname !== '/home') ? $(row).parent().parent().attr('data-db') : $(row).parent().attr('data-db');
     myModal.show();
     $('#btnDelModal').on('click',function () {
 
-        let url =(window.location.pathname === '/assurance') ? '/delAssurance' : (window.location.pathname === '/entretiens') ? '/delEntretiens' : (window.location.pathname === '/reparation') ? '/delReparation' : (window.location.pathname === '/consommation') ? '/delConsommation' : (window.location.pathname === '/home') ? '/delVoiture' :  '';
+        let url  = (db === 'voiture') ? '/delVoiture': (db === 'consommation') ? '/delConsommation' : (db === 'entretiens') ? '/delEntretiens' :(db === 'reparations') ? '/delReparations' :(db === 'assurance') ? '/delAssurance' :'';
         if(url !== '/delVoiture'){
             $("tr[data-voiture='"+data+"']").remove()
         }else{
@@ -252,7 +261,7 @@ function verifDatas(datas,page,type){
                     `)
                 }
             }else{
-                tab['id'] = datas;
+                tab['id'] = (type === 'add') ? '' : datas;
                 tab['marque'] = $('.modal.fade.show input[name=marque]').val();
                 tab['model'] = $('.modal.fade.show input[name=model]').val();
                 tab['puissance'] = $('.modal.fade.show input[name=puissance]').val();
@@ -303,7 +312,12 @@ function verifDatas(datas,page,type){
     }
     if (page === "assurance"){
         if($('.modal.fade.show input[name=nomAssu]').val() !=="" && $('.modal.fade.show input[name=debutAssu]').val() !== "" && $('.modal.fade.show input[name=finAssu]').val() !== "" && $('.modal.fade.show input[name=frais]').val()!==""){
-            tab['id'] = datas;
+
+            if (type === 'add'){
+                tab['id_voiture'] = (window.location.pathname.match('voiture')) ? window.location.pathname.replace('/voiture/' ,'') : $('.modal.fade.show input[name=id_voiture]').val();
+            }else{
+                tab['id'] = datas;
+            }
             tab['nomAssu'] = $('.modal.fade.show input[name=nomAssu]').val();
             tab['debutAssu'] = $('.modal.fade.show input[name=debutAssu]').val()
             tab['finAssu'] = $('.modal.fade.show input[name=finAssu]').val()
@@ -337,7 +351,11 @@ function verifDatas(datas,page,type){
     }
     if (page === "entretiens"){
         if($('.modal.fade.show input[name=typeEnt]').val() !=="" && $('.modal.fade.show input[name=dateEnt]').val() !== "" && $('.modal.fade.show input[name=montantEnt]').val() !== "" && $('.modal.fade.show input[name=garageEnt]').val() !== ""){
-            tab['id'] = datas;
+            if (type === 'add'){
+                tab['id_voiture'] = (window.location.pathname.match('voiture')) ? window.location.pathname.replace('/voiture/' ,'') : $('.modal.fade.show input[name=id_voiture]').val();
+            }else{
+                tab['id'] = datas;
+            }
             tab['typeEnt'] = $('.modal.fade.show input[name=typeEnt]').val();
             tab['dateEnt'] = $('.modal.fade.show input[name=dateEnt]').val();
             tab['montantEnt'] = $('.modal.fade.show input[name=montantEnt]').val();
@@ -372,7 +390,11 @@ function verifDatas(datas,page,type){
     }
     if (page === "reparations"){
         if($('.modal.fade.show input[name=typeRep]').val() !=="" && $('.modal.fade.show input[name=dateRep]').val() !== "" && $('.modal.fade.show input[name=montantRep]').val() !== "" && $('.modal.fade.show input[name=garageRep]').val() !== ""){
-            tab['id'] = datas;
+            if (type === 'add'){
+                tab['id_voiture'] = (window.location.pathname.match('voiture')) ? window.location.pathname.replace('/voiture/' ,'') : $('.modal.fade.show input[name=id_voiture]').val();
+            }else{
+                tab['id'] = datas;
+            }
             tab['typeRep'] = $('.modal.fade.show input[name=typeRep]').val();
             tab['dateRep'] = $('.modal.fade.show input[name=dateRep]').val();
             tab['montantRep'] = $('.modal.fade.show input[name=montantRep]').val();
@@ -409,7 +431,11 @@ function verifDatas(datas,page,type){
         if($('.modal.fade.show input[name=montantCons]').val() !=="" && $('.modal.fade.show input[name=litre]').val() !== ""){
             tab['montantCons'] = $('.modal.fade.show input[name=montantCons]').val();
             tab['litre'] = $('.modal.fade.show input[name=litre]').val();
-            tab['id'] = datas;
+            if (type === 'add'){
+                tab['id_voiture'] = (window.location.pathname.match('voiture')) ? window.location.pathname.replace('/voiture/' ,'') : $('.modal.fade.show input[name=id_voiture]').val();
+            }else{
+                tab['id'] = datas;
+            }
         }else{
             if($('.modal.fade.show input[name=montantCons]').val() ===""){
                 $('.modal.fade.show input[name=montantCons]').css('border','2px solid red')
@@ -427,179 +453,16 @@ function verifDatas(datas,page,type){
     }
     return tab;
 }
-function addDatas(datas,type){
-    let dataVerif =verifDatas(datas,type);
-    if (dataVerif['id'] !== undefined){
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
+function updateDatas(datas,page,type){
+    let dataVerif =verifDatas(datas,page,type);
+    let urlAjax = (type === 'add' && page === 'consommation') ? '/addConsommation': (type !== 'add' && page === 'consommation') ? '/updateConsommation' :
+        (type === 'add' && page === 'entretiens') ? '/addEntretiens' : (type !== 'add' && page === 'entretiens') ? '/updateEntretiens' :
+        (type === 'add' && page === 'assurance') ? '/addAssurance' : (type !== 'add' && page === 'assurance') ? '/updateAssurance' :
+        (type === 'add' && page === 'reparations') ? '/addReparations' : (type !== 'add' && page === 'reparations') ? '/updateReparations' :
+        (type === 'add' && page === 'voiture') ? '/addVoiture' : (type !== 'add' && page ==='voiture') ? '/updateVoiture' : '';
+    if (dataVerif['id'] !== undefined || dataVerif['id_voiture'] !== undefined){
 
-        if(name === 'voiture'){
-            $.ajax({
-                type:'POST',
-                data:dataVerif,
-                url:'/addVoiture',
-                dataType:'json',
-                success:function (datas) {
-                    myModal1.hide();
-                    $("div[data-voiture="+datas.id+"] h2 span").eq(0).html(datas.immatriculation);
-                    $("div[data-voiture="+datas.id+"] div.col-6 div.col-auto:nth-child(2) h2").eq(0).html(datas.marque);
-                    $("div[data-voiture="+datas.id+"] div.col-6 div.col-auto:nth-child(2) h2").eq(1).html(datas.model);
-                    $("div[data-voiture="+datas.id+"] div.col-6 div.col-auto:nth-child(2) h2").eq(2).html(datas.circulation);
-                    $("div[data-voiture="+datas.id+"] div.col-6 div.col-auto:nth-child(2) h2").eq(3).html(datas.status);
-                    $("div[data-voiture="+datas.id+"] div.col-6 div.col-auto:nth-child(2) h2").eq(4).html(datas.puissance);
-
-                }
-            })
-            let files =  $('.modal.fade.show input[name=file]')[0].files;
-            if (files.length > 0){
-                let fd = new FormData();
-                fd.append('file',files[0]);
-                fd.append('id',dataVerif['id']);
-                fd.append('_token',$('meta[name="csrf-token"]').attr('content'));
-                $.ajax({
-                    type:'POST',
-                    data: fd,
-                    contentType:false,
-                    processData:false,
-                    url:'/uploadImage',
-                    dataType:'json',
-                    success:function (datas) {
-                        myModal1.hide();
-                        $("div[data-voiture="+datas.id+"]").parent().children().first().children().attr('src','http://127.0.0.1:8000/storage/'+datas.image);
-                    }
-                })
-            }
-        }
-
-        if (name === 'assurance') {
-            $.ajax({
-                type: "POST",
-                url: "/voiture/addAssurance",
-                data: {
-                    nomAssu: $('input[name=nomAssu]').val(),
-                    debutAssu: $('input[name=debutAssu]').val(),
-                    finAssu: $('input[name=finAssu]').val(),
-                    frais: $('input[name=frais]').val(),
-                    id_voiture: id_voiture
-                },
-                success: function (row) {
-                    myModal1.hide();
-                    row.forEach(datas => {
-                        $('#DataTable_assurances tbody').prepend(`
-                            <tr data-voiture="${datas.id}">
-                                <td>${datas.nomAssu}</td>
-                                <td>${datas.debutAssu}</td>
-                                <td>${datas.finAssu}</td>
-                                <td>${datas.frais}€
-                                <button class="btn btn-info editButon">modifier</button>
-                                <button class="btn btn-danger delButton">supprimer</button></td>
-                            </tr>
-                        `)
-                    })
-                }
-            })
-        }
-        if (name === 'entretiens') {
-            let note = ($('input[name=noteEnt]').val() !== '' && $('input[name=noteEnt]').val() !== undefined) ? $('input[name=noteEnt]').val() : 'aucune note';
-            $.ajax({
-                type: "POST",
-                url: "/voiture/addEntretien",
-                data: {
-                    noteEnt: note,
-                    typeEnt: $('input[name=typeEnt]').val(),
-                    dateEnt: $('input[name=dateEnt]').val(),
-                    montantEnt: $('input[name=montantEnt]').val(),
-                    garageEnt: $('input[name=garageEnt]').val(),
-                    id_voiture: id_voiture
-                },
-                dataType: "json",
-                success: function (row) {
-                    myModal1.hide();
-                    row.forEach(datas => {
-                        $('#DataTable_entretiens tbody').prepend(`
-                            <tr data-voiture="${datas.id}">
-                                <td>${datas.garageEnt}</td>
-                                <td>${datas.typeEnt}</td>
-                                <td>${datas.montantEnt}€</td>
-                                <td>${datas.dateEnt}</td>
-                                <td>${datas.noteEnt}
-                                <button class="btn btn-info editButon">modifier</button>
-                                <button class="btn btn-danger delButton">supprimer</button></td>
-                            </tr>
-                        `)
-                    })
-                }
-            })
-        }
-        if (name === 'reparations') {
-            let note = ($('input[name=noteRep]').val() !== '' && $('input[name=noteRep]').val() !== undefined) ? $('input[name=noteRep]').val() : 'aucune note';
-            $.ajax({
-                type: "POST",
-                url: "/voiture/addReparation",
-                data: {
-                    noteRep: note,
-                    typeRep: $('input[name=typeRep]').val(),
-                    dateRep: $('input[name=dateRep]').val(),
-                    montantRep: $('input[name=montantRep]').val(),
-                    garageRep: $('input[name=garageRep]').val(),
-                    id_voiture: id_voiture
-                },
-                dataType: "json",
-                success: function (row) {
-                    myModal1.hide();
-                    row.forEach(datas => {
-                        $('#DataTable_reparations tbody').prepend(`
-                            <tr data-voiture="${datas.id}">
-                                <td>${datas.garageRep}</td>
-                                <td>${datas.typeRep}</td>
-                                <td>${datas.montantRep}€</td>
-                                <td>${datas.dateRep}</td>
-                                <td>${datas.noteRep}
-                                <button class="btn btn-info editButon">modifier</button>
-                                <button class="btn btn-danger delButton">supprimer</button></td>
-                            </tr>
-                        `)
-                    })
-                }
-            })
-        }
-        if (name === 'consommation') {
-            $.ajax({
-                type: "POST",
-                url: "/voiture/addConsommation",
-                data: {
-                    montantCons: $('input[name=montantCons]').val(),
-                    litre: $('input[name=litre]').val(),
-                    id_voiture: id_voiture
-                },
-                dataType: "json",
-                success: function (row) {
-                    myModal1.hide();
-                    row.forEach(datas => {
-                        $('#DataTable_carburants tbody').prepend(`
-                            <tr data-voiture="${datas.id}">
-                                <td>${datas.litre}</td>
-                                <td>${datas.montantCons}€</td>
-                                <td>${Math.round(datas.montantCons / datas.litre)}€
-                                <button class="btn btn-info editButon">modifier</button>
-                                <button class="btn btn-danger delButton">supprimer</button></td>
-                            </tr>
-                        `)
-                    })
-
-                }
-            })
-        }
-    }
-}
-function updateDatas(datas,type){
-    let dataVerif =verifDatas(datas,type);
-    if (dataVerif['id'] !== undefined){
-
-        if (type === 'consommation'){
+        if (page === 'consommation'){
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -608,18 +471,18 @@ function updateDatas(datas,type){
             $.ajax({
                 type:'POST',
                 data:dataVerif,
-                url:'/updateConsommation',
+                url: urlAjax,
                 dataType:'json',
                 success:function (datas) {
                     myModal1.hide();
                     $("tr[data-voiture="+datas.id+"] td").eq(0).html(datas.litre);
                     $("tr[data-voiture="+datas.id+"] td").eq(1).html(datas.montantCons);
                     $("tr[data-voiture="+datas.id+"] td").eq(2).html(Math.round(datas.montantCons / datas.litre)+'€');
-
+                    eventModif()
                 }
             })
         }
-        if (type === 'assurance'){
+        if (page === 'assurance'){
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -628,7 +491,7 @@ function updateDatas(datas,type){
             $.ajax({
                 type:'POST',
                 data:dataVerif,
-                url:'/updateAssurance',
+                url:urlAjax,
                 dataType:'json',
                 success:function (datas) {
                     myModal1.hide();
@@ -636,11 +499,10 @@ function updateDatas(datas,type){
                     $("tr[data-voiture="+datas.id+"] td").eq(1).html(datas.debutAssu);
                     $("tr[data-voiture="+datas.id+"] td").eq(2).html(datas.finAssu);
                     $("tr[data-voiture="+datas.id+"] td").eq(3).html(datas.frais);
-
                 }
             })
         }
-        if (type === 'entretiens'){
+        if (page === 'entretiens'){
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -649,20 +511,29 @@ function updateDatas(datas,type){
             $.ajax({
                 type:'POST',
                 data:dataVerif,
-                url:'/updateEntretiens',
+                url:urlAjax,
                 dataType:'json',
-                success:function (datas) {
+                success:function (rowData) {
                     myModal1.hide();
-                    $("tr[data-voiture="+datas.id+"] td").eq(0).html(datas.garageEnt);
-                    $("tr[data-voiture="+datas.id+"] td").eq(1).html(datas.typeEnt);
-                    $("tr[data-voiture="+datas.id+"] td").eq(2).html(datas.montantEnt);
-                    $("tr[data-voiture="+datas.id+"] td").eq(3).html(datas.dateEnt);
-                    $("tr[data-voiture="+datas.id+"] td").eq(4).html((datas.noteEnt !== "") ? datas.noteEnt : 'aucune note');
-
+                    rowData.forEach(datas=>{
+                        let table = $('#DataTable_entretiens').DataTable();
+                        let tab = [datas.garageEnt,datas.typeEnt,datas.montantEnt,datas.dateEnt];
+                        if(!window.location.pathname.match('voiture')){
+                            tab.push(datas.immatriculation);
+                        }
+                        tab.push(datas.noteEnt+`<button class="btn btn-info editButton">modifier</button>
+                        <button class="btn btn-danger delButton">supprimer</button>`)
+                        let row = table.row.add(tab).node();
+                        $(row).attr({"data-voiture":datas.id,"data-db":page})
+                        table.draw();
+                        if(type !== 'add'){
+                            $("tr[data-voiture='"+datas.id+"']").eq(1).remove();
+                        }
+                    })
                 }
             })
         }
-        if (type === 'reparations'){
+        if (page === 'reparations'){
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -671,7 +542,7 @@ function updateDatas(datas,type){
             $.ajax({
                 type:'POST',
                 data:dataVerif,
-                url:'/updateReparations',
+                url:urlAjax,
                 dataType:'json',
                 success:function (datas) {
                     myModal1.hide();
@@ -680,51 +551,67 @@ function updateDatas(datas,type){
                     $("tr[data-voiture="+datas.id+"] td").eq(2).html(datas.montantRep);
                     $("tr[data-voiture="+datas.id+"] td").eq(3).html(datas.dateRep);
                     $("tr[data-voiture="+datas.id+"] td").eq(4).html((datas.noteRep !== "") ? datas.noteRep : 'aucune note');
-
                 }
             })
         }
-        if (type === 'voiture'){
+        if (page === 'voiture'){
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
+            let files = ($('.modal.fade.show input[name=file]') !== undefined) ? $('.modal.fade.show input[name=file]')[0].files : 0;
+            let fd = new FormData();
+            if (files.length > 0){
+                fd.append('file',files[0]);
+            }
+            if(type !== 'add'){
+                fd.append('id',dataVerif['id']);
+            }
+            Object.keys(dataVerif).forEach(function(key) {
+                fd.append(key,dataVerif[key]);
+            });
             $.ajax({
                 type:'POST',
-                data:dataVerif,
-                url:'/updateVoiture',
+                data: fd,
+                contentType:false,
+                processData:false,
+                url:urlAjax,
                 dataType:'json',
-                success:function (datas) {
-                    myModal1.hide();
-                    $("div[data-voiture="+datas.id+"] h2 span").eq(0).html(datas.immatriculation);
-                    $("div[data-voiture="+datas.id+"] div.col-6 div.col-auto:nth-child(2) h2").eq(0).html(datas.marque);
-                    $("div[data-voiture="+datas.id+"] div.col-6 div.col-auto:nth-child(2) h2").eq(1).html(datas.model);
-                    $("div[data-voiture="+datas.id+"] div.col-6 div.col-auto:nth-child(2) h2").eq(2).html(datas.circulation);
-                    $("div[data-voiture="+datas.id+"] div.col-6 div.col-auto:nth-child(2) h2").eq(3).html(datas.status);
-                    $("div[data-voiture="+datas.id+"] div.col-6 div.col-auto:nth-child(2) h2").eq(4).html(datas.puissance);
+                success:function (rowData) {
+                    if(type !== 'add'){
+                        rowData.forEach(datas =>{
+                            $("div[data-voiture="+datas.id+"]").parent().children().first().children().attr('src','http://127.0.0.1:8000/storage/'+datas.image);
+                            $("div[data-voiture="+datas.id+"] h2 span").eq(0).html(datas.immatriculation);
+                            $("div[data-voiture="+datas.id+"] div.col-6 div.col-auto:nth-child(2) h2").eq(0).html(datas.marque);
+                            $("div[data-voiture="+datas.id+"] div.col-6 div.col-auto:nth-child(2) h2").eq(1).html(datas.model);
+                            $("div[data-voiture="+datas.id+"] div.col-6 div.col-auto:nth-child(2) h2").eq(2).html(datas.circulation);
+                            $("div[data-voiture="+datas.id+"] div.col-6 div.col-auto:nth-child(2) h2").eq(3).html(datas.status);
+                            $("div[data-voiture="+datas.id+"] div.col-6 div.col-auto:nth-child(2) h2").eq(4).html(datas.puissance);
+                            $("div[data-voiture="+datas.id+"] div.col-6 div.col-auto:nth-child(2) h2").eq(5).html(datas.carburant);
+                        })
+                    }
+                    if(type === 'add'){
+                        rowData.forEach(datas=>{
+                            $('.container.d-flex').append(`
+                         <div class="col-2 d-flex flex-column  p-2 rounded m-2 blockVoiture" style="background: #e4e4e4" data-voiture="${datas.id}">
+                            <img src="http://127.0.0.1:8000/storage/${datas.image}" alt="" class="rounded">
+                            <p class="text-center">${datas.model}</p>
+                            <a  class="btn btn-primary w-75 align-self-center mt-3 btn-info-car" href="http://127.0.0.1:8000/voiture/${datas.id}">
+                                En savoir plus
+                            </a>
+                            <button class="btn btn-danger delButton w-75 mt-2 align-self-center">Supprimer</button>
+                        </div>
+                        `)
+                        })
 
+                    }
+                    myModal1.hide();
                 }
             })
-            let files =  $('.modal.fade.show input[name=file]')[0].files;
-            if (files.length > 0){
-                let fd = new FormData();
-                fd.append('file',files[0]);
-                fd.append('id',dataVerif['id']);
-                fd.append('_token',$('meta[name="csrf-token"]').attr('content'));
-                $.ajax({
-                    type:'POST',
-                    data: fd,
-                    contentType:false,
-                    processData:false,
-                    url:'/uploadImage',
-                    dataType:'json',
-                    success:function (datas) {
-                        myModal1.hide();
-                        $("div[data-voiture="+datas.id+"]").parent().children().first().children().attr('src','http://127.0.0.1:8000/storage/'+datas.image);
-                    }
-                })
-            }
+
+
+
 
         }
     }

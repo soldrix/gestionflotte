@@ -17,9 +17,9 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::post('/addVoiture','App\Http\Controllers\HomeController@VoitureForm');
+Route::post('/addVoiture',[App\Http\Controllers\HomeController::class, 'insertData']);
 Route::post('/addAssurance', [App\Http\Controllers\AssuranceController::class, 'createAssurance']);
-Route::post('/addEntretiens', [App\Http\Controllers\EntretiensController::class, 'createEntretiens']);
+Route::post('/addEntretiens', [App\Http\Controllers\EntretiensController::class, 'insertDatas']);
 Route::post('/addReparations', [App\Http\Controllers\ReparationsController::class, 'createReparations']);
 Route::post('/addConsommation', [App\Http\Controllers\ConsommationController::class, 'create']);
 

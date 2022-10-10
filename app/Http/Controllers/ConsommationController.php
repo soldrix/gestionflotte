@@ -10,7 +10,8 @@ class ConsommationController extends Controller
     public function verifDatas($datas){
         $validation = $datas->validate([
             "litre" => "required",
-            "montantCons" => "required"
+            "montantCons" => "required",
+            "id_voiture" => "required"
         ]);
         $tab =[
             "litre" => $validation['litre'],
@@ -20,7 +21,7 @@ class ConsommationController extends Controller
         return $tab;
     }
     public function insertData($datas){
-        return DB::table('reparations')->insert($this->verifDatas($datas));
+        return DB::table('consommation')->insert($this->verifDatas($datas));
     }
     public function updateDatas(Request $request){
         $validation = $request->validate([
@@ -29,7 +30,7 @@ class ConsommationController extends Controller
         ]);
         $litre = $validation['litre'];
         $montant = $validation['montantCons'];
-        $id = $request->id;
+        $id = $request->id_voiture;
         DB::update("UPDATE consommation set litre='$litre',montantCons='$montant' where id='$id'");
         $json = new \stdClass();
         $json->id = $id;

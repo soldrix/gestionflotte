@@ -23,16 +23,9 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function index()
-    {
-        $voiture = DB::select('select * from voiture');
-        return view('home',['voiture'=>$voiture]);
-    }
 
-    public function VoitureForm(Request $request) {
-
-        // Form validation
-        $validation = $request->validate([
+    public function verifDatas($datas){
+        $validation = $datas->validate([
             'marque' => 'required',
             'model'=>'required',
             'circulation' => 'required',
@@ -40,19 +33,15 @@ class HomeController extends Controller
             'immatriculation' => 'required',
             'status' => 'required',
             'puissance' => 'required',
-            'file' => 'required',
+            'file' => 'required'
         ]);
-
-        $file = $request->file('file');
+        $file = $datas->file('file');
         // Generate a file name with extension
         $fileName = 'voiture-'.time().'.'.$file->getClientOriginalExtension();
-
         // Save the file
         $file->storeAs('/public/upload', $fileName);
         $path = "upload/".$fileName;
-
-        DB::table('voiture')->insert([
-            "image" => $path,
+        $tab =[
             "marque" => $validation['marque'],
             "model" => $validation['model'],
             "circulation" => $validation['circulation'],
@@ -60,13 +49,21 @@ class HomeController extends Controller
             "statut" => $validation['status'],
             "carburant" => $validation['carburant'],
             "puissance" => $validation['puissance'],
-        ]);
-
-
-        return redirect('/home')->with('dataSave','success');
-  }
+            'image' => $path
+        ];
+        return $tab;
+    }
+    public function insertData(Request $request){
+         DB::table('voiture')->insert($this->verifDatas($request));
+        return DB::table('voiture')->select()->where($this->verifDatas($request))->get();
+    }
+    public function index()
+    {
+        $voiture = DB::select('select * from voiture');
+        return view('home',['voiture'=>$voiture]);
+    }
     public function deleteVoiture(Request $request){
-        $row = $request->id_voiture;
+        $row = $request->id;
         DB::delete("DELETE FROM `voiture` WHERE id='$row'");
     }
 }

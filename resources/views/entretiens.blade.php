@@ -15,6 +15,7 @@
                     <th>Type</th>
                     <th>Montant</th>
                     <th>Date</th>
+                    <th>Immatriculation</th>
                     <th>Note</th>
                 </tr>
                 </thead>
@@ -25,6 +26,7 @@
                         <td>{{$datasEnt->typeEnt}}</td>
                         <td>{{$datasEnt->montantEnt}}€</td>
                         <td>{{$datasEnt->dateEnt}}</td>
+                        <td>{{$datasEnt->immatriculation}}</td>
                         <td>{{(isset($datasEnt->noteEnt)) ? $datasEnt->noteEnt : "aucune note"}}
                             <button class="btn btn-info editButton">modifier</button>
                             <button class="btn btn-danger delButton">supprimer</button></td>
