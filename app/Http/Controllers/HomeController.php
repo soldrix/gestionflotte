@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 
 class HomeController extends Controller
 {
@@ -39,7 +41,8 @@ class HomeController extends Controller
         // Generate a file name with extension
         $fileName = 'voiture-'.time().'.'.$file->getClientOriginalExtension();
         // Save the file
-        $file->storeAs('/public/upload', $fileName);
+//        $file->storeAs('/public/upload', $fileName);
+        Storage::disk('public')->put('/upload/' . $fileName, File::get($file));
         $path = "upload/".$fileName;
         $tab =[
             "marque" => $validation['marque'],
@@ -62,8 +65,16 @@ class HomeController extends Controller
         $voiture = DB::select('select * from voiture');
         return view('home',['voiture'=>$voiture]);
     }
-    public function deleteVoiture(Request $request){
-        $row = $request->id;
-        DB::delete("DELETE FROM `voiture` WHERE id='$row'");
+    public function deleteVoiture(Request $request):void{
+        $id = $request->id;
+        $car =  DB::table('voiture')->where('id',$id)->get();
+        foreach ($car as $datas){
+            if(Storage::disk('public')->exists($datas->image)){
+                Storage::disk('public')->delete($datas->image);
+            }else{
+                error_log($datas->image);
+            }
+        }
+        DB::delete("DELETE FROM `voiture` WHERE id='$id'");
     }
 }

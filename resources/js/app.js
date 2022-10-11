@@ -233,24 +233,6 @@ function supModal(row){
                 url:url,
                 success:function () {
                     myModal.hide();
-                    if (window.location.pathname === '/home' || window.location.pathname === '/delVoiture'){
-                        if ($('.blockVoiture').length < 1){
-                            $('.container').append(`
-                        <p>Aucune voiture disponible</p>
-                        `)
-                        }
-                    }
-                    if ($('.dataTable').length > 0){
-                        for (let i = 0; i < $('.dataTable').length ; i++) {
-                            if ($('.dataTable tbody tr').eq(i).length < 1){
-                                $('.dataTable tbody').eq(i).append(`
-                            <tr class="odd">
-                                <td colspan="5" class="dataTables_empty" valign="top">Aucune entrée correspondante trouvée</td>
-                            </tr>
-                        `)
-                            }
-                        }
-                    }
                 }
             })
         }
@@ -482,13 +464,31 @@ function updateDatas(datas,page,type){
                 data:dataVerif,
                 url: urlAjax,
                 dataType:'json',
-                success:function (datas) {
-                    myModal1.hide();
-                    myModal3.hide();
-                    $("tr[data-voiture="+datas.id+"] td").eq(0).html(datas.litre);
-                    $("tr[data-voiture="+datas.id+"] td").eq(1).html(datas.montantCons);
-                    $("tr[data-voiture="+datas.id+"] td").eq(2).html(Math.round(datas.montantCons / datas.litre)+'€');
-                    eventModif()
+                success:function (rowData) {
+                    if(window.location.pathname.match('voiture') || type !== 'add' ){
+                        myModal1.hide();
+                    }
+                    rowData.forEach(datas=>{
+                        let table = $('#DataTable_carburants').DataTable();
+                        if(type !== 'add'){
+                            table.row($("tr[data-voiture='"+datas.id+"']"))
+                                .remove()
+                                .draw();
+                        }
+                        let tab = [datas.litre,datas.montantCons+'€'];
+                        if(!window.location.pathname.match('voiture')){
+                            if(type==='add'){
+                                myModal3.hide();
+                            }
+                            tab.push(datas.immatriculation);
+                        }
+                        tab.push(Math.round(datas.montantCons / datas.litre)+'€'+`<button class="btn btn-info editButton">modifier</button>
+                        <button class="btn btn-danger delButton">supprimer</button>`)
+                        let row = table.row.add(tab).node();
+                        $(row).attr({"data-voiture":datas.id,"data-db":page})
+                        table.draw();
+                        eventModif();
+                    })
                 }
             })
         }
@@ -503,14 +503,31 @@ function updateDatas(datas,page,type){
                 data:dataVerif,
                 url:urlAjax,
                 dataType:'json',
-                success:function (datas) {
-                    myModal1.hide();
-                    myModal3.hide();
-                    $("tr[data-voiture="+datas.id+"] td").eq(0).html(datas.nomAssu);
-                    $("tr[data-voiture="+datas.id+"] td").eq(1).html(datas.debutAssu);
-                    $("tr[data-voiture="+datas.id+"] td").eq(2).html(datas.finAssu);
-                    $("tr[data-voiture="+datas.id+"] td").eq(3).html(datas.frais);
-                    eventModif();
+                success:function (rowData) {
+                    if(window.location.pathname.match('voiture') || type !== 'add' ){
+                        myModal1.hide();
+                    }
+                    rowData.forEach(datas=>{
+                        let table = $('#DataTable_assurances').DataTable();
+                        if(type !== 'add'){
+                            table.row($("tr[data-voiture='"+datas.id+"']"))
+                                .remove()
+                                .draw();
+                        }
+                        let tab = [datas.nomAssu,datas.debutAssu,datas.finAssu];
+                        if(!window.location.pathname.match('voiture')){
+                            if(type==='add'){
+                                myModal3.hide();
+                            }
+                            tab.push(datas.immatriculation);
+                        }
+                        tab.push(datas.frais+'€'+`<button class="btn btn-info editButton">modifier</button>
+                        <button class="btn btn-danger delButton">supprimer</button>`)
+                        let row = table.row.add(tab).node();
+                        $(row).attr({"data-voiture":datas.id,"data-db":page})
+                        table.draw();
+                        eventModif();
+                    })
                 }
             })
         }
@@ -526,8 +543,9 @@ function updateDatas(datas,page,type){
                 url:urlAjax,
                 dataType:'json',
                 success:function (rowData) {
-                    myModal1.hide();
-                    myModal3.hide();
+                    if(window.location.pathname.match('voiture') || type !== 'add' ){
+                        myModal1.hide();
+                    }
                     rowData.forEach(datas=>{
                         let table = $('#DataTable_entretiens').DataTable();
                         if(type !== 'add'){
@@ -537,6 +555,9 @@ function updateDatas(datas,page,type){
                         }
                         let tab = [datas.garageEnt,datas.typeEnt,datas.montantEnt+'€',datas.dateEnt];
                         if(!window.location.pathname.match('voiture')){
+                            if(type==='add'){
+                                myModal3.hide();
+                            }
                             tab.push(datas.immatriculation);
                         }
                         tab.push(datas.noteEnt+`<button class="btn btn-info editButton">modifier</button>
@@ -560,16 +581,31 @@ function updateDatas(datas,page,type){
                 data:dataVerif,
                 url:urlAjax,
                 dataType:'json',
-                success:function (datas) {
-                    myModal1.hide();
-                    myModal3.hide();
-                    $("tr[data-voiture="+datas.id+"] td").eq(0).html(datas.garageRep);
-                    $("tr[data-voiture="+datas.id+"] td").eq(1).html(datas.typeRep);
-                    $("tr[data-voiture="+datas.id+"] td").eq(2).html(datas.montantRep);
-                    $("tr[data-voiture="+datas.id+"] td").eq(3).html(datas.dateRep);
-                    $("tr[data-voiture="+datas.id+"] td").eq(4).html((datas.noteRep !== "") ? datas.noteRep : 'aucune note');
-                    eventModif();
-
+                success:function (rowData) {
+                    if(window.location.pathname.match('voiture') || type !== 'add' ){
+                        myModal1.hide();
+                    }
+                    rowData.forEach(datas=>{
+                        let table = $('#DataTable_reparations').DataTable();
+                        if(type !== 'add'){
+                            table.row($("tr[data-voiture='"+datas.id+"']"))
+                                .remove()
+                                .draw();
+                        }
+                        let tab = [datas.garageRep,datas.typeRep,datas.montantRep+'€',datas.dateRep];
+                        if(!window.location.pathname.match('voiture')){
+                            if(type==='add'){
+                                myModal3.hide();
+                            }
+                            tab.push(datas.immatriculation);
+                        }
+                        tab.push(datas.noteRep+`<button class="btn btn-info editButton">modifier</button>
+                        <button class="btn btn-danger delButton">supprimer</button>`)
+                        let row = table.row.add(tab).node();
+                        $(row).attr({"data-voiture":datas.id,"data-db":page})
+                        table.draw();
+                        eventModif();
+                    })
                 }
             })
         }
@@ -610,7 +646,7 @@ function updateDatas(datas,page,type){
                     if(type === 'add'){
                         rowData.forEach(datas=>{
                             $('.container.d-flex').append(`
-                         <div class="col-2 d-flex flex-column  p-2 rounded m-2 blockVoiture" style="background: #e4e4e4" data-voiture="${datas.id}">
+                         <div class="col-2 d-flex flex-column  p-2 rounded m-2 blockVoiture" style="background: #e4e4e4" data-voiture="${datas.id}" data-db="${page}">
                             <img src="http://127.0.0.1:8000/storage/${datas.image}" alt="" class="rounded">
                             <p class="text-center">${datas.model}</p>
                             <a  class="btn btn-primary w-75 align-self-center mt-3 btn-info-car" href="http://127.0.0.1:8000/voiture/${datas.id}">

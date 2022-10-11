@@ -3,7 +3,7 @@
 @section('content')
     <div class="container-fluid">
         <!-- Button trigger modal -->
-        <button type="button" class="btn btn-primary float-end btnAddModal" data-bs-toggle="modal" data-bs-target="#ReparationsModal">
+        <button type="button" class="btn btn-primary float-end btnAddModal">
             Ajouter Reparation
         </button>
         <div class="container">
@@ -15,8 +15,8 @@
                     <th>Type</th>
                     <th>Montant</th>
                     <th>Date</th>
-                    <th>Note</th>
                     <th>Immatriculation</th>
+                    <th>Note</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -26,8 +26,8 @@
                         <td>{{$datas->typeRep}}</td>
                         <td>{{$datas->montantRep}}€</td>
                         <td>{{$datas->dateRep}}</td>
-                        <td>{{(isset($datas->noteRep)) ? $datas->noteRep : "aucune note"}}</td>
-                        <td>{{$datas->immatriculation}}
+                        <td>{{$datas->immatriculation}}</td>
+                        <td>{{(isset($datas->noteRep)) ? $datas->noteRep : "aucune note"}}
                             <button class="btn btn-info editButton">modifier</button>
                             <button class="btn btn-danger delButton">supprimer</button></td>
                     </tr>
@@ -36,9 +36,9 @@
             </table>
         </div>
     </div>
-    <div class="modal fade" id="ReparationsModal" tabindex="-1" aria-hidden="true">
-        <form class="modal-dialog modal-xl" method="post" action="/addReparations">
-            @csrf
+    <div class="modal fade" id="ReparationsModal" tabindex="-1">
+        <div class="modal-dialog modal-xl">
+
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Modal reparations</h5>
@@ -65,9 +65,9 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
-                    <button type="submit" class="btn btn-primary btnModal">Creer</button>
+                    <button type="button" class="btn btn-primary btnModal">Creer</button>
                 </div>
             </div>
-        </form>
+        </div>
     </div>
 @endsection

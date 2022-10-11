@@ -8,22 +8,23 @@ use Illuminate\Support\Facades\DB;
 
 class AssuranceController extends Controller
 {
-    public function insertDatas($datas){
-        $validation = $datas->validate([
+    public function insertDatas(Request $request){
+        $validation = $request->validate([
             "id_voiture" => "required",
             "nomAssu" => "required",
             "debutAssu" => "required",
             "finAssu" => "required",
             "frais" => "required",
         ]);
-        DB::table('assurance')->insert([
+        $tab = [
             "nomAssu" => $validation['nomAssu'],
             "id_voiture" => $validation['id_voiture'],
             "debutAssu" => $validation['debutAssu'],
             "finAssu" => $validation['finAssu'],
             "frais" => $validation['frais'],
-        ]);
-        return $validation;
+        ];
+        DB::table('assurance')->insert($tab);
+        return DB::table('assurance')->select('assurance.*','immatriculation')->join('voiture' , 'assurance.id_voiture', '=','voiture.id')->where($tab)->get();
     }
     public function updateDatas(Request $request){
         $validation = $request->validate([
@@ -39,13 +40,7 @@ class AssuranceController extends Controller
             "finAssu" => $validation['finAssu'],
             "frais" => $validation['frais'],
         ]);
-        $json = new \stdClass();
-        $json->id = $id;
-        $json->nomAssu = $validation['nomAssu'];
-        $json->debutAssu = $validation['debutAssu'];
-        $json->finAssu = $validation['finAssu'];
-        $json->frais = $validation['frais'];
-        return json_encode($json);
+        return DB::table('assurance')->select('assurance.*','immatriculation')->join('voiture' , 'assurance.id_voiture', '=','voiture.id')->where('assurance.id',$id)->get();
     }
     public function charge(){
         $voiture = DB::select('select * from voiture');
@@ -53,17 +48,9 @@ class AssuranceController extends Controller
         return  view('/assurance',['voiture'=>$voiture,'assurance'=>$assurance]);
     }
 
-    public function createAssurance(Request $request){
-        $this->insertDatas($request);
-        return redirect('/assurance')->with('dataSave','sucess');
-    }
     public function deleteAssurance(Request $request) : void{
         $row = $request->id;
         DB::delete("DELETE FROM `assurance` WHERE id='$row'");
-    }
-    public function modification(Request $request){
-        DB::table('assurance')->update($this->dbDataRow($request));
-        return $request;
     }
     public function getAssurance(Request $request){
         $id = $request->id;

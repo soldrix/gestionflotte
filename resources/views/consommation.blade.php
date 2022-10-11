@@ -3,7 +3,7 @@
 @section('content')
     <div class="container-fluid">
         <!-- Button trigger modal -->
-        <button type="button" class="btn btn-primary float-end btnAddModal" data-bs-toggle="modal" data-bs-target="#ConsommationModal">
+        <button type="button" class="btn btn-primary float-end btnAddModal">
             Ajouter consommation
         </button>
         <div class="container">
@@ -13,8 +13,8 @@
                 <tr>
                     <th>Nombre de litre</th>
                     <th>Montant</th>
-                    <th>Litre/Prix</th>
                     <th>Immatriculation</th>
+                    <th>Litre/Prix</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -22,8 +22,8 @@
                     <tr data-voiture="{{$datasCons->id}}" data-db="consommation">
                         <td>{{$datasCons->litre}}</td>
                         <td>{{$datasCons->montantCons}}€</td>
-                        <td>{{round($datasCons->montantCons/$datasCons->litre,3)}}€</td>
-                        <td>{{$datasCons->immatriculation}}
+                        <td>{{$datasCons->immatriculation}}</td>
+                        <td>{{round($datasCons->montantCons/$datasCons->litre,3)}}€
                             <button class="btn btn-info editButton">modifier</button>
                             <button class="btn btn-danger delButton">supprimer</button></td>
                     </tr>
@@ -32,9 +32,8 @@
             </table>
         </div>
     </div>
-    <div class="modal fade" id="ConsommationModal" tabindex="-1" aria-hidden="true">
-        <form class="modal-dialog modal-xl" method="post" action="/addConsommation">
-            @csrf
+    <div class="modal fade" id="ConsommationModal" tabindex="-1">
+        <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Modal consommation</h5>
@@ -55,9 +54,9 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
-                    <button type="submit" class="btn btn-primary btnModal">Creer</button>
+                    <button type="button" class="btn btn-primary btnModal">Creer</button>
                 </div>
             </div>
-        </form>
+        </div>
     </div>
 @endsection

@@ -3,7 +3,7 @@
 @section('content')
     <div class="container-fluid">
         <!-- Button trigger modal -->
-        <button type="button" class="btn btn-primary float-end btnAddModal" data-bs-toggle="modal" data-bs-target="#AssuranceModal">
+        <button type="button" class="btn btn-primary float-end btnAddModal">
             Ajouter Assurance
         </button>
         <div class="container">
@@ -14,8 +14,8 @@
                     <th>Nom assurance</th>
                     <th>Debut assurance</th>
                     <th>Fin assurance</th>
-                    <th>Frais</th>
                     <th>Immatriculation</th>
+                    <th>Frais</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -24,8 +24,8 @@
                         <td>{{$datasAssu->nomAssu}}</td>
                         <td>{{$datasAssu->debutAssu}}</td>
                         <td>{{$datasAssu->finAssu}}</td>
-                        <td>{{$datasAssu->frais}}€</td>
-                        <td>{{$datasAssu->immatriculation}}
+                        <td>{{$datasAssu->immatriculation}}</td>
+                        <td>{{$datasAssu->frais}}€
                             <button class="btn btn-info editButton">modifier</button>
                         <button class="btn btn-danger delButton">supprimer</button></td>
                     </tr>
@@ -34,9 +34,9 @@
             </table>
         </div>
     </div>
-    <div class="modal fade" id="AssuranceModal" tabindex="-1" aria-labelledby="VoitureModalLabel" aria-hidden="true">
-        <form class="modal-dialog modal-xl" method="post" enctype="multipart/form-data" action="/addAssurance">
-            @csrf
+    <div class="modal fade" id="AssuranceModal" tabindex="-1">
+        <div class="modal-dialog modal-xl">
+
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="VoitureModalLabel">Modal assurance</h5>
@@ -61,10 +61,10 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
-                    <button type="submit" class="btn btn-primary btnModal">Creer</button>
+                    <button type="button" class="btn btn-primary btnModal">Creer</button>
                 </div>
             </div>
-        </form>
+        </div>
     </div>
 
 @endsection

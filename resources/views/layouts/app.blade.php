@@ -40,7 +40,7 @@
                     <ul class="navbar-nav me-auto">
                         <a href="{{url('/entretiens')}}" class="mx-2 text-dark text-decoration-none">Entretiens</a>
                         <a href="{{url('/assurance')}}" class="mx-2 text-dark text-decoration-none">Assurance</a>
-                        <a href="{{url('/reparation')}}" class="mx-2 text-dark text-decoration-none">Reparation</a>
+                        <a href="{{url('/reparations')}}" class="mx-2 text-dark text-decoration-none">Reparation</a>
                         <a href="{{url('/consommation')}}" class="mx-2 text-dark text-decoration-none">Consommation</a>
                     </ul>
 

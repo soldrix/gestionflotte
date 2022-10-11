@@ -7,8 +7,8 @@ use Illuminate\Support\Facades\DB;
 
 class ReparationsController extends Controller
 {
-    public function verifDatas($datas){
-        $validation = $datas->validate([
+    public function insertDatas(Request $request){
+        $validation = $request->validate([
             "typeRep" => "required",
             "dateRep" => "required",
             "montantRep" => "required",
@@ -21,13 +21,10 @@ class ReparationsController extends Controller
             "dateRep" => $validation['dateRep'],
             "montantRep" => $validation['montantRep'],
             "garageRep" => $validation['garageRep'],
-            "noteRep" => (isset($datas->noteRep)) ? $datas->noteRep : null
+            "noteRep" => (isset($request->noteRep)) ? $request->noteRep : 'aucune note'
         ];
-        return $tab;
-    }
-
-    public function insertDatas($datas){
-        return DB::table('reparations')->insert($this->verifDatas($datas));
+        DB::table('reparations')->insert($tab);
+        return DB::table('reparations')->select('reparations.*','immatriculation')->join('voiture' , 'reparations.id_voiture', '=','voiture.id')->where($tab)->get();
     }
     public function updateDatas(Request $request){
         $validation = $request->validate([
@@ -44,23 +41,12 @@ class ReparationsController extends Controller
             "garageRep" => $validation['garageRep'],
             "noteRep" => (isset($request->noteRep)) ? $request->noteRep : 'aucune note'
         ]);
-        $json = new \stdClass();
-        $json->id = $id;
-        $json->typeRep = $validation['typeRep'];
-        $json->montantRep = $validation['montantRep'];
-        $json->garageRep = $validation['garageRep'];
-        $json->dateRep = $validation['dateRep'];
-        $json->noteRep = (isset($request->noteRep)) ? $request->noteRep : 'aucune note';
-        return json_encode($json);
+        return DB::table('reparations')->select('reparations.*','immatriculation')->join('voiture' , 'reparations.id_voiture', '=','voiture.id')->where('reparations.id',$id)->get();
     }
     public function charge(){
         $voiture = DB::select('select * from voiture');
         $reparation = DB::select('SELECT reparations.*,voiture.immatriculation FROM `reparations` INNER JOIN voiture ON voiture.id = reparations.id_voiture');
         return  view('/reparation',['voiture'=>$voiture,'reparation'=>$reparation]);
-    }
-    public function createReparations(Request $request){
-        $this->insertDatas($request);
-        return redirect('/reparation')->with('dataSave','success');
     }
     public function deleteReparations(Request $request) : void{
         $row = $request->id;
