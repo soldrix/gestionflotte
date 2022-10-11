@@ -1,6 +1,7 @@
 require('datatables.net-bs5');
 window.bootstrap = require('bootstrap/dist/js/bootstrap.bundle.js');
 require('jquery-mask-plugin/dist/jquery.mask.js')
+let myModal3;
 $(document).ready(function () {
 
     if ( $('.dataTable').length > 0){
@@ -22,6 +23,7 @@ $(document).ready(function () {
         });
     }
     //todo faire  insertion en ajax
+
     $(document).on('click','#btnAddVoiture',function () {
         modal('voiture')
     }).on('click',"#btnAddAssurance",function () {
@@ -32,15 +34,19 @@ $(document).ready(function () {
         modal('reparations')
     }).on('click','#btnAddConsommation',function () {
         modal('consommation')
+    }).on('click','.btnAddModal',function () {
+        let urlName = window.location.pathname.replace('/','');
+        modal(urlName,'add')
+        myModal3 = new bootstrap.Modal(document.getElementById( urlName.replace(urlName[0],urlName[0].toUpperCase())+'Modal'));
+        myModal3.show();
     })
-
-
 
 })
 function eventModif(){
-    $(document).on('click','.delButton',function () {
+    $('.delButton').off().on('click',function () {
         supModal(this)
-    }).on('click','.editButton',function () {
+    })
+    $('.editButton').off().on('click',function () {
         let db = $(this).parent().parent().attr('data-db');
         let dataid = $(this).parent().parent().attr('data-voiture');
         let url  = (db === 'voiture') ? '/getVoiture': (db === 'consommation') ? '/getConsommation' : (db === 'entretiens') ? '/getEntretiens' :(db === 'reparations') ? '/getReparations' :(db === 'assurance') ? '/getAssurance' :'';
@@ -55,7 +61,6 @@ let myModal1 = new bootstrap.Modal(document.getElementById('AddModal'));
 
 function modal(name,type,url,dataid) {
 
-    myModal1.show();
     let htmlModal = (name === "voiture") ?
         `<h2>Ajouter une voiture</h2>
                     <div class="d-flex flex-wrap">
@@ -115,13 +120,15 @@ function modal(name,type,url,dataid) {
                     <label for="litre">nombre de litres :</label>
                     <input type="text" name="litre" placeholder="Nombre de litre" class="inputForm inputDate" required>` : "";
 
-
-    $('#AddModal').find('.modal-body').html(htmlModal)
-    $('#AddModal .modal-header h5').html("Modal " + name)
-    $('#AddModal').ready(function () {
-        $('input[name=puissance]').mask('00000');
-        $('input[name=immatriculation]').mask('SS-000-SS');
-    })
+    if(window.location.pathname.match('voiture') && type === "add" || window.location.pathname.match('home') && type === "add" || type !== 'add'){
+        myModal1.show();
+        $('#AddModal').find('.modal-body').html(htmlModal)
+        $('#AddModal .modal-header h5').html("Modal " + name)
+        $('#AddModal').ready(function () {
+            $('input[name=puissance]').mask('00000');
+            $('input[name=immatriculation]').mask('SS-000-SS');
+        })
+    }
     if (type=== "edit"){
         $.ajaxSetup({
             headers: {
@@ -175,27 +182,30 @@ function modal(name,type,url,dataid) {
                         }
                     }
                 })
-                $('.btnModal').on('click',function () {
+                $('.btnModal').off().on('click',function () {
+                    $(this).prop('disabled',true);
                     updateDatas(dataid,name);
-                    $(this).prop('disabled',true)
                 })
-                document.getElementById('AddModal').addEventListener('hide.bs.modal', function () {
+
+            }
+        })
+    }
+    if (type !== "edit"){
+        $('.btnModal').off().on('click', function () {
+            $(this).prop('disabled',true);
+            updateDatas('',name,'add');
+            if(!window.location.pathname.match('voiture') && !window.location.pathname.match('home')){
+                document.getElementById(name.replace(name[0],name[0].toUpperCase())+'Modal').addEventListener('hide.bs.modal', function () {
                     $('.modal input').val('');
                     $('.btnModal').prop('disabled',false);
                 })
             }
         })
     }
-    if (type !== "edit"){
-        $('.btnModal').on('click', function () {
-            updateDatas('',name,'add')
-            $(this).prop('disabled',true)
-        })
-        document.getElementById('AddModal').addEventListener('hide.bs.modal', function () {
-            $('.modal input').val('');
-            $('.btnModal').prop('disabled',false);
-        })
-    }
+    document.getElementById('AddModal').addEventListener('hide.bs.modal', function () {
+        $('.modal input').val('');
+        $('.btnModal').prop('disabled',false);
+    })
 }
 var myModal = new bootstrap.Modal(document.getElementById('delModal'));
 function supModal(row){
@@ -314,7 +324,7 @@ function verifDatas(datas,page,type){
         if($('.modal.fade.show input[name=nomAssu]').val() !=="" && $('.modal.fade.show input[name=debutAssu]').val() !== "" && $('.modal.fade.show input[name=finAssu]').val() !== "" && $('.modal.fade.show input[name=frais]').val()!==""){
 
             if (type === 'add'){
-                tab['id_voiture'] = (window.location.pathname.match('voiture')) ? window.location.pathname.replace('/voiture/' ,'') : $('.modal.fade.show input[name=id_voiture]').val();
+                tab['id_voiture'] = (window.location.pathname.match('voiture')) ? window.location.pathname.replace('/voiture/' ,'') : $('.modal.fade.show select[name=id_voiture]').val();
             }else{
                 tab['id'] = datas;
             }
@@ -352,7 +362,7 @@ function verifDatas(datas,page,type){
     if (page === "entretiens"){
         if($('.modal.fade.show input[name=typeEnt]').val() !=="" && $('.modal.fade.show input[name=dateEnt]').val() !== "" && $('.modal.fade.show input[name=montantEnt]').val() !== "" && $('.modal.fade.show input[name=garageEnt]').val() !== ""){
             if (type === 'add'){
-                tab['id_voiture'] = (window.location.pathname.match('voiture')) ? window.location.pathname.replace('/voiture/' ,'') : $('.modal.fade.show input[name=id_voiture]').val();
+                tab['id_voiture'] = (window.location.pathname.match('voiture')) ? window.location.pathname.replace('/voiture/' ,'') : $('.modal.fade.show select[name=id_voiture]').val();
             }else{
                 tab['id'] = datas;
             }
@@ -391,7 +401,7 @@ function verifDatas(datas,page,type){
     if (page === "reparations"){
         if($('.modal.fade.show input[name=typeRep]').val() !=="" && $('.modal.fade.show input[name=dateRep]').val() !== "" && $('.modal.fade.show input[name=montantRep]').val() !== "" && $('.modal.fade.show input[name=garageRep]').val() !== ""){
             if (type === 'add'){
-                tab['id_voiture'] = (window.location.pathname.match('voiture')) ? window.location.pathname.replace('/voiture/' ,'') : $('.modal.fade.show input[name=id_voiture]').val();
+                tab['id_voiture'] = (window.location.pathname.match('voiture')) ? window.location.pathname.replace('/voiture/' ,'') : $('.modal.fade.show select[name=id_voiture]').val();
             }else{
                 tab['id'] = datas;
             }
@@ -432,7 +442,7 @@ function verifDatas(datas,page,type){
             tab['montantCons'] = $('.modal.fade.show input[name=montantCons]').val();
             tab['litre'] = $('.modal.fade.show input[name=litre]').val();
             if (type === 'add'){
-                tab['id_voiture'] = (window.location.pathname.match('voiture')) ? window.location.pathname.replace('/voiture/' ,'') : $('.modal.fade.show input[name=id_voiture]').val();
+                tab['id_voiture'] = (window.location.pathname.match('voiture')) ? window.location.pathname.replace('/voiture/' ,'') : $('.modal.fade.show select[name=id_voiture]').val();
             }else{
                 tab['id'] = datas;
             }
@@ -461,7 +471,6 @@ function updateDatas(datas,page,type){
         (type === 'add' && page === 'reparations') ? '/addReparations' : (type !== 'add' && page === 'reparations') ? '/updateReparations' :
         (type === 'add' && page === 'voiture') ? '/addVoiture' : (type !== 'add' && page ==='voiture') ? '/updateVoiture' : '';
     if (dataVerif['id'] !== undefined || dataVerif['id_voiture'] !== undefined){
-
         if (page === 'consommation'){
             $.ajaxSetup({
                 headers: {
@@ -475,6 +484,7 @@ function updateDatas(datas,page,type){
                 dataType:'json',
                 success:function (datas) {
                     myModal1.hide();
+                    myModal3.hide();
                     $("tr[data-voiture="+datas.id+"] td").eq(0).html(datas.litre);
                     $("tr[data-voiture="+datas.id+"] td").eq(1).html(datas.montantCons);
                     $("tr[data-voiture="+datas.id+"] td").eq(2).html(Math.round(datas.montantCons / datas.litre)+'€');
@@ -495,10 +505,12 @@ function updateDatas(datas,page,type){
                 dataType:'json',
                 success:function (datas) {
                     myModal1.hide();
+                    myModal3.hide();
                     $("tr[data-voiture="+datas.id+"] td").eq(0).html(datas.nomAssu);
                     $("tr[data-voiture="+datas.id+"] td").eq(1).html(datas.debutAssu);
                     $("tr[data-voiture="+datas.id+"] td").eq(2).html(datas.finAssu);
                     $("tr[data-voiture="+datas.id+"] td").eq(3).html(datas.frais);
+                    eventModif();
                 }
             })
         }
@@ -515,9 +527,15 @@ function updateDatas(datas,page,type){
                 dataType:'json',
                 success:function (rowData) {
                     myModal1.hide();
+                    myModal3.hide();
                     rowData.forEach(datas=>{
                         let table = $('#DataTable_entretiens').DataTable();
-                        let tab = [datas.garageEnt,datas.typeEnt,datas.montantEnt,datas.dateEnt];
+                        if(type !== 'add'){
+                            table.row($("tr[data-voiture='"+datas.id+"']"))
+                                .remove()
+                                .draw();
+                        }
+                        let tab = [datas.garageEnt,datas.typeEnt,datas.montantEnt+'€',datas.dateEnt];
                         if(!window.location.pathname.match('voiture')){
                             tab.push(datas.immatriculation);
                         }
@@ -526,9 +544,7 @@ function updateDatas(datas,page,type){
                         let row = table.row.add(tab).node();
                         $(row).attr({"data-voiture":datas.id,"data-db":page})
                         table.draw();
-                        if(type !== 'add'){
-                            $("tr[data-voiture='"+datas.id+"']").eq(1).remove();
-                        }
+                        eventModif();
                     })
                 }
             })
@@ -546,11 +562,14 @@ function updateDatas(datas,page,type){
                 dataType:'json',
                 success:function (datas) {
                     myModal1.hide();
+                    myModal3.hide();
                     $("tr[data-voiture="+datas.id+"] td").eq(0).html(datas.garageRep);
                     $("tr[data-voiture="+datas.id+"] td").eq(1).html(datas.typeRep);
                     $("tr[data-voiture="+datas.id+"] td").eq(2).html(datas.montantRep);
                     $("tr[data-voiture="+datas.id+"] td").eq(3).html(datas.dateRep);
                     $("tr[data-voiture="+datas.id+"] td").eq(4).html((datas.noteRep !== "") ? datas.noteRep : 'aucune note');
+                    eventModif();
+
                 }
             })
         }
@@ -560,13 +579,10 @@ function updateDatas(datas,page,type){
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
-            let files = ($('.modal.fade.show input[name=file]') !== undefined) ? $('.modal.fade.show input[name=file]')[0].files : 0;
+            let files = ($(".modal.fade.show input[name=file]").get(0).files.length !== 0) ? $('.modal.fade.show input[name=file]')[0].files[0] : 0;
             let fd = new FormData();
-            if (files.length > 0){
-                fd.append('file',files[0]);
-            }
-            if(type !== 'add'){
-                fd.append('id',dataVerif['id']);
+            if (files !== 0){
+                fd.append('file',files);
             }
             Object.keys(dataVerif).forEach(function(key) {
                 fd.append(key,dataVerif[key]);
@@ -607,6 +623,7 @@ function updateDatas(datas,page,type){
 
                     }
                     myModal1.hide();
+                    eventModif();
                 }
             })
 
@@ -614,5 +631,7 @@ function updateDatas(datas,page,type){
 
 
         }
+    }else{
+        console.log(dataVerif)
     }
 }

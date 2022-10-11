@@ -3,7 +3,7 @@
 @section('content')
     <div class="container-fluid">
         <!-- Button trigger modal -->
-        <button type="button" class="btn btn-primary float-end btnAddModal" data-bs-toggle="modal" data-bs-target="#EntretiensModal">
+        <button type="button" class="btn btn-primary float-end btnAddModal">
             Ajouter Entretien
         </button>
         <div class="container">
@@ -36,9 +36,8 @@
             </table>
         </div>
     </div>
-    <div class="modal fade" id="EntretiensModal" tabindex="-1" aria-hidden="true">
-        <form class="modal-dialog modal-xl" method="post" action="/addEntretiens">
-            @csrf
+    <div class="modal fade" id="EntretiensModal" tabindex="-1">
+        <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="VoitureModalLabel">Modal entretiens</h5>
@@ -68,6 +67,6 @@
                     <button type="submit" class="btn btn-primary btnModal">Creer</button>
                 </div>
             </div>
-        </form>
+        </div>
     </div>
 @endsection

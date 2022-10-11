@@ -88,14 +88,12 @@
     </div>
     <div class="modal fade" id="AddModal" tabindex="-1" aria-labelledby="VoitureModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-xl">
-            @csrf
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="VoitureModalLabel">Modal </h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="col-6 align-self-center modal-body d-flex flex-column">
-
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>

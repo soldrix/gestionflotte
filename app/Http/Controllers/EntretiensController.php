@@ -24,7 +24,7 @@ class EntretiensController extends Controller
             "noteEnt" => (isset($request->noteEnt)) ? $request->noteEnt : 'aucune note'
         ];
         DB::table('entretiens')->insert($tab);
-        return DB::table('entretiens')->where($tab)->get();
+        return DB::table('entretiens')->select('entretiens.*','immatriculation')->join('voiture' , 'entretiens.id_voiture', '=','voiture.id')->where($tab)->get();
     }
     public function updateDatas(Request $request){
         $validation = $request->validate([

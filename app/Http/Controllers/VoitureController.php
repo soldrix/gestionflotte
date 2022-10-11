@@ -107,21 +107,21 @@ class VoitureController extends Controller
         $datasVoiture = $this->getVoiture($request);
         return $datasVoiture;
     }
-    public function uploadImage(Request $request){
-
-            $file = $request->file('file');
-            $id = json_decode($request->id);
-            // Generate a file name with extension
-            $fileName = 'voiture-'.time().'.'.$file->getClientOriginalExtension();
-
-            // Save the file
-            $file->storeAs('/public/upload', $fileName);
-            $path = "upload/".$fileName;
-            DB::update("update voiture set image='$path' where id='$id'");
-            $json = new \stdClass();
-            $json->id = $id;
-            $json->image = $path;
-
-        return json_encode($json);
-    }
+//    public function uploadImage(Request $request){
+//
+//            $file = $request->file('file');
+//            $id = json_decode($request->id);
+//            // Generate a file name with extension
+//            $fileName = 'voiture-'.time().'.'.$file->getClientOriginalExtension();
+//
+//            // Save the file
+//            $file->storeAs('/public/upload', $fileName);
+//            $path = "upload/".$fileName;
+//            DB::update("update voiture set image='$path' where id='$id'");
+//            $json = new \stdClass();
+//            $json->id = $id;
+//            $json->image = $path;
+//
+//        return json_encode($json);
+//    }
 }
