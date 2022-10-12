@@ -25,7 +25,7 @@
                         <td>{{$datas->garageRep}}</td>
                         <td>{{$datas->typeRep}}</td>
                         <td>{{$datas->montantRep}}€</td>
-                        <td>{{$datas->dateRep}}</td>
+                        <td>{{date('d/m/Y', strtotime($datas->dateRep))}}</td>
                         <td>{{$datas->immatriculation}}</td>
                         <td>{{(isset($datas->noteRep)) ? $datas->noteRep : "aucune note"}}
                             <button class="btn btn-info editButton">modifier</button>
@@ -41,26 +41,39 @@
 
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Modal reparations</h5>
+                    <h5 class="modal-title">Ajouter une réparations</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="col-6 align-self-center modal-body d-flex flex-column">
-                    <h2>Reparations</h2>
                     <div class="d-flex flex-wrap">
-                        <input type="text" name="typeRep" placeholder="Type ex:(vidange)" class="inputForm inputType" required>
-                        <input type="date" name="dateRep" placeholder="Date Entretiens" class="inputForm inputDate" required>
-                        <input type="text" name="garageRep" placeholder="Garage" class="inputForm inputGarage" required>
+                        <label for="typeRep">Type de réparations :</label>
+                        <input type="text" name="typeRep" placeholder="Type ex:(vidange)" class="inputForm inputType inputText mb-2 me-2" required>
                     </div>
-
-                    <div class="d-flex">
-                        <input type="text" name="montantRep" placeholder="Montant total" class="inputForm inputMontant" required>
-                        <select name="id_voiture" id="idSelect">
+                    <div class="d-flex flex-wrap align-items-baseline">
+                        <label for="dateRep">Date de la réparations :</label>
+                        <input type="date" name="dateRep" placeholder="Date Entretiens" class="inputForm inputDate mb-2 me-2" required>
+                    </div>
+                    <div class="d-flex flex-wrap align-items-baseline">
+                        <label for="garageRep">Nom du garage :</label>
+                        <input type="text" name="garageRep" placeholder="Garage" class="inputForm inputGarage mb-2 me-2 inputText" required>
+                    </div>
+                    <div class="d-flex flex-wrap align-items-baseline">
+                        <label for="montantRep">Montant :</label>
+                        <input type="text" name="montantRep" placeholder="Montant total" class="inputForm inputMontant inputNumber mb-2 me-2" required>
+                    </div>
+                    <div class="d-flex flex-wrap align-items-baseline">
+                        <label for="id_voiture">Immatriculation du véhicule :</label>
+                        <select name="id_voiture" id="idSelect" class="mb-2 me-2">
                             @foreach($voiture as $datas)
                                 <option value="{{$datas->id}}">{{$datas->immatriculation}}</option>
                             @endforeach
                         </select>
                     </div>
-                    <textarea name="noteEnt" id="noteRep" cols="30" rows="4" class="inputForm inputNote"></textarea>
+                    <div class="d-flex flex-wrap align-items-baseline">
+                        <label for="noteEnt">Note supplémentaire :</label>
+                        <textarea name="noteEnt" id="noteRep" cols="30" rows="4" class="inputForm inputNote inputText mb-2 me-2"></textarea>
+                    </div>
+
 
                 </div>
                 <div class="modal-footer">

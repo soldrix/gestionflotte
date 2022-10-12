@@ -19,5 +19,6 @@ mix.autoload({
     .js('node_modules/@fortawesome/fontawesome-free/js/fontawesome.js','public/js')
     .css('node_modules/@fortawesome/fontawesome-free/css/all.css','public/css')
     .css('node_modules/datatables.net-bs5/css/dataTables.bootstrap5.css','public/css')
+    .css('resources/css/style.css','public/css')
     .sass('resources/sass/app.scss', 'public/css')
     .sourceMaps();

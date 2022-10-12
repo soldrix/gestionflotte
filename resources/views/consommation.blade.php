@@ -36,21 +36,27 @@
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Modal consommation</h5>
+                    <h5 class="modal-title">Ajouter une consommation</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="col-6 align-self-center modal-body d-flex flex-column">
-                    <h2>Consommation</h2>
-                    <div class="d-flex">
-                        <input type="text" name="montantCons" placeholder="Montant total" class="inputForm inputMontant" required>
-                        <input type="text" name="litre" placeholder="Nombre de litre" class="inputForm inputDate" required>
+                    <div class="d-flex flex-wrap align-items-baseline">
+                        <label for="montantCons">Montant :</label>
+                        <input type="text" name="montantCons" placeholder="Montant total" class="inputForm inputMontant inputNumber mb-2 me-2" required>
+                    </div>
+                    <div class="d-flex flex-wrap align-items-baseline">
+                        <label for="litre">Nombre de litre :</label>
+                        <input type="text" name="litre" placeholder="Nombre de litre" class="inputForm inputDate mb-2 inputNumber" required>
+                    </div>
+                    <div class="d-flex flex-wrap align-items-baseline">
+                        <label for="id_voiture">Immatriculation du véhicule :</label>
+                        <select name="id_voiture" id="idSelect" class="mb-2 me-2">
+                            @foreach($voiture as $datas)
+                                <option value="{{$datas->id}}">{{$datas->immatriculation}}</option>
+                            @endforeach
+                        </select>
                     </div>
 
-                    <select name="id_voiture" id="idSelect">
-                        @foreach($voiture as $datas)
-                            <option value="{{$datas->id}}">{{$datas->immatriculation}}</option>
-                        @endforeach
-                    </select>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>

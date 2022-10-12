@@ -272,6 +272,7 @@ function modal(name,type,url,dataid) {
             if(!window.location.pathname.match('voiture') && !window.location.pathname.match('home')){
                 document.getElementById(name.replace(name[0],name[0].toUpperCase())+'Modal').addEventListener('hide.bs.modal', function () {
                     $('.modal input').val('');
+                    $('.modal input').removeClass('active');
                     $('.text-danger').remove();
                 })
             }
@@ -279,6 +280,7 @@ function modal(name,type,url,dataid) {
     }
     document.getElementById('AddModal').addEventListener('hide.bs.modal', function () {
         $('.modal input').val('');
+        $('.modal input').removeClass('active');
         $('.text-danger').remove();
     })
 }
@@ -366,10 +368,15 @@ function verifDatas(datas,page,type){
         let carburant = $('.modal.fade.show input[name=carburant]');
         let immatriculation = $('.modal.fade.show input[name=immatriculation]');
         let circulation = $('.modal.fade.show input[name=circulation]');
-        let image = $('.modal.fade.show input[name=file]');
+        let imageFile = $('.modal.fade.show input[name=file]');
         if(marque.val() !=="" && model.val() !== "" && puissance.val() !== "" && carburant.val()!=="" && immatriculation.val()!=="" && circulation.val()!==""){
-            if (type === 'add' && image[0].files.length < 1){
-                draw_error(image,'error_image')
+            if (type === 'add' && imageFile[0].files.length <= 0){
+                if($('#error_image').length <= 0){
+                    imageFile.addClass('active');
+                    imageFile.parent().append(`
+                    <p id='error_image' class='text-danger'>Champ requis</p>
+                `);
+                }
             }else{
 
                 tab['id'] = (type === 'add') ? '' : datas;
@@ -383,6 +390,14 @@ function verifDatas(datas,page,type){
             }
 
         }else{
+            if (type === 'add' && imageFile[0].files.length <= 0){
+                if($('#error_image').length <= 0){
+                    imageFile.addClass('active');
+                    imageFile.parent().append(`
+                    <p id='error_image' class='text-danger'>Champ requis</p>
+                `);
+                }
+            }
             draw_error(marque,'error_marque')
             draw_error(circulation,'error_circulation')
             draw_error(model,'error_model')

@@ -1,4 +1,4 @@
 @import '~datatables.net-bs5/css/dataTables.bootstrap5.css';
-input.active{
+.modal.fade input.active{
     border:2px solid red;
 }

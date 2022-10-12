@@ -25,7 +25,7 @@
                         <td>{{$datasEnt->garageEnt}}</td>
                         <td>{{$datasEnt->typeEnt}}</td>
                         <td>{{$datasEnt->montantEnt}}€</td>
-                        <td>{{$datasEnt->dateEnt}}</td>
+                        <td>{{date('d/m/Y', strtotime($datasEnt->dateEnt))}}</td>
                         <td>{{$datasEnt->immatriculation}}</td>
                         <td>{{(isset($datasEnt->noteEnt)) ? $datasEnt->noteEnt : "aucune note"}}
                             <button class="btn btn-info editButton">modifier</button>
@@ -40,26 +40,39 @@
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="VoitureModalLabel">Modal entretiens</h5>
+                    <h5 class="modal-title" id="VoitureModalLabel">Ajouter un entretiens</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="col-6 align-self-center modal-body d-flex flex-column">
-                    <h2>Entretiens</h2>
-                    <div class="d-flex flex-wrap">
-                        <input type="text" name="typeEnt" placeholder="Type ex:(vidange)" class="inputForm inputType" required>
-                        <input type="date" name="dateEnt" placeholder="Date Entretiens" class="inputForm inputDate" required>
-                        <input type="text" name="garageEnt" placeholder="Garage" class="inputForm inputGarage" required>
+                    <div class="d-flex flex-wrap align-items-baseline">
+                        <label for="typeEnt">Type d'entretiens :</label>
+                        <input type="text" name="typeEnt" placeholder="Type ex:(vidange)" class="inputForm inputType inputText mb-2 me-2" required>
                     </div>
-
-                    <div class="d-flex">
-                        <input type="text" name="montantEnt" placeholder="Montant total" class="inputForm inputMontant" required>
+                    <div class="d-flex flex-wrap align-items-baseline">
+                        <label for="dateEnt">Date de l'entretiens</label>
+                        <input type="date" name="dateEnt" placeholder="Date Entretiens" class="inputForm inputDate mb-2 me-2" required>
+                    </div>
+                    <div class="d-flex flex-wrap align-items-baseline">
+                        <label for="garageEnt">Nom du garage :</label>
+                        <input type="text" name="garageEnt" placeholder="Garage" class="inputForm inputGarage inputText mb-2 me-2" required>
+                    </div>
+                    <div class="d-flex flex-wrap align-items-baseline">
+                        <label for="montantEnt">Montant :</label>
+                        <input type="text" name="montantEnt" placeholder="Montant total" class="inputForm inputMontant inputNumber mb-2 me-2" required>
+                    </div>
+                    <div class="d-flex flex-wrap align-items-baseline">
+                        <label for="id_voiture">Immatricualtion véhicule :</label>
                         <select name="id_voiture" id="idSelect">
                             @foreach($voiture as $datas)
                                 <option value="{{$datas->id}}">{{$datas->immatriculation}}</option>
                             @endforeach
                         </select>
                     </div>
-                    <textarea name="noteEnt" id="noteEnt" cols="30" rows="4" class="inputForm inputNote"></textarea>
+                    <div class="d-flex flex-wrap align-items-baseline">
+                        <label for="noteEnt">Note supplémentaire :</label>
+                        <textarea name="noteEnt" id="noteEnt" cols="30" rows="4" class="inputForm inputNote inputText"></textarea>
+                    </div>
+
 
                 </div>
                 <div class="modal-footer">
