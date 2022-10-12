@@ -86,14 +86,15 @@
             @yield('content')
         </main>
     </div>
-    <div class="modal fade" id="AddModal" tabindex="-1" aria-labelledby="VoitureModalLabel" aria-hidden="true">
+    <div class="modal fade" id="AddModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="VoitureModalLabel">Modal </h5>
+                    <h3 class="modal-title" id="VoitureModalLabel">Modal </h3>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="col-6 align-self-center modal-body d-flex flex-column">
+
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
@@ -102,11 +103,11 @@
             </div>
         </div>
     </div>
-        @if (session()->has('dataSave'))
+
         <div class="toast-container position-absolute start-0 p-3 top-0 mt-5" >
 
             <!-- Then put toasts within -->
-            <div id="toastNotice" class="toast show" role="alert">
+            <div id="saveToast" class="toast" role="alert">
                 <div class="toast-header">
                     <strong class="me-auto">Enregistrement des données</strong>
                     <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
@@ -115,11 +116,20 @@
                     Les données ont été enregistrées
                 </div>
             </div>
+            <div id="toastSupp" class="toast" role="alert">
+                <div class="toast-header">
+                    <strong class="me-auto">Suppression données</strong>
+                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+                <div class="toast-body">
+                    Les données ont été supprimé
+                </div>
+            </div>
 
         </div>
-        @endif
 
-    <div class="modal" tabindex="-1" id="delModal">
+
+    <div class="modal" tabindex="-1" id="delModal" data-bs-backdrop="static" data-bs-keyboard="false">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
@@ -133,15 +143,7 @@
             </div>
         </div>
     </div>
-    <div id="toastSupp" class="toast" role="alert">
-        <div class="toast-header">
-            <strong class="me-auto">Suppression données</strong>
-            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-        </div>
-        <div class="toast-body">
-            Les données ont été supprimé
-        </div>
-    </div>
+
 
 </body>
 </html>

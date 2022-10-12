@@ -34,7 +34,7 @@
             </table>
         </div>
     </div>
-    <div class="modal fade" id="AssuranceModal" tabindex="-1">
+    <div class="modal fade" id="AssuranceModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
         <div class="modal-dialog modal-xl">
 
             <div class="modal-content">

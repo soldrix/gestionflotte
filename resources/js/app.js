@@ -62,74 +62,142 @@ let myModal1 = new bootstrap.Modal(document.getElementById('AddModal'));
 function modal(name,type,url,dataid) {
 
     let htmlModal = (name === "voiture") ?
-        `<h2>Ajouter une voiture</h2>
-                    <div class="d-flex flex-wrap">
-                        <input type="text" name="marque" placeholder="Marque" class="mb-2 me-2 inputMarque inputForm"  required>
-                        <input type="text" name="model" placeholder="Model" class="mb-2 inputModel inputForm" required>
+        `
+
+                    <div class="d-flex flex-wrap align-items-baseline">
+                        <label class="me-2" for="marque">Marque :</label>
+                        <input type="text" name="marque" placeholder="Marque" class="mb-2 me-2 inputForm inputText"  required>
                     </div>
-                    <div class="d-flex flex-wrap">
-                        <input type="text" name="carburant" placeholder="Carburant ex:(diesel)" class="mb-2 me-2 inputCarbu inputForm" required>
-                        <input type="date" name="circulation" placeholder="Date circulation" class="mb-2 inputCirc inputForm" required>
+                    <div class="d-flex flex-wrap align-items-baseline">
+                        <label class="me-2" for="model">Model :</label>
+                        <input type="text" name="model" placeholder="Model" class="mb-2 inputForm inputText" required>
                     </div>
-                    <div class="d-flex flex-wrap">
+                    <div class="d-flex flex-wrap align-items-baseline">
+                        <label class="me-2" for="carburant">Type de carburant :</label>
+                        <input type="text" name="carburant" placeholder="Carburant ex:(diesel)" class="mb-2 me-2 inputText inputForm" required>
+                    </div>
+                    <div class="d-flex flex-wrap align-items-baseline">
+                        <label class="me-2" for="cicrculation">Mise en circulation :</label>
+                        <input type="text" name="circulation" placeholder="Date circulation" class="mb-2 inputCirc inputDate inputForm" required>
+                    </div>
+                    <div class="d-flex flex-wrap align-items-baseline">
+                        <label class="me-2" for="immatriculation">Immatriculation du véhicule :</label>
                         <input type="text" name="immatriculation" placeholder="Immatriculation" class="mb-2 me-2 inputIm inputForm" required>
+                    </div>
+                    <div class="d-flex flex-wrap align-items-baseline">
+                        <label class="me-2" for="puissance">Nombre de chevaux :</label>
                         <input type="text" name="puissance" placeholder="Puissance ex:(100cc)" class="mb-2 inputPuissance inputForm" required>
                     </div>
-                    <div class="d-flex flex-wrap">
-                         <select name="status" id="voitureSatut" class="mb-2 me-2">
+                    <div class="d-flex flex-wrap align-items-baseline">
+                        <label class="me-2" for="status">Status du véhicule :</label>
+                        <select name="status" id="voitureSatut" class="mb-2 me-2">
                             <option value="disponible">Disponible</option>
                             <option value="indisponible">Indisponible</option>
                         </select>
+                    </div>
+                    <div class="d-flex flex-wrap align-items-baseline">
+                        <label class="me-2" for="file">Image du véhicule :</label>
                         <input type="file" name="file" accept="image/png, image/jpeg, image/jpg" class="mb-2 inputFile inputForm" required>
                     </div>
                    `
         : (name === "assurance") ?
-            `<h2>Assurance</h2>
-                    <div class="d-flex flex-wrap">
-                        <input type="text" name="nomAssu" placeholder="Nom assurance" class="inputForm inputAssu" required>
-                        <input type="date" name="debutAssu" placeholder="Debut assurance" class="inputForm assuDateD" required>
-                        <input type="date" name="finAssu" placeholder="Fin assurance"  class="inputForm assuDateF" required>
+            `
+                    <div class="d-flex flex-wrap align-items-baseline">
+                        <label class="me-2" for="nomAssu">Nom de l'assurance :</label>
+                        <input type="text" name="nomAssu" placeholder="Nom assurance" class="inputForm inputText mb-2" required>
+                    </div>
+                    <div class="d-flex flex-wrap align-items-baseline">
+                        <label class="me-2" for="debutAssu">Date de début :</label>
+                        <input type="text" name="debutAssu" placeholder="Debut assurance" class="inputForm inputDate assuDateD mb-2" required>
+                    </div>
+                    <div class="d-flex flex-wrap align-items-baseline">
+                        <label class="me-2" for="finAssu">Date de fin :</label>
+                        <input type="text" name="finAssu" placeholder="Fin assurance"  class="inputForm inputDate assuDateF mb-2" required>
                     </div>
                     <div class="d-flex">
-                        <input type="text" name="frais" placeholder="Frais assurance" class="inputForm inputFrais" required>
+                        <label class="me-2" for="frais">Frais de l'assurance :</label>
+                        <input type="text" name="frais" placeholder="Frais assurance" class="inputForm  inputNumber mb-2" required>
                     </div>`
             : (name === "entretiens") ?
-                `<h2>Entretiens</h2>
-
-                    <input type="text" name="typeEnt" placeholder="Type ex:(vidange)" class="inputForm inputType" required>
-
-                    <input type="date" name="dateEnt" placeholder="Date Entretiens" class="inputForm inputDate" required>
-
-                    <input type="text" name="montantEnt" placeholder="Montant total" class="inputForm inputMontant" required>
-                    <input type="text" name="garageEnt" placeholder="Garage" class="inputForm inputGarge" required>
-                    <textarea name="noteEnt" id="noteEnt" cols="30" rows="4" class="inputForm inputNote"></textarea>`
+                `
+                    <div class="d-flex flex-wrap align-items-baseline">
+                        <label class="me-2" for="typeEnt">Type d'entretien :</label>
+                        <input type="text" name="typeEnt" placeholder="Type ex:(vidange)" class="inputForm inputText mb-2" required>
+                    </div>
+                    <div class="d-flex flex-wrap align-items-baseline">
+                        <label class="me-2" for="dateEnt">Date de l'entretien :</label>
+                        <input type="text" name="dateEnt" placeholder="Date Entretiens" class="inputForm inputDate mb-2" required>
+                    </div>
+                    <div class="d-flex flex-wrap align-items-baseline">
+                        <label class="me-2" for="montantEnt">Montant de l'entretien :</label>
+                        <input type="text" name="montantEnt" placeholder="Montant total" class="inputForm inputNumber mb-2" required>
+                    </div>
+                    <div class="d-flex flex-wrap align-items-baseline">
+                        <label class="me-2" for="garageEnt">Nom du garage :</label>
+                        <input type="text" name="garageEnt" placeholder="Garage" class="inputForm inputText  mb-2" required>
+                    </div>
+                    <div class="d-flex flex-column">
+                        <label class="me-2" for="noteEnt">Note supplémentaire :</label>
+                        <textarea name="noteEnt" id="noteEnt" cols="30" rows="4" class="inputForm inputText mb-2"></textarea>
+                    </div>`
                 : (name === "reparations") ?
-                    `<h2>Reparations</h2>
-
-                    <input type="text" name="typeRep" placeholder="Type ex:(vidange)" class="inputForm inputType" required>
-
-                    <input type="date" name="dateRep" placeholder="Date Reparations" class="inputForm inputDate" required>
-
-                    <input type="text" name="montantRep" placeholder="Montant total" class="inputForm inputMontant" required>
-                    <input type="text" name="garageRep" placeholder="Garage" class="inputForm inputGarage" required>
-                    <textarea name="noteRep" id="noteRep" cols="30" rows="4" class="inputForm inputNote"></textarea>`
+                    `
+                    <div class="d-flex flex-wrap align-items-baseline">
+                        <label class="me-2" for="typeRep">Type de réparation :</label>
+                        <input type="text" name="typeRep" placeholder="Type ex:(vidange)" class="inputForm inputText mb-2" required>
+                    </div>
+                    <div class="d-flex flex-wrap align-items-baseline">
+                        <label class="me-2" for="dateRep">Date de la réparation :</label>
+                        <input type="text" name="dateRep" placeholder="Date Reparations" class="inputForm inputDate mb-2" required>
+                    </div>
+                    <div class="d-flex flex-wrap align-items-baseline">
+                        <label class="me-2" for="montantRep">Montant de la réparation :</label>
+                        <input type="text" name="montantRep" placeholder="Montant total" class="inputForm inputNumber mb-2" required>
+                    </div>
+                    <div class="d-flex flex-wrap align-items-baseline">
+                        <label class="me-2" for="garageRep">Nom du garage :</label>
+                        <input type="text" name="garageRep" placeholder="Garage" class="inputForm inputText mb-2" required>
+                    </div>
+                    <div class="d-flex flex-column">
+                        <label class="me-2" for="noteRep">Note supplémentaire :</label>
+                        <textarea name="noteRep" id="noteRep" cols="30" rows="4" class="inputForm inputText mb-2"></textarea>
+                    </div>
+                    `
                     : (name === "consommation") ?
-                        `<h2>Consommation</h2>
-                    <label for="montantCons">Montant :</label>
-                    <input type="text" name="montantCons" placeholder="Montant total" class="inputForm inputMontant" required>
-                    <label for="litre">nombre de litres :</label>
-                    <input type="text" name="litre" placeholder="Nombre de litre" class="inputForm inputDate" required>` : "";
+                        `
+                    <div class="d-flex flex-wrap align-items-baseline">
+                        <label class="me-2" for="montantCons">Montant :</label>
+                        <input type="text" name="montantCons" placeholder="Montant total" class="inputForm inputNumber mb-2" required>
+                    </div>
+                    <div class="d-flex flex-wrap align-items-baseline">
+                        <label class="me-2" for="litre">nombre de litres :</label>
+                        <input type="text" name="litre" placeholder="Nombre de litre" class="inputForm inputNumber mb-2" required>
+                    </div>` : "";
 
     if(window.location.pathname.match('voiture') && type === "add" || window.location.pathname.match('home') && type === "add" || type !== 'add'){
         myModal1.show();
         $('#AddModal').find('.modal-body').html(htmlModal)
-        $('#AddModal .modal-header h5').html("Modal " + name)
         $('#AddModal').ready(function () {
             $('input[name=puissance]').mask('00000');
             $('input[name=immatriculation]').mask('SS-000-SS');
         })
     }
+    $('#AddModal').ready(function () {
+        $('.inputDate').mask('00/00/0000', {placeholder: "__/__/____"});
+        let bigregex = "A";
+        for (let i = 0; i < 99; i++) {
+            bigregex = bigregex + "A";
+        }
+        $('.inputText').mask(bigregex)
+        bigregex = '0';
+        for (let i = 0; i < 99 ; i++) {
+            bigregex += "0";
+        }
+        $('input[name=litre]').mask(bigregex)
+
+    })
     if (type=== "edit"){
+        $('#AddModal .modal-header h3').html((name === 'entretiens' || name === 'assurance') ? "Modifier l' " + name : "Modifier la " + name)
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -151,19 +219,19 @@ function modal(name,type,url,dataid) {
                     if(url === '/getAssurance'){
                         $('input[name=nomAssu]').val(datas.nomAssu);
                         $('input[name=frais]').val(datas.frais);
-                        $('input[name=debutAssu]').val(datas.debutAssu);
-                        $('input[name=finAssu]').val(datas.finAssu);
+                        $('input[name=debutAssu]').val(reverseDate(datas.debutAssu));
+                        $('input[name=finAssu]').val(reverseDate(datas.finAssu));
                     }
                     if(url === '/getReparations'){
                         $('input[name=typeRep]').val(datas.typeRep);
-                        $('input[name=dateRep]').val(datas.dateRep);
+                        $('input[name=dateRep]').val(reverseDate(datas.dateRep));
                         $('input[name=montantRep]').val(datas.montantRep);
                         $('input[name=garageRep]').val(datas.garageRep);
                         $('input[name=noteRep]').val(datas.noteRep);
                     }
                     if(url === '/getEntretiens'){
                         $('input[name=typeEnt]').val(datas.typeEnt);
-                        $('input[name=dateEnt]').val(datas.dateEnt);
+                        $('input[name=dateEnt]').val(reverseDate(datas.dateEnt));
                         $('input[name=montantEnt]').val(datas.montantEnt);
                         $('input[name=garageEnt]').val(datas.garageEnt);
                         $('input[name=noteEnt]').val(datas.noteEnt);
@@ -172,7 +240,7 @@ function modal(name,type,url,dataid) {
                         $('input[name=marque]').val(datas.marque);
                         $('input[name=model]').val(datas.model);
                         $('input[name=puissance]').val(datas.puissance);
-                        $('input[name=circulation]').val(datas.circulation);
+                        $('input[name=circulation]').val(reverseDate(datas.circulation));
                         $('input[name=carburant]').val(datas.carburant);
                         $('input[name=immatriculation]').val(datas.immatriculation);
                         if(datas.status === 'disponible'){
@@ -185,29 +253,38 @@ function modal(name,type,url,dataid) {
                 $('.btnModal').off().on('click',function () {
                     $(this).prop('disabled',true);
                     updateDatas(dataid,name);
+                    setTimeout(()=>{
+                        $('.btnModal').prop('disabled',false);
+                    },2000)
                 })
 
             }
         })
     }
     if (type !== "edit"){
+        $('#AddModal .modal-header h3').html((name === 'entretiens') ? "Ajouter un " + name : "Ajouter une " + name)
         $('.btnModal').off().on('click', function () {
             $(this).prop('disabled',true);
+            setTimeout(()=>{
+                $('.btnModal').prop('disabled',false);
+            },2000)
             updateDatas('',name,'add');
             if(!window.location.pathname.match('voiture') && !window.location.pathname.match('home')){
                 document.getElementById(name.replace(name[0],name[0].toUpperCase())+'Modal').addEventListener('hide.bs.modal', function () {
                     $('.modal input').val('');
-                    $('.btnModal').prop('disabled',false);
+                    $('.text-danger').remove();
                 })
             }
         })
     }
     document.getElementById('AddModal').addEventListener('hide.bs.modal', function () {
         $('.modal input').val('');
-        $('.btnModal').prop('disabled',false);
+        $('.text-danger').remove();
     })
 }
 var myModal = new bootstrap.Modal(document.getElementById('delModal'));
+var delToastEl = document.getElementById('toastSupp');
+var delToast = bootstrap.Toast.getOrCreateInstance(delToastEl);
 function supModal(row){
     let data = (window.location.pathname !== '/home') ? $(row).parent().parent().attr('data-voiture') : $(row).parent().attr('data-voiture');
     let db = (window.location.pathname !== '/home') ? $(row).parent().parent().attr('data-db') : $(row).parent().attr('data-db');
@@ -233,6 +310,7 @@ function supModal(row){
                 url:url,
                 success:function () {
                     myModal.hide();
+                    delToast.show();
                 }
             })
         }
@@ -242,208 +320,173 @@ function supModal(row){
 }
 
 function verifDatas(datas,page,type){
+    //pour inverser une date
+    function reverseDate(d){
+        d = d.val().split('/');
+        return d[2]+'-'+d[1]+'-'+d[0];
+    }
+    //function pour ajouter message erreur
+    function draw_error(s,i,t,o){
+        //s = selector
+        //i = id error
+        //t = type
+        //o = other
+        if(s.val() ==='' && t !== 'nb'){
+            if($('#'+i).length <= 0){
+                s.addClass('active');
+                s.parent().append(`
+                    <p id='${i}' class='text-danger'>Champ requis</p>
+                `);
+            }
+        }
+        if(t==='nb' && isNaN(s.val().replaceAll(',','.')) || s.val() ===''){
+            if($('#'+i).length <= 0){
+                s.addClass('active')
+                s.parent().append(`
+                    <p id='${i}' class='text-danger'>Champ requis et doit correspondre à exemple:(151,15 ou 151)</p>
+                `)
+            }
+        }
+        if(t==='date' && reverseDate(o.val()) >= reverseDate(s.val())){
+            if($('#'+i).length <= 0){
+                s.addClass('active')
+                s.parent().append(`
+                    <p id='${i}' class='text-danger'>Champ requis et doit être plus grand que la date de début</p>
+                `)
+            }
+        }
+    }
+
     let tab = {};
+    let idVoiture = (window.location.pathname.match('voiture')) ? window.location.pathname.replace('/voiture/' ,'') : $('.modal.fade.show select[name=id_voiture]').val();
     if (page === "voiture"){
-        if($('.modal.fade.show input[name=marque]').val() !=="" && $('.modal.fade.show input[name=model]').val() !== "" && $('.modal.fade.show input[name=puissance]').val() !== "" && $('.modal.fade.show input[name=carburant]').val()!=="" && $('.modal.fade.show input[name=immatriculation]').val()!=="" && $('.modal.fade.show input[name=circulation]').val()!==""){
-            if (type === 'add' && $('.modal.fade.show input[name=file]')[0].files.length < 1){
-                if ($('.modal.fade.show input[name=file]').val() === ""){
-                    $('.modal.fade.show input[name=file]').css('border','2px solid red')
-                    $('.modal.fade.show input[name=file]').parent().append(`
-                        <p>Champ requis</p>
-                    `)
-                }
+        let marque = $('.modal.fade.show input[name=marque]');
+        let model = $('.modal.fade.show input[name=model]');
+        let puissance = $('.modal.fade.show input[name=puissance]');
+        let carburant = $('.modal.fade.show input[name=carburant]');
+        let immatriculation = $('.modal.fade.show input[name=immatriculation]');
+        let circulation = $('.modal.fade.show input[name=circulation]');
+        let image = $('.modal.fade.show input[name=file]');
+        if(marque.val() !=="" && model.val() !== "" && puissance.val() !== "" && carburant.val()!=="" && immatriculation.val()!=="" && circulation.val()!==""){
+            if (type === 'add' && image[0].files.length < 1){
+                draw_error(image,'error_image')
             }else{
+
                 tab['id'] = (type === 'add') ? '' : datas;
-                tab['marque'] = $('.modal.fade.show input[name=marque]').val();
-                tab['model'] = $('.modal.fade.show input[name=model]').val();
-                tab['puissance'] = $('.modal.fade.show input[name=puissance]').val();
-                tab['carburant'] = $('.modal.fade.show input[name=carburant]').val();
-                tab['immatriculation'] = $('.modal.fade.show input[name=immatriculation]').val();
-                tab['circulation'] = $('.modal.fade.show input[name=circulation]').val();
+                tab['marque'] = marque.val();
+                tab['model'] = model.val();
+                tab['puissance'] = puissance.val();
+                tab['carburant'] = carburant.val();
+                tab['immatriculation'] = immatriculation.val();
+                tab['circulation'] = reverseDate(circulation);
                 tab['status'] = $('.modal.fade.show select[name=status]').val();
             }
 
         }else{
-            if ($('.modal.fade.show input[name=marque]').val() === ""){
-                $('.modal.fade.show input[name=marque]').css('border','2px solid red')
-                $('.modal.fade.show input[name=marque]').parent().append(`
-                    <p>Champ requis</p>
-                `)
-            }
-            if ($('.modal.fade.show input[name=circulation]').val() === ""){
-                $('.modal.fade.show input[name=circulation]').css('border','2px solid red')
-                $('.modal.fade.show input[name=circulation]').parent().append(`
-                    <p>Champ requis</p>
-                `)
-            }
-            if ($('.modal.fade.show input[name=model]').val() === ""){
-                $('.modal.fade.show input[name=model]').css('border','2px solid red')
-                $('.modal.fade.show input[name=model]').parent().append(`
-                    <p>Champ requis</p>
-                `)
-            }
-            if ($('.modal.fade.show input[name=puissance]').val() === ""){
-                $('.modal.fade.show input[name=puissance]').css('border','2px solid red')
-                $('.modal.fade.show input[name=puissance]').parent().append(`
-                    <p>Champ requis</p>
-                `)
-            }
-            if ($('.modal.fade.show input[name=carburant]').val() === ""){
-                $('.modal.fade.show input[name=carburant]').css('border','2px solid red')
-                $('.modal.fade.show input[name=Carburant]').parent().append(`
-                    <p>Champ requis</p>
-                `)
-            }
-            if ($('.modal.fade.show input[name=immatriculation]').val() === ""){
-                $('.modal.fade.show input[name=immatriculation]').css('border','2px solid red')
-                $('.modal.fade.show input[name=immatriculation]').parent().append(`
-                    <p>Champ requis</p>
-                `)
-            }
+            draw_error(marque,'error_marque')
+            draw_error(circulation,'error_circulation')
+            draw_error(model,'error_model')
+            draw_error(puissance,'error_puissance')
+            draw_error(carburant,'error_carburant')
+            draw_error(immatriculation,'error_immatricualtion')
         }
     }
     if (page === "assurance"){
-        if($('.modal.fade.show input[name=nomAssu]').val() !=="" && $('.modal.fade.show input[name=debutAssu]').val() !== "" && $('.modal.fade.show input[name=finAssu]').val() !== "" && $('.modal.fade.show input[name=frais]').val()!==""){
-
+        let nomAssu = $('.modal.fade.show input[name=nomAssu]');
+        let debutAssu = $('.modal.fade.show input[name=debutAssu]');
+        let finAssu = $('.modal.fade.show input[name=finAssu]');
+        let frais = $('.modal.fade.show input[name=frais]');
+        let debutAssuVal = reverseDate(debutAssu);
+        let finAssuVal = reverseDate(finAssu);
+        if(nomAssu.val() !=="" && debutAssu.val() !== "" && finAssu.val() !== "" && frais.val()!=="" && !isNaN(frais.val().replaceAll(',','.')) && frais.val().replaceAll(',','.') > 0 && debutAssuVal < finAssuVal){
             if (type === 'add'){
-                tab['id_voiture'] = (window.location.pathname.match('voiture')) ? window.location.pathname.replace('/voiture/' ,'') : $('.modal.fade.show select[name=id_voiture]').val();
+                tab['id_voiture'] = idVoiture;
             }else{
                 tab['id'] = datas;
             }
-            tab['nomAssu'] = $('.modal.fade.show input[name=nomAssu]').val();
-            tab['debutAssu'] = $('.modal.fade.show input[name=debutAssu]').val()
-            tab['finAssu'] = $('.modal.fade.show input[name=finAssu]').val()
-            tab['frais'] = $('.modal.fade.show input[name=frais]').val()
+            tab['nomAssu'] = nomAssu.val();
+            tab['debutAssu'] = debutAssuVal;
+            tab['finAssu'] = finAssuVal;
+            tab['frais'] = frais.val().replaceAll(',',".");
         }else{
-            if ($('.modal.fade.show input[name=nomAssu]').val() === ""){
-                $('.modal.fade.show input[name=nomAssu]').css('border','2px solid red')
-                $('.modal.fade.show input[name=nomAssu]').parent().append(`
-                    <p>Champ requis</p>
-                `)
-            }
-            if ($('.modal.fade.show input[name=debutAssu]').val() === ""){
-                $('.modal.fade.show input[name=debutAssu]').css('border','2px solid red')
-                $('.modal.fade.show input[name=debutAssu]').parent().append(`
-                    <p>Champ requis</p>
-                `)
-            }
-            if ($('.modal.fade.show input[name=finAssu]').val() === ""){
-                $('.modal.fade.show input[name=finAssu]').css('border','2px solid red')
-                $('.modal.fade.show input[name=finAssu]').parent().append(`
-                    <p>Champ requis</p>
-                `)
-            }
-            if ($('.modal.fade.show input[name=frais]').val() === ""){
-                $('.modal.fade.show input[name=frais]').css('border','2px solid red')
-                $('.modal.fade.show input[name=frais]').parent().append(`
-                    <p>Champ requis</p>
-                `)
-            }
+            draw_error(nomAssu,'error_nomAssu');
+            draw_error(debutAssu,'error_debutAssu');
+            draw_error(finAssu,'error_finAssu','date');
+            draw_error(frais,'error_frais','nb');
         }
     }
     if (page === "entretiens"){
-        if($('.modal.fade.show input[name=typeEnt]').val() !=="" && $('.modal.fade.show input[name=dateEnt]').val() !== "" && $('.modal.fade.show input[name=montantEnt]').val() !== "" && $('.modal.fade.show input[name=garageEnt]').val() !== ""){
+        let typeEnt = $('.modal.fade.show input[name=typeEnt]');
+        let dateEnt = $('.modal.fade.show input[name=dateEnt]');
+        let montantEnt = $('.modal.fade.show input[name=montantEnt]');
+        let garageEnt = $('.modal.fade.show input[name=garageEnt]');
+        let noteEnt = $('.modal.fade.show textarea[name=noteEnt]');
+        if(typeEnt.val() !=="" && dateEnt.val() !== "" && montantEnt.val() !== "" && garageEnt.val() !== "" && !isNaN(montantEnt.val().replaceAll(',','.')) && montantEnt.val().replaceAll(',','.') > 0){
             if (type === 'add'){
-                tab['id_voiture'] = (window.location.pathname.match('voiture')) ? window.location.pathname.replace('/voiture/' ,'') : $('.modal.fade.show select[name=id_voiture]').val();
+                tab['id_voiture'] = idVoiture;
             }else{
                 tab['id'] = datas;
             }
-            tab['typeEnt'] = $('.modal.fade.show input[name=typeEnt]').val();
-            tab['dateEnt'] = $('.modal.fade.show input[name=dateEnt]').val();
-            tab['montantEnt'] = $('.modal.fade.show input[name=montantEnt]').val();
-            tab['garageEnt'] = $('.modal.fade.show input[name=garageEnt]').val();
-            tab['noteEnt'] = ($('.modal.fade.show textarea[name=noteEnt]').val() !=="") ? $('.modal.fade.show textarea[name=noteEnt]').val() : 'aucune note';
+            tab['typeEnt'] = typeEnt.val();
+            tab['dateEnt'] = reverseDate(dateEnt);
+            tab['montantEnt'] = montantEnt.val().replaceAll(',','.');
+            tab['garageEnt'] = garageEnt.val();
+            tab['noteEnt'] = (noteEnt.val() !=="") ? noteEnt.val() : 'aucune note';
         }else{
-            if ($('.modal.fade.show input[name=typeEnt]').val() === ""){
-                $('.modal.fade.show input[name=typeEnt]').css('border','2px solid red')
-                $('.modal.fade.show input[name=typeEnt]').parent().append(`
-                    <p>Champ requis</p>
-                `)
-            }
-            if ($('.modal.fade.show input[name=dateEnt]').val() === ""){
-                $('.modal.fade.show input[name=dateEnt]').css('border','2px solid red')
-                $('.modal.fade.show input[name=dateEnt]').parent().append(`
-                    <p>Champ requis</p>
-              `)
-            }
-            if ($('.modal.fade.show input[name=montantEnt]').val() === ""){
-                $('.modal.fade.show input[name=montantEnt]').css('border','2px solid red')
-                $('.modal.fade.show input[name=montantEnt]').parent().append(`
-                    <p>Champ requis</p>
-                `)
-            }
-            if ($('.modal.fade.show input[name=garageEnt]').val() === ""){
-                $('.modal.fade.show input[name=garageEnt]').css('border','2px solid red')
-                $('.modal.fade.show input[name=garageEnt]').parent().append(`
-                    <p>Champ requis</p>
-                `)
-            }
+            draw_error(typeEnt,'error_typeEnt')
+            draw_error(dateEnt,'error_dateEnt')
+            draw_error(montantEnt,'error_montantEnt','nb')
+            draw_error(garageEnt,'error_garageEnt')
         }
     }
     if (page === "reparations"){
-        if($('.modal.fade.show input[name=typeRep]').val() !=="" && $('.modal.fade.show input[name=dateRep]').val() !== "" && $('.modal.fade.show input[name=montantRep]').val() !== "" && $('.modal.fade.show input[name=garageRep]').val() !== ""){
+        let typeRep = $('.modal.fade.show input[name=typeRep]');
+        let dateRep = $('.modal.fade.show input[name=dateRep]');
+        let montantRep = $('.modal.fade.show input[name=montantRep]');
+        let garageRep = $('.modal.fade.show input[name=garageRep]');
+        let noteRep = $('.modal.fade.show textarea[name=noteRep]');
+        if(typeRep.val() !=="" && dateRep.val() !== "" && montantRep.val() !== "" && garageRep.val() !== "" && !isNaN(montantRep.val().replaceAll(',','.')) && montantRep.val().replaceAll(',','.') > 0){
             if (type === 'add'){
-                tab['id_voiture'] = (window.location.pathname.match('voiture')) ? window.location.pathname.replace('/voiture/' ,'') : $('.modal.fade.show select[name=id_voiture]').val();
+                tab['id_voiture'] = idVoiture;
             }else{
                 tab['id'] = datas;
             }
-            tab['typeRep'] = $('.modal.fade.show input[name=typeRep]').val();
-            tab['dateRep'] = $('.modal.fade.show input[name=dateRep]').val();
-            tab['montantRep'] = $('.modal.fade.show input[name=montantRep]').val();
-            tab['garageRep'] = $('.modal.fade.show input[name=garageRep]').val();
-            tab['noteRep'] = ($('.modal.fade.show textarea[name=noteRep]').val() !=="") ? $('.modal.fade.show textarea[name=noteRep]').val() : 'aucune note';
+            tab['typeRep'] = typeRep.val();
+            tab['dateRep'] = reverseDate(dateRep);
+            tab['montantRep'] = montantRep.val();
+            tab['garageRep'] = garageRep.val();
+            tab['noteRep'] = (noteRep.val() !=="") ? noteRep.val() : 'aucune note';
         }else{
-            if ($('.modal.fade.show input[name=typeRep]').val() === ""){
-                $('.modal.fade.show input[name=typeRep]').css('border','2px solid red')
-                $('.modal.fade.show input[name=typeRep]').parent().append(`
-                    <p>Champ requis</p>
-                `)
-            }
-            if ($('.modal.fade.show input[name=dateRep]').val() === ""){
-                $('.modal.fade.show input[name=dateRep]').css('border','2px solid red')
-                $('.modal.fade.show input[name=dateRep]').parent().append(`
-                    <p>Champ requis</p>
-              `)
-            }
-            if ($('.modal.fade.show input[name=montantRep]').val() === ""){
-                $('.modal.fade.show input[name=montantRep]').css('border','2px solid red')
-                $('.modal.fade.show input[name=montantRep]').parent().append(`
-                    <p>Champ requis</p>
-                `)
-            }
-            if ($('.modal.fade.show input[name=garageRep]').val() === ""){
-                $('.modal.fade.show input[name=garageRep]').css('border','2px solid red')
-                $('.modal.fade.show input[name=garageRep]').parent().append(`
-                    <p>Champ requis</p>
-                `)
-            }
+            draw_error(typeRep,'error_typeRep');
+            draw_error(dateRep,'error_dateRep');
+            draw_error(montantRep,'error_montantRep','nb');
+            draw_error(garageRep,'error_garageRep');
         }
     }
     if (page === "consommation"){
-        if($('.modal.fade.show input[name=montantCons]').val() !=="" && $('.modal.fade.show input[name=litre]').val() !== ""){
-            tab['montantCons'] = $('.modal.fade.show input[name=montantCons]').val();
-            tab['litre'] = $('.modal.fade.show input[name=litre]').val();
+        let montantConso = $('.modal.fade.show input[name=montantCons]');
+        let litre = $('.modal.fade.show input[name=litre]');
+        if(montantConso.val() !=="" && litre.val() !== "" && montantConso.val().replaceAll(',','.') > 0 && !isNaN(montantConso.val().replaceAll(',','.'))){
+            tab['montantCons'] = montantConso.val().replaceAll(',','.');
+            tab['litre'] = litre.val();
             if (type === 'add'){
-                tab['id_voiture'] = (window.location.pathname.match('voiture')) ? window.location.pathname.replace('/voiture/' ,'') : $('.modal.fade.show select[name=id_voiture]').val();
+                tab['id_voiture'] = idVoiture;
             }else{
                 tab['id'] = datas;
             }
         }else{
-            if($('.modal.fade.show input[name=montantCons]').val() ===""){
-                $('.modal.fade.show input[name=montantCons]').css('border','2px solid red')
-                $('.modal.fade.show input[name=montantCons]').parent().append(`
-                    <p>Champ requis</p>
-                `)
-            }
-            if($('.modal.fade.show input[name=litre]').val() === ""){
-                $('.modal.fade.show input[name=litre]').css('border','2px solid red')
-                $('.modal.fade.show input[name=litre]').parent().append(`
-                    <p>Champ requis</p>
-                `)
-            }
+            draw_error(montantConso,'error_montantCons','nb')
+            draw_error(litre,'error_litre')
         }
     }
     return tab;
+}
+var saveToastEl = document.getElementById('saveToast');
+var saveToast = bootstrap.Toast.getOrCreateInstance(saveToastEl);
+function reverseDate(d){
+    //d = date
+    d = d.split('-');
+    return d[2]+'/'+d[1]+'/'+d[0];
 }
 function updateDatas(datas,page,type){
     let dataVerif =verifDatas(datas,page,type);
@@ -489,6 +532,7 @@ function updateDatas(datas,page,type){
                         table.draw();
                         eventModif();
                     })
+                    saveToast.show();
                 }
             })
         }
@@ -514,7 +558,7 @@ function updateDatas(datas,page,type){
                                 .remove()
                                 .draw();
                         }
-                        let tab = [datas.nomAssu,datas.debutAssu,datas.finAssu];
+                        let tab = [datas.nomAssu,reverseDate(datas.debutAssu),reverseDate(datas.finAssu)];
                         if(!window.location.pathname.match('voiture')){
                             if(type==='add'){
                                 myModal3.hide();
@@ -528,6 +572,7 @@ function updateDatas(datas,page,type){
                         table.draw();
                         eventModif();
                     })
+                    saveToast.show();
                 }
             })
         }
@@ -553,7 +598,7 @@ function updateDatas(datas,page,type){
                                 .remove()
                                 .draw();
                         }
-                        let tab = [datas.garageEnt,datas.typeEnt,datas.montantEnt+'€',datas.dateEnt];
+                        let tab = [datas.garageEnt,datas.typeEnt,datas.montantEnt+'€',reverseDate(datas.dateEnt)];
                         if(!window.location.pathname.match('voiture')){
                             if(type==='add'){
                                 myModal3.hide();
@@ -567,6 +612,7 @@ function updateDatas(datas,page,type){
                         table.draw();
                         eventModif();
                     })
+                    saveToast.show();
                 }
             })
         }
@@ -592,7 +638,7 @@ function updateDatas(datas,page,type){
                                 .remove()
                                 .draw();
                         }
-                        let tab = [datas.garageRep,datas.typeRep,datas.montantRep+'€',datas.dateRep];
+                        let tab = [datas.garageRep,datas.typeRep,datas.montantRep+'€',reverseDate(datas.dateRep)];
                         if(!window.location.pathname.match('voiture')){
                             if(type==='add'){
                                 myModal3.hide();
@@ -606,16 +652,18 @@ function updateDatas(datas,page,type){
                         table.draw();
                         eventModif();
                     })
+                    saveToast.show();
                 }
             })
         }
         if (page === 'voiture'){
+            let image = $('.modal.fade.show input[name=file]');
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
-            let files = ($(".modal.fade.show input[name=file]").get(0).files.length !== 0) ? $('.modal.fade.show input[name=file]')[0].files[0] : 0;
+            let files = (image.get(0).files.length !== 0) ? image[0].files[0] : 0;
             let fd = new FormData();
             if (files !== 0){
                 fd.append('file',files);
@@ -637,7 +685,7 @@ function updateDatas(datas,page,type){
                             $("div[data-voiture="+datas.id+"] h2 span").eq(0).html(datas.immatriculation);
                             $("div[data-voiture="+datas.id+"] div.col-6 div.col-auto:nth-child(2) h2").eq(0).html(datas.marque);
                             $("div[data-voiture="+datas.id+"] div.col-6 div.col-auto:nth-child(2) h2").eq(1).html(datas.model);
-                            $("div[data-voiture="+datas.id+"] div.col-6 div.col-auto:nth-child(2) h2").eq(2).html(datas.circulation);
+                            $("div[data-voiture="+datas.id+"] div.col-6 div.col-auto:nth-child(2) h2").eq(2).html(reverseDate(datas.circulation));
                             $("div[data-voiture="+datas.id+"] div.col-6 div.col-auto:nth-child(2) h2").eq(3).html(datas.status);
                             $("div[data-voiture="+datas.id+"] div.col-6 div.col-auto:nth-child(2) h2").eq(4).html(datas.puissance);
                             $("div[data-voiture="+datas.id+"] div.col-6 div.col-auto:nth-child(2) h2").eq(5).html(datas.carburant);
@@ -660,6 +708,7 @@ function updateDatas(datas,page,type){
                     }
                     myModal1.hide();
                     eventModif();
+                    saveToast.show();
                 }
             })
 
@@ -667,7 +716,5 @@ function updateDatas(datas,page,type){
 
 
         }
-    }else{
-        console.log(dataVerif)
     }
 }
