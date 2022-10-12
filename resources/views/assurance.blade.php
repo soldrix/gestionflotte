@@ -50,11 +50,11 @@
                     </div>
                     <div class="d-flex flex-wrap align-items-baseline">
                         <label for="debutAssu">Date de début :</label>
-                        <input type="date" name="debutAssu" class="inputForm assuDateD mb-2 inputDate me-2" required>
+                        <input type="text" name="debutAssu" class="inputForm assuDateD mb-2 inputDate me-2" required>
                     </div>
                     <div class="d-flex flex-wrap align-items-baseline">
                         <label for="finAssu">Date de fin :</label>
-                        <input type="date" name="finAssu" class="inputForm assuDateF inputDate mb-2 me-2" required>
+                        <input type="text" name="finAssu" class="inputForm assuDateF inputDate mb-2 me-2" required>
                     </div>
                     <div class="d-flex flex-wrap align-items-baseline">
                         <label for="frais">Frais de l'assurance :</label>

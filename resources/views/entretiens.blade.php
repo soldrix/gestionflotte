@@ -50,7 +50,7 @@
                     </div>
                     <div class="d-flex flex-wrap align-items-baseline">
                         <label for="dateEnt">Date de l'entretiens</label>
-                        <input type="date" name="dateEnt" placeholder="Date Entretiens" class="inputForm inputDate mb-2 me-2" required>
+                        <input type="text" name="dateEnt" placeholder="Date Entretiens" class="inputForm inputDate mb-2 me-2" required>
                     </div>
                     <div class="d-flex flex-wrap align-items-baseline">
                         <label for="garageEnt">Nom du garage :</label>

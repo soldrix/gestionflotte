@@ -349,7 +349,7 @@ function verifDatas(datas,page,type){
                 `)
             }
         }
-        if(t==='date' && reverseDate(o.val()) >= reverseDate(s.val())){
+        if(t==='date' && reverseDate(o) >= reverseDate(s)){
             if($('#'+i).length <= 0){
                 s.addClass('active')
                 s.parent().append(`
@@ -426,7 +426,7 @@ function verifDatas(datas,page,type){
         }else{
             draw_error(nomAssu,'error_nomAssu');
             draw_error(debutAssu,'error_debutAssu');
-            draw_error(finAssu,'error_finAssu','date');
+            draw_error(finAssu,'error_finAssu','date',debutAssu);
             draw_error(frais,'error_frais','nb');
         }
     }
