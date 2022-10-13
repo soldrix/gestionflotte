@@ -10,7 +10,8 @@
         @foreach($voiture as $data)
         <div class="col-2 d-flex flex-column  p-2 rounded m-2 blockVoiture" style="background: #e4e4e4" data-voiture="{{$data->id}}" data-db="voiture">
             <img src="{{asset("/storage/".$data->image)}}" alt="{{asset("/storage/".$data->image)}}" class="rounded">
-            <p class="text-center">{{$data->model}}</p>
+            <p class="text-center my-1">Marque : {{$data->marque}}</p>
+            <p class="text-center m-0">Model : {{$data->model}}</p>
             <a  class="btn btn-primary w-75 align-self-center mt-3 btn-info-car" href="{{route('voitureData', $data->id) }}">
                 En savoir plus
             </a>

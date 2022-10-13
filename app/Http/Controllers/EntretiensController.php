@@ -21,7 +21,7 @@ class EntretiensController extends Controller
             "dateEnt" => $validation['dateEnt'],
             "montantEnt" => $validation['montantEnt'],
             "garageEnt" => $validation['garageEnt'],
-            "noteEnt" => (isset($request->noteEnt)) ? $request->noteEnt : 'aucune note'
+            "noteEnt" => (isset($request->noteEnt)) ? $request->noteEnt : 'Aucune note'
         ];
         DB::table('entretiens')->insert($tab);
         return DB::table('entretiens')->select('entretiens.*','immatriculation')->join('voiture' , 'entretiens.id_voiture', '=','voiture.id')->where($tab)->get();
@@ -39,7 +39,7 @@ class EntretiensController extends Controller
             "dateEnt" => $validation['dateEnt'],
             "montantEnt" => $validation['montantEnt'],
             "garageEnt" => $validation['garageEnt'],
-            "noteEnt" => (isset($datas->noteEnt)) ? $datas->noteEnt : 'aucune note'
+            "noteEnt" => (isset($request->noteEnt)) ? $request->noteEnt : 'Aucune note'
         ]);
         return DB::table('entretiens')->select('entretiens.*','immatriculation')->join('voiture' , 'entretiens.id_voiture', '=','voiture.id')->where('entretiens.id',$id)->get();
     }

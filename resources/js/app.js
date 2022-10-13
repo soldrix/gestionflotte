@@ -138,7 +138,7 @@ function modal(name,type,url,dataid) {
                     </div>
                     <div class="d-flex flex-column">
                         <label class="me-2" for="noteEnt">Note supplémentaire :</label>
-                        <textarea name="noteEnt" id="noteEnt" cols="30" rows="4" class="inputForm inputText mb-2"></textarea>
+                        <textarea name="noteEnt" id="noteEnt" cols="30" rows="4" class="inputForm mb-2"></textarea>
                     </div>`
                 : (name === "reparations") ?
                     `
@@ -160,7 +160,7 @@ function modal(name,type,url,dataid) {
                     </div>
                     <div class="d-flex flex-column">
                         <label class="me-2" for="noteRep">Note supplémentaire :</label>
-                        <textarea name="noteRep" id="noteRep" cols="30" rows="4" class="inputForm inputText mb-2"></textarea>
+                        <textarea name="noteRep" id="noteRep" cols="30" rows="4" class="inputForm mb-2"></textarea>
                     </div>
                     `
                     : (name === "consommation") ?
@@ -227,14 +227,14 @@ function modal(name,type,url,dataid) {
                         $('input[name=dateRep]').val(reverseDate(datas.dateRep));
                         $('input[name=montantRep]').val(datas.montantRep);
                         $('input[name=garageRep]').val(datas.garageRep);
-                        $('input[name=noteRep]').val(datas.noteRep);
+                        $('textarea[name=noteRep]').val(datas.noteRep);
                     }
                     if(url === '/getEntretiens'){
                         $('input[name=typeEnt]').val(datas.typeEnt);
                         $('input[name=dateEnt]').val(reverseDate(datas.dateEnt));
                         $('input[name=montantEnt]').val(datas.montantEnt);
                         $('input[name=garageEnt]').val(datas.garageEnt);
-                        $('input[name=noteEnt]').val(datas.noteEnt);
+                        $('textarea[name=noteEnt]').val(datas.noteEnt);
                     }
                     if(url === '/getVoiture'){
                         $('input[name=marque]').val(datas.marque);
@@ -322,6 +322,9 @@ function supModal(row){
 }
 
 function verifDatas(datas,page,type){
+    function capitalizeFirstLetter(string) {
+        return string.charAt(0).toUpperCase() + string.slice(1);
+    }
      //pour inverser une date
     function reverseDate(d){
         d = d.val().split('/');
@@ -390,13 +393,13 @@ function verifDatas(datas,page,type){
             }else{
 
                 tab['id'] = (type === 'add') ? '' : datas;
-                tab['marque'] = marque.val();
+                tab['marque'] = capitalizeFirstLetter(marque.val());
                 tab['model'] = model.val();
                 tab['puissance'] = puissance.val();
-                tab['carburant'] = carburant.val();
-                tab['immatriculation'] = immatriculation.val();
+                tab['carburant'] = capitalizeFirstLetter(carburant.val());
+                tab['immatriculation'] = immatriculation.val().toUpperCase();
                 tab['circulation'] = reverseDate(circulation);
-                tab['status'] = $('.modal.fade.show select[name=status]').val();
+                tab['status'] = carburant.val($('.modal.fade.show select[name=status]').val());
             }
 
         }else{
@@ -429,7 +432,7 @@ function verifDatas(datas,page,type){
             }else{
                 tab['id'] = datas;
             }
-            tab['nomAssu'] = nomAssu.val();
+            tab['nomAssu'] = capitalizeFirstLetter(nomAssu.val());
             tab['debutAssu'] = debutAssuVal;
             tab['finAssu'] = finAssuVal;
             tab['frais'] = frais.val().replaceAll(',',".");
@@ -452,11 +455,11 @@ function verifDatas(datas,page,type){
             }else{
                 tab['id'] = datas;
             }
-            tab['typeEnt'] = typeEnt.val();
+            tab['typeEnt'] = capitalizeFirstLetter(typeEnt.val());
             tab['dateEnt'] = reverseDate(dateEnt);
             tab['montantEnt'] = montantEnt.val().replaceAll(',','.');
-            tab['garageEnt'] = garageEnt.val();
-            tab['noteEnt'] = (noteEnt.val() !=="") ? noteEnt.val() : 'aucune note';
+            tab['garageEnt'] = capitalizeFirstLetter(garageEnt.val());
+            tab['noteEnt'] = (noteEnt.val() !=="") ? capitalizeFirstLetter(noteEnt.val()) : 'Aucune note';
         }else{
             draw_error(typeEnt,'error_typeEnt')
             draw_error(dateEnt,'error_dateEnt','date')
@@ -476,11 +479,11 @@ function verifDatas(datas,page,type){
             }else{
                 tab['id'] = datas;
             }
-            tab['typeRep'] = typeRep.val();
+            tab['typeRep'] = capitalizeFirstLetter(typeRep.val());
             tab['dateRep'] = reverseDate(dateRep);
             tab['montantRep'] = montantRep.val();
-            tab['garageRep'] = garageRep.val();
-            tab['noteRep'] = (noteRep.val() !=="") ? noteRep.val() : 'aucune note';
+            tab['garageRep'] = capitalizeFirstLetter(garageRep.val());
+            tab['noteRep'] = (noteRep.val() !=="") ? capitalizeFirstLetter(noteRep.val()) : 'Aucune note';
         }else{
             draw_error(typeRep,'error_typeRep');
             draw_error(dateRep,'error_dateRep','date');
@@ -636,7 +639,11 @@ function updateDatas(datas,page,type){
                             }
                             tab.push(datas.immatriculation);
                         }
-                        tab.push(datas.noteEnt+`<div class="divBtnTab">
+                        tab.push(`
+                            <div class="noteSupp">
+                                ${datas.noteEnt}
+                            </div>
+                            <div class="divBtnTab">
                                 <button class="btn btn-info editButton text-white"><i class="fa-solid fa-pencil "></i></button>
                                 <button class="btn btn-danger delButton"><i class="fa-solid fa-trash-can"></i></button>
                             </div>`)
@@ -679,7 +686,11 @@ function updateDatas(datas,page,type){
                             }
                             tab.push(datas.immatriculation);
                         }
-                        tab.push(datas.noteRep+`<div class="divBtnTab">
+                        tab.push(`
+                            <div class="noteSupp">
+                                ${datas.noteRep}
+                            </div>
+                            <div class="divBtnTab">
                                 <button class="btn btn-info editButton text-white"><i class="fa-solid fa-pencil "></i></button>
                                 <button class="btn btn-danger delButton"><i class="fa-solid fa-trash-can"></i></button>
                             </div>`)

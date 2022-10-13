@@ -28,7 +28,9 @@
                         <td>{{date('d/m/Y', strtotime($datas->dateRep))}}</td>
                         <td>{{$datas->immatriculation}}</td>
                         <td class="tdBtn">
-                            {{(isset($datas->noteRep)) ? $datas->noteRep : "aucune note"}}
+                            <div class="noteSupp">
+                                {{(isset($datas->noteRep)) ? $datas->noteRep : "Aucune note"}}
+                            </div>
                             <div class="divBtnTab">
                                 <button class="btn btn-info editButton text-white"><i class="fa-solid fa-pencil "></i></button>
                                 <button class="btn btn-danger delButton"><i class="fa-solid fa-trash-can"></i></button>
@@ -75,7 +77,7 @@
                     </div>
                     <div class="d-flex flex-wrap align-items-baseline">
                         <label for="noteEnt">Note supplémentaire :</label>
-                        <textarea name="noteEnt" id="noteRep" cols="30" rows="4" class="inputForm inputNote inputText mb-2 me-2"></textarea>
+                        <textarea name="noteEnt" id="noteRep" cols="30" rows="4" class="inputForm inputNote  mb-2 me-2"></textarea>
                     </div>
 
 
