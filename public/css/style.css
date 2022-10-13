@@ -1,4 +1,22 @@
 .modal.fade input.active{
     border:2px solid red;
 }
+.tdBtn{
+    justify-content: space-between;
+    display: flex;
+    align-items: center;
+}
+tr:hover .divBtnTab{
+    opacity: 100%;
+}
+.divBtnTab{
+    width: -webkit-fit-content;
+    width: -moz-fit-content;
+    width: fit-content;
+    float: right;
+    opacity: 0;
+}
+td{
+    vertical-align: middle;
+}
 

@@ -26,9 +26,13 @@
                         <td>{{date('d/m/Y', strtotime($datasAssu->debutAssu))}}</td>
                         <td>{{date('d/m/Y', strtotime($datasAssu->finAssu))}}</td>
                         <td>{{$datasAssu->immatriculation}}</td>
-                        <td>{{$datasAssu->frais}}€
-                            <button class="btn btn-info editButton">modifier</button>
-                        <button class="btn btn-danger delButton">supprimer</button></td>
+                        <td class="tdBtn">
+                            {{$datasAssu->frais.'€'}}
+                            <div class="divBtnTab">
+                                <button class="btn btn-info editButton text-white"><i class="fa-solid fa-pencil "></i></button>
+                                <button class="btn btn-danger delButton"><i class="fa-solid fa-trash-can"></i></button>
+                            </div>
+                        </td>
                     </tr>
                 @endforeach
                 </tbody>

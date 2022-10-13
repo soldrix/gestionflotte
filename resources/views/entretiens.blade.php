@@ -24,12 +24,16 @@
                     <tr data-voiture="{{$datasEnt->id}}" data-db="entretiens">
                         <td>{{$datasEnt->garageEnt}}</td>
                         <td>{{$datasEnt->typeEnt}}</td>
-                        <td>{{$datasEnt->montantEnt}}€</td>
+                        <td>{{$datasEnt->montantEnt."€"}}</td>
                         <td>{{date('d/m/Y', strtotime($datasEnt->dateEnt))}}</td>
                         <td>{{$datasEnt->immatriculation}}</td>
-                        <td>{{(isset($datasEnt->noteEnt)) ? $datasEnt->noteEnt : "aucune note"}}
-                            <button class="btn btn-info editButton">modifier</button>
-                            <button class="btn btn-danger delButton">supprimer</button></td>
+                        <td class="tdBtn">
+                            {{(isset($datasEnt->noteEnt)) ? $datasEnt->noteEnt : "aucune note"}}
+                            <div class="divBtnTab">
+                                <button class="btn btn-info editButton text-white"><i class="fa-solid fa-pencil "></i></button>
+                                <button class="btn btn-danger delButton"><i class="fa-solid fa-trash-can"></i></button>
+                            </div>
+                        </td>
                     </tr>
                 @endforeach
                 </tbody>

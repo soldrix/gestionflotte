@@ -9,17 +9,16 @@ class VoitureController extends Controller
     public function charge(Request $request){
         $id = (isset($request->id)) ? $request->id : null ;
         $voitureData = DB::select("select * from voiture where id='$id'");
-
-        foreach ($voitureData as $datas){
-            $voitureID = $datas->id;
-        }
-        $nbData = Db::select("SELECT COUNT(reparations.id) AS 'nbRep',COUNT(entretiens.id) AS 'nbEnt',COUNT(consommation.id) AS 'nbCons',COUNT(assurance.id) AS 'nbAssu' FROM voiture INNER JOIN reparations on voiture.id= reparations.id_voiture INNER JOIN entretiens on voiture.id = entretiens.id_voiture INNER JOIN consommation on voiture.id = consommation.id_voiture INNER JOIN assurance on voiture.id =assurance.id_voiture WHERE voiture.id = '$voitureID'");
         $datas1 = DB::select("select * from assurance where id_voiture='$id'");
         $datas2 = DB::select("select * from consommation where id_voiture='$id'");
         $datas3 = DB::select("select * from entretiens where id_voiture='$id'");
         $datas4 = DB::select("select * from reparations where id_voiture='$id'");
-
-        return view('voiture',['voitureData'=>$voitureData,'assurance'=>$datas1,"consommation"=>$datas2,"entretiens"=>$datas3,"reparations"=>$datas4,"nbData"=>$nbData]);
+        $json = new \stdClass();
+        $json->nbAssu  = count($datas1);
+        $json->nbCons  = count($datas2);
+        $json->nbEnt  = count($datas3);
+        $json->nbRep  = count($datas4);
+        return view('voiture',['voitureData'=>$voitureData,'assurance'=>$datas1,"consommation"=>$datas2,"entretiens"=>$datas3,"reparations"=>$datas4,'nbData'=>$json]);
     }
     public function getVoiture(Request $request){
         $id = $request->id;

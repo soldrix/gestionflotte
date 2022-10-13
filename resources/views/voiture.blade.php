@@ -12,12 +12,12 @@
         <div class="col-8 px-2 mt-5" data-voiture="{{$datas->id}}" data-db="voiture">
             <h2 class="text-primary">Immatriculation : <span class="text-muted">{{$datas->immatriculation}}</span></h2>
             <div class="d-flex mt-5">
-                @foreach($nbData as $datasnb)
-                <p class="mx-2"><i class="fa-solid fa-wrench fa-xl text-info"></i> <span> {{$datasnb->nbEnt}} </span> entretiens</p>
-                <p class="mx-2"><i class="fa-solid fa-gear fa-xl text-info"></i> <span> {{$datasnb->nbRep}} </span> reparations</p>
-                <p class="mx-2"><i class="fa-solid fa-calendar-check fa-xl text-info"></i> <span> {{$datasnb->nbAssu}} </span> assurances</p>
-                <p class="mx-2"><i class="fa-solid fa-gas-pump fa-xl text-info"></i> <span> {{$datasnb->nbCons}} </span> assurances</p>
-                @endforeach
+
+                <p class="mx-2"><i class="fa-solid fa-wrench fa-xl text-info"></i> <span> {{$nbData->nbEnt}} </span> entretiens</p>
+                <p class="mx-2"><i class="fa-solid fa-gear fa-xl text-info"></i> <span> {{$nbData->nbRep}} </span> reparations</p>
+                <p class="mx-2"><i class="fa-solid fa-calendar-check fa-xl text-info"></i> <span> {{$nbData->nbAssu}} </span> assurances</p>
+                <p class="mx-2"><i class="fa-solid fa-gas-pump fa-xl text-info"></i> <span> {{$nbData->nbCons}} </span> assurances</p>
+
             </div>
             <div class="col-6 mt-5 d-flex">
                 <div class="col-auto mx-2">
@@ -36,7 +36,9 @@
                     <h2 class="text-muted">{{$datas->puissance}}</h2>
                     <h2 class="text-muted">{{$datas->carburant}}</h2>
                 </div>
-                <button class="btn btn-info editButton align-self-center ms-5" style="height: fit-content">modifier</button>
+                <div class="col-auto mx-2 p-0  align-self-center">
+                    <button class="btn btn-info editButton ms-5" style="height: fit-content">modifier</button>
+                </div>
             </div>
         </div>
 
@@ -80,11 +82,15 @@
                     <tr data-voiture="{{{$datasEnt->id}}}" data-db="entretiens">
                         <td>{{$datasEnt->garageEnt}}</td>
                         <td>{{$datasEnt->typeEnt}}</td>
-                        <td>{{$datasEnt->montantEnt}}€</td>
+                        <td>{{$datasEnt->montantEnt.'€'}}</td>
                         <td>{{$datasEnt->dateEnt}}</td>
-                        <td>{{(isset($datasEnt->noteEnt)) ? $datasEnt->noteEnt : "aucune note"}}
-                            <button class="btn btn-info editButton">modifier</button>
-                            <button class="btn btn-danger delButton">supprimer</button></td>
+                        <td class="tdBtn">
+                            {{(isset($datasEnt->noteEnt)) ? $datasEnt->noteEnt : "aucune note"}}
+                            <div class="divBtnTab">
+                                <button class="btn btn-info editButton text-white"><i class="fa-solid fa-pencil "></i></button>
+                                <button class="btn btn-danger delButton"><i class="fa-solid fa-trash-can"></i></button>
+                            </div>
+                        </td>
                     </tr>
                     @endforeach
                     </tbody>
@@ -111,11 +117,15 @@
                         <tr data-voiture="{{$datasRep->id}}" data-db="reparations">
                             <td>{{$datasRep->garageRep}}</td>
                             <td>{{$datasRep->typeRep}}</td>
-                            <td>{{$datasRep->montantRep}}€</td>
+                            <td>{{$datasRep->montantRep.'€'}}</td>
                             <td>{{$datasRep->dateRep}}</td>
-                            <td>{{(isset($datasRep->noteRep)) ? $datasRep->noteRep : "aucune note"}}
-                                <button class="btn btn-info editButton">modifier</button>
-                                <button class="btn btn-danger delButton">supprimer</button></td>
+                            <td class="tdBtn">
+                                {{(isset($datasRep->noteRep)) ? $datasRep->noteRep : "aucune note"}}
+                                <div class="divBtnTab">
+                                    <button class="btn btn-info editButton text-white"><i class="fa-solid fa-pencil "></i></button>
+                                    <button class="btn btn-danger delButton"><i class="fa-solid fa-trash-can"></i></button>
+                                </div>
+                            </td>
                         </tr>
                     @endforeach
                     </tbody>
@@ -141,9 +151,13 @@
                             <td>{{$datasAssu->nomAssu}}</td>
                             <td>{{$datasAssu->debutAssu}}</td>
                             <td>{{$datasAssu->finAssu}}</td>
-                            <td>{{$datasAssu->frais}}€
-                                <button class="btn btn-info editButton">modifier</button>
-                                <button class="btn btn-danger delButton">supprimer</button></td>
+                            <td class="tdBtn">
+                                {{$datasAssu->frais."€"}}
+                                <div class="divBtnTab">
+                                    <button class="btn btn-info editButton text-white"><i class="fa-solid fa-pencil "></i></button>
+                                    <button class="btn btn-danger delButton"><i class="fa-solid fa-trash-can"></i></button>
+                                </div>
+                            </td>
                         </tr>
                     @endforeach
                     </tbody>
@@ -166,10 +180,14 @@
                     @foreach($consommation as $datasCons)
                         <tr data-voiture="{{$datasCons->id}}" data-db="consommation">
                             <td>{{$datasCons->litre}}</td>
-                            <td>{{$datasCons->montantCons}}€</td>
-                            <td>{{round($datasCons->montantCons/$datasCons->litre,3)}}€
-                                <button class="btn btn-info editButton">modifier</button>
-                                <button class="btn btn-danger delButton">supprimer</button></td>
+                            <td>{{$datasCons->montantCons.'€'}}</td>
+                            <td class="tdBtn">
+                                {{round($datasCons->montantCons/$datasCons->litre,3).'€'}}
+                                <div class="divBtnTab">
+                                    <button class="btn btn-info editButton text-white"><i class="fa-solid fa-pencil "></i></button>
+                                    <button class="btn btn-danger delButton"><i class="fa-solid fa-trash-can"></i></button>
+                                </div>
+                            </td>
                         </tr>
                     @endforeach
                     </tbody>

@@ -47,8 +47,8 @@ function eventModif(){
         supModal(this)
     })
     $('.editButton').off().on('click',function () {
-        let db = $(this).parent().parent().attr('data-db');
-        let dataid = $(this).parent().parent().attr('data-voiture');
+        let db = $(this).parent().parent().parent().attr('data-db');
+        let dataid = $(this).parent().parent().parent().attr('data-voiture');
         let url  = (db === 'voiture') ? '/getVoiture': (db === 'consommation') ? '/getConsommation' : (db === 'entretiens') ? '/getEntretiens' :(db === 'reparations') ? '/getReparations' :(db === 'assurance') ? '/getAssurance' :'';
         modal(db,'edit',url,dataid);
     })
@@ -288,8 +288,8 @@ var myModal = new bootstrap.Modal(document.getElementById('delModal'));
 var delToastEl = document.getElementById('toastSupp');
 var delToast = bootstrap.Toast.getOrCreateInstance(delToastEl);
 function supModal(row){
-    let data = (window.location.pathname !== '/home') ? $(row).parent().parent().attr('data-voiture') : $(row).parent().attr('data-voiture');
-    let db = (window.location.pathname !== '/home') ? $(row).parent().parent().attr('data-db') : $(row).parent().attr('data-db');
+    let data = (window.location.pathname !== '/home') ? $(row).parent().parent().parent().attr('data-voiture') : $(row).parent().attr('data-voiture');
+    let db = (window.location.pathname !== '/home') ? $(row).parent().parent().parent().attr('data-db') : $(row).parent().attr('data-db');
     myModal.show();
     $('#btnDelModal').on('click',function () {
 
@@ -322,10 +322,11 @@ function supModal(row){
 }
 
 function verifDatas(datas,page,type){
-    //pour inverser une date
+     //pour inverser une date
     function reverseDate(d){
         d = d.val().split('/');
-        return d[2]+'-'+d[1]+'-'+d[0];
+        let date =d[2]+'-'+d[1]+'-'+d[0];
+        return (new Date(date) instanceof Date && !isNaN(new Date(date)) && d[2] >= new Date().getFullYear() - 122) ? date : false;
     }
     //function pour ajouter message erreur
     function draw_error(s,i,t,o){
@@ -333,27 +334,36 @@ function verifDatas(datas,page,type){
         //i = id error
         //t = type
         //o = other
-        if(s.val() ==='' && t !== 'nb'){
-            if($('#'+i).length <= 0){
+        if(t === undefined || t === ''){
+            if($('#'+i).length <= 0 && s.val() ===''){
                 s.addClass('active');
                 s.parent().append(`
-                    <p id='${i}' class='text-danger'>Champ requis</p>
-                `);
+                <p id='${i}' class='text-danger'>Champ requis</p>
+            `);
             }
         }
-        if(t==='nb' && isNaN(s.val().replaceAll(',','.')) || s.val() ===''){
-            if($('#'+i).length <= 0){
+        if(t === 'nb'){
+            if($('#'+i).length <= 0 && isNaN(s.val().replaceAll(',','.')) || s.val() ===''){
                 s.addClass('active')
                 s.parent().append(`
                     <p id='${i}' class='text-danger'>Champ requis et doit correspondre à exemple:(151,15 ou 151)</p>
                 `)
             }
         }
-        if(t==='date' && reverseDate(o) >= reverseDate(s)){
-            if($('#'+i).length <= 0){
+        if(t === 'dateDebut' || t === 'dateFin'){
+            if($('#'+i).length <= 0 && reverseDate(o) >= reverseDate(s) || reverseDate(s) === false ) {
+                s.addClass('active')
+                let html = (t === 'dateDebut') ? 'Champ requis ,doit être plus petite que la date de fin et doit être une date valide' : 'Champ requis ,doit être plus grand que la date de début et doit être une date valide';
+                s.parent().append(`
+                    <p id='${i}' class='text-danger'> ${html}</p>
+                `)
+            }
+        }
+        if(t === 'date'){
+            if($('#'+i).length <= 0 && reverseDate(s) === false || s.val() === ""){
                 s.addClass('active')
                 s.parent().append(`
-                    <p id='${i}' class='text-danger'>Champ requis et doit être plus grand que la date de début</p>
+                    <p id='${i}' class='text-danger'>Champ requis et doit être une date valide</p>
                 `)
             }
         }
@@ -369,7 +379,7 @@ function verifDatas(datas,page,type){
         let immatriculation = $('.modal.fade.show input[name=immatriculation]');
         let circulation = $('.modal.fade.show input[name=circulation]');
         let imageFile = $('.modal.fade.show input[name=file]');
-        if(marque.val() !=="" && model.val() !== "" && puissance.val() !== "" && carburant.val()!=="" && immatriculation.val()!=="" && circulation.val()!==""){
+        if(marque.val() !=="" && model.val() !== "" && puissance.val() !== "" && carburant.val()!=="" && immatriculation.val()!=="" && circulation.val()!=="" && reverseDate(circulation) !== false){
             if (type === 'add' && imageFile[0].files.length <= 0){
                 if($('#error_image').length <= 0){
                     imageFile.addClass('active');
@@ -399,7 +409,7 @@ function verifDatas(datas,page,type){
                 }
             }
             draw_error(marque,'error_marque')
-            draw_error(circulation,'error_circulation')
+            draw_error(circulation,'error_circulation','date')
             draw_error(model,'error_model')
             draw_error(puissance,'error_puissance')
             draw_error(carburant,'error_carburant')
@@ -413,7 +423,7 @@ function verifDatas(datas,page,type){
         let frais = $('.modal.fade.show input[name=frais]');
         let debutAssuVal = reverseDate(debutAssu);
         let finAssuVal = reverseDate(finAssu);
-        if(nomAssu.val() !=="" && debutAssu.val() !== "" && finAssu.val() !== "" && frais.val()!=="" && !isNaN(frais.val().replaceAll(',','.')) && frais.val().replaceAll(',','.') > 0 && debutAssuVal < finAssuVal){
+        if(nomAssu.val() !=="" && debutAssu.val() !== "" && finAssu.val() !== "" && frais.val()!=="" && !isNaN(frais.val().replaceAll(',','.')) && frais.val().replaceAll(',','.') > 0 && debutAssuVal < finAssuVal && reverseDate(debutAssu) !== false && reverseDate(finAssu) !== false){
             if (type === 'add'){
                 tab['id_voiture'] = idVoiture;
             }else{
@@ -425,8 +435,8 @@ function verifDatas(datas,page,type){
             tab['frais'] = frais.val().replaceAll(',',".");
         }else{
             draw_error(nomAssu,'error_nomAssu');
-            draw_error(debutAssu,'error_debutAssu');
-            draw_error(finAssu,'error_finAssu','date',debutAssu);
+            draw_error(debutAssu,'error_debutAssu','dateDebut',finAssu);
+            draw_error(finAssu,'error_finAssu','dateFin',debutAssu);
             draw_error(frais,'error_frais','nb');
         }
     }
@@ -436,7 +446,7 @@ function verifDatas(datas,page,type){
         let montantEnt = $('.modal.fade.show input[name=montantEnt]');
         let garageEnt = $('.modal.fade.show input[name=garageEnt]');
         let noteEnt = $('.modal.fade.show textarea[name=noteEnt]');
-        if(typeEnt.val() !=="" && dateEnt.val() !== "" && montantEnt.val() !== "" && garageEnt.val() !== "" && !isNaN(montantEnt.val().replaceAll(',','.')) && montantEnt.val().replaceAll(',','.') > 0){
+        if(typeEnt.val() !=="" && dateEnt.val() !== "" && reverseDate(dateEnt) !== false && montantEnt.val() !== "" && garageEnt.val() !== "" && !isNaN(montantEnt.val().replaceAll(',','.')) && montantEnt.val().replaceAll(',','.') > 0){
             if (type === 'add'){
                 tab['id_voiture'] = idVoiture;
             }else{
@@ -449,7 +459,7 @@ function verifDatas(datas,page,type){
             tab['noteEnt'] = (noteEnt.val() !=="") ? noteEnt.val() : 'aucune note';
         }else{
             draw_error(typeEnt,'error_typeEnt')
-            draw_error(dateEnt,'error_dateEnt')
+            draw_error(dateEnt,'error_dateEnt','date')
             draw_error(montantEnt,'error_montantEnt','nb')
             draw_error(garageEnt,'error_garageEnt')
         }
@@ -460,7 +470,7 @@ function verifDatas(datas,page,type){
         let montantRep = $('.modal.fade.show input[name=montantRep]');
         let garageRep = $('.modal.fade.show input[name=garageRep]');
         let noteRep = $('.modal.fade.show textarea[name=noteRep]');
-        if(typeRep.val() !=="" && dateRep.val() !== "" && montantRep.val() !== "" && garageRep.val() !== "" && !isNaN(montantRep.val().replaceAll(',','.')) && montantRep.val().replaceAll(',','.') > 0){
+        if(typeRep.val() !=="" && dateRep.val() !== ""  && montantRep.val() !== "" && reverseDate(dateRep) !== false && garageRep.val() !== "" && !isNaN(montantRep.val().replaceAll(',','.')) && montantRep.val().replaceAll(',','.') > 0){
             if (type === 'add'){
                 tab['id_voiture'] = idVoiture;
             }else{
@@ -473,7 +483,7 @@ function verifDatas(datas,page,type){
             tab['noteRep'] = (noteRep.val() !=="") ? noteRep.val() : 'aucune note';
         }else{
             draw_error(typeRep,'error_typeRep');
-            draw_error(dateRep,'error_dateRep');
+            draw_error(dateRep,'error_dateRep','date');
             draw_error(montantRep,'error_montantRep','nb');
             draw_error(garageRep,'error_garageRep');
         }
@@ -540,10 +550,13 @@ function updateDatas(datas,page,type){
                             }
                             tab.push(datas.immatriculation);
                         }
-                        tab.push(Math.round(datas.montantCons / datas.litre)+'€'+`<button class="btn btn-info editButton">modifier</button>
-                        <button class="btn btn-danger delButton">supprimer</button>`)
+                        tab.push(Math.round(datas.montantCons / datas.litre)+'€'+`<div class="divBtnTab">
+                                <button class="btn btn-info editButton text-white"><i class="fa-solid fa-pencil "></i></button>
+                                <button class="btn btn-danger delButton"><i class="fa-solid fa-trash-can"></i></button>
+                            </div>`)
                         let row = table.row.add(tab).node();
                         $(row).attr({"data-voiture":datas.id,"data-db":page})
+                        $(row).children().last().addClass('tdBtn');
                         table.draw();
                         eventModif();
                     })
@@ -580,10 +593,13 @@ function updateDatas(datas,page,type){
                             }
                             tab.push(datas.immatriculation);
                         }
-                        tab.push(datas.frais+'€'+`<button class="btn btn-info editButton">modifier</button>
-                        <button class="btn btn-danger delButton">supprimer</button>`)
+                        tab.push(datas.frais+'€'+`<div class="divBtnTab">
+                                <button class="btn btn-info editButton text-white"><i class="fa-solid fa-pencil "></i></button>
+                                <button class="btn btn-danger delButton"><i class="fa-solid fa-trash-can"></i></button>
+                            </div>`)
                         let row = table.row.add(tab).node();
                         $(row).attr({"data-voiture":datas.id,"data-db":page})
+                        $(row).children().last().addClass('tdBtn');
                         table.draw();
                         eventModif();
                     })
@@ -620,10 +636,13 @@ function updateDatas(datas,page,type){
                             }
                             tab.push(datas.immatriculation);
                         }
-                        tab.push(datas.noteEnt+`<button class="btn btn-info editButton">modifier</button>
-                        <button class="btn btn-danger delButton">supprimer</button>`)
+                        tab.push(datas.noteEnt+`<div class="divBtnTab">
+                                <button class="btn btn-info editButton text-white"><i class="fa-solid fa-pencil "></i></button>
+                                <button class="btn btn-danger delButton"><i class="fa-solid fa-trash-can"></i></button>
+                            </div>`)
                         let row = table.row.add(tab).node();
                         $(row).attr({"data-voiture":datas.id,"data-db":page})
+                        $(row).children().last().addClass('tdBtn');
                         table.draw();
                         eventModif();
                     })
@@ -660,10 +679,13 @@ function updateDatas(datas,page,type){
                             }
                             tab.push(datas.immatriculation);
                         }
-                        tab.push(datas.noteRep+`<button class="btn btn-info editButton">modifier</button>
-                        <button class="btn btn-danger delButton">supprimer</button>`)
+                        tab.push(datas.noteRep+`<div class="divBtnTab">
+                                <button class="btn btn-info editButton text-white"><i class="fa-solid fa-pencil "></i></button>
+                                <button class="btn btn-danger delButton"><i class="fa-solid fa-trash-can"></i></button>
+                            </div>`)
                         let row = table.row.add(tab).node();
                         $(row).attr({"data-voiture":datas.id,"data-db":page})
+                        $(row).children().last().addClass('tdBtn');
                         table.draw();
                         eventModif();
                     })
