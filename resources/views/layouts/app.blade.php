@@ -23,6 +23,7 @@
     <link href="{{ asset('css/style.css') }}" rel="stylesheet">
     <link href="{{ asset('css/all.css') }}" rel="stylesheet">
     <link href="{{ asset('css/dataTables.bootstrap5.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/CustomScrollbar.css') }}" rel="stylesheet">
 </head>
 <body>
     <div id="app">
