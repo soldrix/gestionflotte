@@ -312,6 +312,18 @@ function supModal(row){
                 url:url,
                 success:function () {
                     myModal.hide();
+                    if($('#nbRep').length > 0 && db === 'reparations'){
+                        countData($('#nbRep'));
+                    }
+                    if($('#nbCons').length > 0 && db === 'consommation'){
+                        countData($('#nbCons'));
+                    }
+                    if($('#nbAssu').length > 0 && db === 'assurance'){
+                        countData($('#nbAssu'));
+                    }
+                    if($('#nbEnt').length > 0 && db === 'entretiens'){
+                        countData($('#nbEnt'));
+                    }
                     delToast.show();
                 }
             })
@@ -481,7 +493,7 @@ function verifDatas(datas,page,type){
             }
             tab['typeRep'] = capitalizeFirstLetter(typeRep.val());
             tab['dateRep'] = reverseDate(dateRep);
-            tab['montantRep'] = montantRep.val();
+            tab['montantRep'] = montantRep.val().replace(',','.');
             tab['garageRep'] = capitalizeFirstLetter(garageRep.val());
             tab['noteRep'] = (noteRep.val() !=="") ? capitalizeFirstLetter(noteRep.val()) : 'Aucune note';
         }else{
@@ -496,7 +508,7 @@ function verifDatas(datas,page,type){
         let litre = $('.modal.fade.show input[name=litre]');
         if(montantConso.val() !=="" && litre.val() !== "" && montantConso.val().replaceAll(',','.') > 0 && !isNaN(montantConso.val().replaceAll(',','.'))){
             tab['montantCons'] = montantConso.val().replaceAll(',','.');
-            tab['litre'] = litre.val();
+            tab['litre'] = litre.val().replace(',','.');
             if (type === 'add'){
                 tab['id_voiture'] = idVoiture;
             }else{
@@ -515,6 +527,13 @@ function reverseDate(d){
     //d = date
     d = d.split('-');
     return d[2]+'/'+d[1]+'/'+d[0];
+}
+function countData(s,t){
+    if(t==='a'){
+        $(s).html(parseInt($(s).html()) + 1)
+    }else{
+        $(s).html(parseInt($(s).html()) - 1)
+    }
 }
 function updateDatas(datas,page,type){
     let dataVerif =verifDatas(datas,page,type);
@@ -564,6 +583,9 @@ function updateDatas(datas,page,type){
                         eventModif();
                     })
                     saveToast.show();
+                    if($('#nbCons').length > 0){
+                        countData($('#nbCons'),'a')
+                    }
                 }
             })
         }
@@ -607,6 +629,9 @@ function updateDatas(datas,page,type){
                         eventModif();
                     })
                     saveToast.show();
+                    if($('#nbAssu').length > 0){
+                        countData($('#nbAssu'),'a')
+                    }
                 }
             })
         }
@@ -654,6 +679,9 @@ function updateDatas(datas,page,type){
                         eventModif();
                     })
                     saveToast.show();
+                    if($('#nbEnt').length > 0){
+                        countData($('#nbEnt'),'a')
+                    }
                 }
             })
         }
@@ -701,6 +729,9 @@ function updateDatas(datas,page,type){
                         eventModif();
                     })
                     saveToast.show();
+                    if($('#nbRep').length > 0){
+                        countData($('#nbRep'),'a')
+                    }
                 }
             })
         }

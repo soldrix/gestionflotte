@@ -13,10 +13,10 @@
             <h2 class="text-primary">Immatriculation : <span class="text-muted">{{$datas->immatriculation}}</span></h2>
             <div class="d-flex mt-5">
 
-                <p class="mx-2"><i class="fa-solid fa-wrench fa-xl text-info"></i> <span> {{$nbData->nbEnt}} </span> entretiens</p>
-                <p class="mx-2"><i class="fa-solid fa-gear fa-xl text-info"></i> <span> {{$nbData->nbRep}} </span> reparations</p>
-                <p class="mx-2"><i class="fa-solid fa-calendar-check fa-xl text-info"></i> <span> {{$nbData->nbAssu}} </span> assurances</p>
-                <p class="mx-2"><i class="fa-solid fa-gas-pump fa-xl text-info"></i> <span> {{$nbData->nbCons}} </span> assurances</p>
+                <p class="mx-2"><i class="fa-solid fa-wrench fa-xl text-info"></i> <span id="nbEnt"> {{$nbData->nbEnt}} </span> entretiens</p>
+                <p class="mx-2"><i class="fa-solid fa-gear fa-xl text-info"></i> <span id="nbRep"> {{$nbData->nbRep}} </span> reparations</p>
+                <p class="mx-2"><i class="fa-solid fa-calendar-check fa-xl text-info"></i> <span id="nbAssu"> {{$nbData->nbAssu}} </span> assurances</p>
+                <p class="mx-2"><i class="fa-solid fa-gas-pump fa-xl text-info"></i> <span id="nbCons"> {{$nbData->nbCons}} </span> assurances</p>
 
             </div>
             <div class="col-6 mt-5 d-flex">
