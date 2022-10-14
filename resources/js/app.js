@@ -1,29 +1,37 @@
 require('datatables.net-bs5');
+require( 'datatables.net-responsive-bs5' );
 window.bootstrap = require('bootstrap/dist/js/bootstrap.bundle.js');
 require('jquery-mask-plugin/dist/jquery.mask.js')
 let myModal3;
+function initDataTable(){
+
+    $('.dataTable').DataTable({
+        "language": {
+            "lengthMenu": "Afficher _MENU_ entrées",
+            "zeroRecords": "Aucune entrée correspondante trouvée",
+            "info": "Affichage de _START_ à _END_ sur _TOTAL_ entrées",
+            "infoEmpty": "Affichage de 0 à 0 sur 0 entrées",
+            "infoFiltered": "(filtrées depuis un total de _MAX_ entrées)",
+            "search": "Rechercher:",
+            "paginate": {
+                "first": "Première",
+                "last": "Dernière",
+                "next": "Suivant",
+                "previous": "Précédent"
+            },
+        },
+        paging : false,
+        responsive :true,
+        columnDefs :[
+            {  responsivePriority: 1, targets: 0},
+            {  responsivePriority: 2, targets: -2},
+            {  responsivePriority: 3, targets: -1}
+        ]
+    });
+
+}
 $(document).ready(function () {
-
-    if ( $('.dataTable').length > 0){
-        $('.dataTable').DataTable({
-            "language": {
-                "lengthMenu": "Afficher _MENU_ entrées",
-                "zeroRecords": "Aucune entrée correspondante trouvée",
-                "info": "Affichage de _START_ à _END_ sur _TOTAL_ entrées",
-                "infoEmpty": "Affichage de 0 à 0 sur 0 entrées",
-                "infoFiltered": "(filtrées depuis un total de _MAX_ entrées)",
-                "search": "Rechercher:",
-                "paginate": {
-                    "first": "Première",
-                    "last": "Dernière",
-                    "next": "Suivant",
-                    "previous": "Précédent"
-                },
-            }
-        });
-    }
-    //todo faire  insertion en ajax
-
+    initDataTable()
     $(document).on('click','#btnAddVoiture',function () {
         modal('voiture')
     }).on('click',"#btnAddAssurance",function () {
@@ -54,7 +62,7 @@ function eventModif(){
     })
 }
 $(window).on('load',function () {
-    eventModif()
+    eventModif();
 })
 
 let myModal1 = new bootstrap.Modal(document.getElementById('AddModal'));
@@ -243,7 +251,7 @@ function modal(name,type,url,dataid) {
                         $('input[name=circulation]').val(reverseDate(datas.circulation));
                         $('input[name=carburant]').val(datas.carburant);
                         $('input[name=immatriculation]').val(datas.immatriculation);
-                        if(datas.status === 'disponible'){
+                        if(datas.statut === 'disponible'){
                             $('select[name=status]').children().first().prop('selected',true);
                         }else{
                             $('select[name=status]').children().last().prop('selected',true);
@@ -411,7 +419,7 @@ function verifDatas(datas,page,type){
                 tab['carburant'] = capitalizeFirstLetter(carburant.val());
                 tab['immatriculation'] = immatriculation.val().toUpperCase();
                 tab['circulation'] = reverseDate(circulation);
-                tab['status'] = carburant.val($('.modal.fade.show select[name=status]').val());
+                tab['status'] = capitalizeFirstLetter($('.modal.fade.show select[name=status]').val());
             }
 
         }else{
@@ -762,18 +770,18 @@ function updateDatas(datas,page,type){
                         rowData.forEach(datas =>{
                             $("div[data-voiture="+datas.id+"]").parent().children().first().children().attr('src','http://127.0.0.1:8000/storage/'+datas.image);
                             $("div[data-voiture="+datas.id+"] h2 span").eq(0).html(datas.immatriculation);
-                            $("div[data-voiture="+datas.id+"] div.col-6 div.col-auto:nth-child(2) h2").eq(0).html(datas.marque);
-                            $("div[data-voiture="+datas.id+"] div.col-6 div.col-auto:nth-child(2) h2").eq(1).html(datas.model);
-                            $("div[data-voiture="+datas.id+"] div.col-6 div.col-auto:nth-child(2) h2").eq(2).html(reverseDate(datas.circulation));
-                            $("div[data-voiture="+datas.id+"] div.col-6 div.col-auto:nth-child(2) h2").eq(3).html(datas.status);
-                            $("div[data-voiture="+datas.id+"] div.col-6 div.col-auto:nth-child(2) h2").eq(4).html(datas.puissance);
-                            $("div[data-voiture="+datas.id+"] div.col-6 div.col-auto:nth-child(2) h2").eq(5).html(datas.carburant);
+                            $("div[data-voiture="+datas.id+"]").children().last().children().eq(1).children().eq(0).html(datas.marque);
+                            $("div[data-voiture="+datas.id+"]").children().last().children().eq(1).children().eq(1).html(datas.model);
+                            $("div[data-voiture="+datas.id+"]").children().last().children().eq(1).children().eq(2).html(reverseDate(datas.circulation));
+                            $("div[data-voiture="+datas.id+"]").children().last().children().eq(1).children().eq(3).html(datas.statut);
+                            $("div[data-voiture="+datas.id+"]").children().last().children().eq(1).children().eq(4).html(datas.puissance);
+                            $("div[data-voiture="+datas.id+"]").children().last().children().eq(1).children().eq(5).html(datas.carburant);
                         })
                     }
                     if(type === 'add'){
                         rowData.forEach(datas=>{
                             $('.container.d-flex').append(`
-                         <div class="col-2 d-flex flex-column  p-2 rounded m-2 blockVoiture" style="background: #e4e4e4" data-voiture="${datas.id}" data-db="${page}">
+                         <div class="col-12 col-lg-3 col-xxl-4 d-flex flex-column  p-2 rounded m-2 blockVoiture" style="background: #e4e4e4" data-voiture="${datas.id}" data-db="${page}">
                             <img src="http://127.0.0.1:8000/storage/${datas.image}" alt="" class="rounded">
                             <p class="text-center">${datas.model}</p>
                             <a  class="btn btn-primary w-75 align-self-center mt-3 btn-info-car" href="http://127.0.0.1:8000/voiture/${datas.id}">

@@ -1,14 +1,14 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="container-fluid">
+    <div class="container-fluid p-0">
         <!-- Button trigger modal -->
         <button type="button" class="btn btn-primary float-end btnAddModal">
             Ajouter Entretien
         </button>
-        <div class="container">
+        <div class="container p-0">
             <h2>Page entretiens</h2>
-            <table id="DataTable_entretiens" class="table table-striped dataTable">
+            <table id="DataTable_entretiens" class="table table-striped dataTable table-responsive" style="width: 100%">
                 <thead>
                 <tr>
                     <th>Nom garage</th>

@@ -8,7 +8,7 @@
         </button>
         <div class="container">
             <h2>Page reparation</h2>
-            <table id="DataTable_reparations" class="table table-striped dataTable">
+            <table id="DataTable_reparations" class="table table-striped dataTable table-responsive" style="width: 100%">
                 <thead>
                 <tr>
                     <th>Nom garage</th>

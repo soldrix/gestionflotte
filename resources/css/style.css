@@ -1,4 +1,5 @@
 @import '~datatables.net-bs5/css/dataTables.bootstrap5.css';
+@import '~datatables.net-responsive-bs5/css/responsive.bootstrap5.css';
 .modal.fade input.active{
     border:2px solid red;
 }
@@ -22,4 +23,7 @@ td{
     overflow-y: auto;
     max-height: 100px;
     padding-right:15px;
+}
+.col-sm-12{
+    padding: 0 !important;
 }

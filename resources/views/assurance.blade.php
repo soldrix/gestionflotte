@@ -8,7 +8,7 @@
         </button>
         <div class="container">
             <h2>Page assurance</h2>
-            <table id="DataTable_assurances" class="table table-striped dataTable">
+            <table id="DataTable_assurances" class="table table-striped dataTable table-responsive" style="width: 100%">
                 <thead>
                 <tr>
                     <th>Nom assurance</th>
@@ -28,7 +28,7 @@
                         <td>{{$datasAssu->immatriculation}}</td>
                         <td class="tdBtn">
                             {{$datasAssu->frais.'€'}}
-                            <div class="divBtnTab">
+                            <div class="divBtnTab d-flex flex-column flex-md-row">
                                 <button class="btn btn-info editButton text-white"><i class="fa-solid fa-pencil "></i></button>
                                 <button class="btn btn-danger delButton"><i class="fa-solid fa-trash-can"></i></button>
                             </div>

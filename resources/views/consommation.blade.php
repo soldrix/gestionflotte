@@ -8,7 +8,7 @@
         </button>
         <div class="container">
             <h2>Page Consommation</h2>
-            <table id="DataTable_carburants" class="table table-striped dataTable">
+            <table id="DataTable_carburants" class="table table-striped dataTable table-responsive" style="width: 100%">
                 <thead>
                 <tr>
                     <th>Nombre de litre</th>
