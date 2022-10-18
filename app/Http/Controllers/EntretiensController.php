@@ -7,8 +7,8 @@ use Illuminate\Support\Facades\DB;
 
 class EntretiensController extends Controller
 {
-    public function insertDatas($datas){
-        $validation = $datas->validate([
+    public function insertDatas(Request $request){
+        $validation = $request->validate([
             "typeEnt" => "required",
             "dateEnt" => "required",
             "montantEnt" => "required",
@@ -21,10 +21,10 @@ class EntretiensController extends Controller
             "dateEnt" => $validation['dateEnt'],
             "montantEnt" => $validation['montantEnt'],
             "garageEnt" => $validation['garageEnt'],
-            "noteEnt" => (isset($datas->noteEnt)) ? $datas->noteEnt : 'aucune note'
+            "noteEnt" => (isset($request->noteEnt)) ? $request->noteEnt : 'Aucune note'
         ];
         DB::table('entretiens')->insert($tab);
-        return $tab;
+        return DB::table('entretiens')->select('entretiens.*','immatriculation')->join('voiture' , 'entretiens.id_voiture', '=','voiture.id')->where($tab)->get();
     }
     public function updateDatas(Request $request){
         $validation = $request->validate([
@@ -39,26 +39,16 @@ class EntretiensController extends Controller
             "dateEnt" => $validation['dateEnt'],
             "montantEnt" => $validation['montantEnt'],
             "garageEnt" => $validation['garageEnt'],
-            "noteEnt" => (isset($datas->noteEnt)) ? $datas->noteEnt : 'aucune note'
+            "noteEnt" => (isset($request->noteEnt)) ? $request->noteEnt : 'Aucune note'
         ]);
-        $json = new \stdClass();
-        $json->id = $id;
-        $json->typeEnt = $validation['typeEnt'];
-        $json->montantEnt = $validation['montantEnt'];
-        $json->garageEnt = $validation['garageEnt'];
-        $json->dateEnt = $validation['dateEnt'];
-        $json->noteEnt = (isset($request->noteEnt)) ? $request->noteEnt : 'aucune note';
-        return json_encode($json);
+        return DB::table('entretiens')->select('entretiens.*','immatriculation')->join('voiture' , 'entretiens.id_voiture', '=','voiture.id')->where('entretiens.id',$id)->get();
     }
     public function charge(){
         $voiture = DB::select('select * from voiture');
         $entretiens = DB::select('SELECT entretiens.*,voiture.immatriculation FROM `entretiens` INNER JOIN voiture ON voiture.id = entretiens.id_voiture ');
         return  view('/entretiens',['voiture'=>$voiture,'entretiens'=>$entretiens]);
     }
-    public function createEntretiens(Request $request){
-        $this->insertDatas($request);
-        return redirect('/entretiens')->with('dataSave','success');
-    }
+
     public function deleteEntretiens(Request $request) : void{
         $row = $request->id;
         DB::delete("DELETE FROM `entretiens` WHERE id='$row'");

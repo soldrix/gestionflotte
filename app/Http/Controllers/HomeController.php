@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 
 class HomeController extends Controller
 {
@@ -23,16 +25,9 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function index()
-    {
-        $voiture = DB::select('select * from voiture');
-        return view('home',['voiture'=>$voiture]);
-    }
 
-    public function VoitureForm(Request $request) {
-
-        // Form validation
-        $validation = $request->validate([
+    public function verifDatas($datas){
+        $validation = $datas->validate([
             'marque' => 'required',
             'model'=>'required',
             'circulation' => 'required',
@@ -40,19 +35,16 @@ class HomeController extends Controller
             'immatriculation' => 'required',
             'status' => 'required',
             'puissance' => 'required',
-            'file' => 'required',
+            'file' => 'required'
         ]);
-
-        $file = $request->file('file');
+        $file = $datas->file('file');
         // Generate a file name with extension
         $fileName = 'voiture-'.time().'.'.$file->getClientOriginalExtension();
-
         // Save the file
-        $file->storeAs('/public/upload', $fileName);
+//        $file->storeAs('/public/upload', $fileName);
+        Storage::disk('public')->put('/upload/' . $fileName, File::get($file));
         $path = "upload/".$fileName;
-
-        DB::table('voiture')->insert([
-            "image" => $path,
+        $tab =[
             "marque" => $validation['marque'],
             "model" => $validation['model'],
             "circulation" => $validation['circulation'],
@@ -60,13 +52,29 @@ class HomeController extends Controller
             "statut" => $validation['status'],
             "carburant" => $validation['carburant'],
             "puissance" => $validation['puissance'],
-        ]);
-
-
-        return redirect('/home')->with('dataSave','success');
-  }
-    public function deleteVoiture(Request $request){
-        $row = $request->id_voiture;
-        DB::delete("DELETE FROM `voiture` WHERE id='$row'");
+            'image' => $path
+        ];
+        return $tab;
+    }
+    public function insertData(Request $request){
+         DB::table('voiture')->insert($this->verifDatas($request));
+        return DB::table('voiture')->select()->where($this->verifDatas($request))->get();
+    }
+    public function index()
+    {
+        $voiture = DB::select('select * from voiture');
+        return view('home',['voiture'=>$voiture]);
+    }
+    public function deleteVoiture(Request $request):void{
+        $id = $request->id;
+        $car =  DB::table('voiture')->where('id',$id)->get();
+        foreach ($car as $datas){
+            if(Storage::disk('public')->exists($datas->image)){
+                Storage::disk('public')->delete($datas->image);
+            }else{
+                error_log($datas->image);
+            }
+        }
+        DB::delete("DELETE FROM `voiture` WHERE id='$id'");
     }
 }

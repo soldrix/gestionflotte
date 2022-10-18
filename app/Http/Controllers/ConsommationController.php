@@ -7,44 +7,36 @@ use Illuminate\Support\Facades\DB;
 
 class ConsommationController extends Controller
 {
-    public function verifDatas($datas){
-        $validation = $datas->validate([
+    public function insertData(Request $request){
+        $validation = $request->validate([
             "litre" => "required",
-            "montantCons" => "required"
+            "montantCons" => "required",
+            "id_voiture" => "required"
         ]);
         $tab =[
             "litre" => $validation['litre'],
             "montantCons" => $validation['montantCons'],
             "id_voiture" => $validation['id_voiture'],
         ];
-        return $tab;
-    }
-    public function insertData($datas){
-        return DB::table('reparations')->insert($this->verifDatas($datas));
+        DB::table('consommation')->insert($tab);
+        return DB::table('consommation')->select('consommation.*','immatriculation')->join('voiture' , 'consommation.id_voiture', '=','voiture.id')->where($tab)->get();
     }
     public function updateDatas(Request $request){
         $validation = $request->validate([
             "litre" => "required",
             "montantCons" => "required"
         ]);
-        $litre = $validation['litre'];
-        $montant = $validation['montantCons'];
         $id = $request->id;
-        DB::update("UPDATE consommation set litre='$litre',montantCons='$montant' where id='$id'");
-        $json = new \stdClass();
-        $json->id = $id;
-        $json->litre = $litre;
-        $json->montantCons = $montant;
-        return json_encode($json);
+        DB::table('consommation')->where('id',$id)->update([
+            "litre" => $validation['litre'],
+            "montantCons" => $validation['montantCons']
+        ]);
+        return DB::table('consommation')->select('consommation.*','immatriculation')->join('voiture' , 'consommation.id_voiture', '=','voiture.id')->where('consommation.id',$id)->get();
     }
     public function charge(){
         $voiture = DB::select('select * from voiture');
         $consommation = DB::select('SELECT consommation.*,voiture.immatriculation FROM `consommation` INNER JOIN voiture ON voiture.id = consommation.id_voiture ');
         return  view('/consommation',['voiture'=>$voiture,'consommation'=>$consommation]);
-    }
-    public function create(Request $request){
-        $this->insertData($request);
-        return redirect('/consommation')->with('dataSave','success');
     }
     public function delete(Request $request) : void{
         $row = $request->id;

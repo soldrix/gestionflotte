@@ -1,0 +1,29 @@
+@import '~datatables.net-bs5/css/dataTables.bootstrap5.css';
+@import '~datatables.net-responsive-bs5/css/responsive.bootstrap5.css';
+.modal.fade input.active{
+    border:2px solid red;
+}
+.tdBtn{
+    justify-content: space-between;
+    display: flex;
+    align-items: center;
+}
+tr:hover .divBtnTab{
+    opacity: 100%;
+}
+.divBtnTab{
+    width: fit-content;
+    float: right;
+    opacity: 0;
+}
+td{
+    vertical-align: middle;
+}
+.noteSupp{
+    overflow-y: auto;
+    max-height: 100px;
+    padding-right:15px;
+}
+.col-sm-12{
+    padding: 0 !important;
+}
