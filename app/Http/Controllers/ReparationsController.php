@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class ReparationsController extends Controller
@@ -44,9 +45,12 @@ class ReparationsController extends Controller
         return DB::table('reparations')->select('reparations.*','immatriculation')->join('voiture' , 'reparations.id_voiture', '=','voiture.id')->where('reparations.id',$id)->get();
     }
     public function charge(){
-        $voiture = DB::select('select * from voiture');
-        $reparation = DB::select('SELECT reparations.*,voiture.immatriculation FROM `reparations` INNER JOIN voiture ON voiture.id = reparations.id_voiture');
-        return  view('/reparation',['voiture'=>$voiture,'reparation'=>$reparation]);
+        $user_type = Auth::user()->type;
+        if ($user_type === 'admin'){
+            $voiture = DB::select('select * from voiture');
+            $reparation = DB::select('SELECT reparations.*,voiture.immatriculation FROM `reparations` INNER JOIN voiture ON voiture.id = reparations.id_voiture');
+        }
+        return ($user_type !== 'admin') ? redirect('/home') : view('/reparation',['voiture'=>$voiture,'reparation'=>$reparation]);
     }
     public function deleteReparations(Request $request) : void{
         $row = $request->id;

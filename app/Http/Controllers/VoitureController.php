@@ -2,23 +2,27 @@
 
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class VoitureController extends Controller
 {
     public function charge(Request $request){
-        $id = (isset($request->id)) ? $request->id : null ;
-        $voitureData = DB::select("select * from voiture where id='$id'");
-        $datas1 = DB::select("select * from assurance where id_voiture='$id'");
-        $datas2 = DB::select("select * from consommation where id_voiture='$id'");
-        $datas3 = DB::select("select * from entretiens where id_voiture='$id'");
-        $datas4 = DB::select("select * from reparations where id_voiture='$id'");
-        $json = new \stdClass();
-        $json->nbAssu  = count($datas1);
-        $json->nbCons  = count($datas2);
-        $json->nbEnt  = count($datas3);
-        $json->nbRep  = count($datas4);
-        return view('voiture',['voitureData'=>$voitureData,'assurance'=>$datas1,"consommation"=>$datas2,"entretiens"=>$datas3,"reparations"=>$datas4,'nbData'=>$json]);
+        $user_type = Auth::user()->type;
+        if ($user_type === 'admin'){
+            $id = (isset($request->id)) ? $request->id : null ;
+            $voitureData = DB::select("select * from voiture where id='$id'");
+            $datas1 = DB::select("select * from assurance where id_voiture='$id'");
+            $datas2 = DB::select("select * from consommation where id_voiture='$id'");
+            $datas3 = DB::select("select * from entretiens where id_voiture='$id'");
+            $datas4 = DB::select("select * from reparations where id_voiture='$id'");
+            $json = new \stdClass();
+            $json->nbAssu  = count($datas1);
+            $json->nbCons  = count($datas2);
+            $json->nbEnt  = count($datas3);
+            $json->nbRep  = count($datas4);
+        }
+        return ($user_type !== 'admin') ? redirect('/home') : view('voiture',['voitureData'=>$voitureData,'assurance'=>$datas1,"consommation"=>$datas2,"entretiens"=>$datas3,"reparations"=>$datas4,'nbData'=>$json]);
     }
     public function getVoiture(Request $request){
         $id = $request->id;

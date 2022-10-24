@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 
@@ -43,9 +44,12 @@ class AssuranceController extends Controller
         return DB::table('assurance')->select('assurance.*','immatriculation')->join('voiture' , 'assurance.id_voiture', '=','voiture.id')->where('assurance.id',$id)->get();
     }
     public function charge(){
-        $voiture = DB::select('select * from voiture');
-        $assurance = DB::select('SELECT assurance.*,voiture.immatriculation FROM `assurance` INNER JOIN voiture ON voiture.id = assurance.id_voiture ');
-        return  view('/assurance',['voiture'=>$voiture,'assurance'=>$assurance]);
+        $user_type = Auth::user()->type;
+        if($user_type === 'admin'){
+            $voiture = DB::select('select * from voiture');
+            $assurance = DB::select('SELECT assurance.*,voiture.immatriculation FROM `assurance` INNER JOIN voiture ON voiture.id = assurance.id_voiture ');
+        }
+        return ($user_type !== 'admin') ? redirect('/home') : view('/assurance',['voiture'=>$voiture,'assurance'=>$assurance]);
     }
 
     public function deleteAssurance(Request $request) : void{

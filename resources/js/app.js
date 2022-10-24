@@ -1,7 +1,8 @@
 require('datatables.net-bs5');
 require( 'datatables.net-responsive-bs5' );
 window.bootstrap = require('bootstrap/dist/js/bootstrap.bundle.js');
-require('jquery-mask-plugin/dist/jquery.mask.js')
+require('jquery-mask-plugin/dist/jquery.mask.js');
+import flatpickr from "flatpickr";
 let myModal3;
 function initDataTable(){
 
@@ -32,6 +33,26 @@ function initDataTable(){
 }
 $(document).ready(function () {
     initDataTable()
+    if($('#dateTime').length > 0){
+        let currentDate = new Date();
+        let monthnow = parseInt(currentDate.getUTCMonth()) +1;
+        monthnow = (monthnow < 10) ? '0'+monthnow: monthnow;
+        let datenow = currentDate.getFullYear()+'-'+monthnow+'-'+currentDate.getDate();
+        flatpickr('#dateTime',{
+            mode: "range",
+            dateFormat: "Y-m-d H:i",
+            enableTime: true,
+            time_24hr: true,
+            minTime: currentDate.getHours()+':'+currentDate.getMinutes(),
+            enable:[
+                {
+                    from: datenow,
+                    to: (parseInt(currentDate.getFullYear())+10)+'-'+monthnow+'-'+currentDate.getDate()
+                }
+            ]
+        });
+
+    }
     $(document).on('click','#btnAddVoiture',function () {
         modal('voiture')
     }).on('click',"#btnAddAssurance",function () {
