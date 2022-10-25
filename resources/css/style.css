@@ -28,3 +28,105 @@ td{
 .col-sm-12{
     padding: 0 !important;
 }
+.inputSearch{
+    border: 0;
+    border-bottom: 2px solid black;
+    outline: none;
+    background-color: transparent;
+    min-width: 150px;
+}
+.divFilter{
+    margin-top: 10px;
+    width: 100%;
+    background:#f2f2f2;
+    height: 50px;
+    display:flex;
+}
+.typeVoiture{
+    padding:0;
+    align-self:center;
+    display:flex;
+    position:relative;
+}
+.typeVoiture a{
+    z-index :100;
+    color:black;
+    text-decoration:none;
+    cursor:pointer;
+    user-select:none;
+    font-weight:bold;
+}
+.filterContent{
+    z-index:10;
+    position:absolute;
+    width: 100%;
+    background:white;
+    top: 0;
+    padding:12% 5% 0% 5%;
+    align-items:center;
+    display:none;
+    flex-direction:column;
+}
+.filterContent.active{
+    display:flex;
+}
+.filterContent ul{
+    align-items:flex-start;
+    display: flex;
+    flex-direction:column;
+    width: 100%;
+}
+
+.filterContent ul li{
+    font-size:20px;
+    font-weight:bold;
+    text-align:end;
+    display: flex;
+    align-items: center;
+}
+
+.filterContent ul li input{
+    transform:scale(1.5);
+    border:3px solid black;
+    margin:0 15px;
+}
+
+.ligne-75{
+    width: 75%;
+    height:2px;
+    background:black;
+    margin:10px 0;
+    opacity:50%;
+}
+#nbOffre{
+    font-weight: bold;
+}
+#btnOffre{
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    height: fit-content;
+}
+#containerVoiture{
+    background-color: #F2F2F2;
+}
+.imageVoiture{
+    background-color: black;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+    height: 450px;
+    border-radius: 15px;
+}
+.iconVoiture{
+    height: 24px;
+    width: 24px;
+    font-size: 24px;
+}
+.iconVoiture svg{
+    width: 100%;
+    height: 100%;
+}
+.iconVoiture svg path{
+    fill: white;
+}

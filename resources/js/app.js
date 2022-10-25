@@ -32,25 +32,62 @@ function initDataTable(){
 
 }
 $(document).ready(function () {
+    $('.typeVoiture a').on('click',function(){
+        $(this).parent().find('.filterContent').toggleClass('active')
+        $(this).find('i').toggleClass('fa-chevron-up fa-chevron-down')
+    })
     initDataTable()
-    if($('#dateTime').length > 0){
+    if($('#dateD').length > 0){
         let currentDate = new Date();
         let monthnow = parseInt(currentDate.getUTCMonth()) +1;
         monthnow = (monthnow < 10) ? '0'+monthnow: monthnow;
         let datenow = currentDate.getFullYear()+'-'+monthnow+'-'+currentDate.getDate();
-        flatpickr('#dateTime',{
-            mode: "range",
-            dateFormat: "Y-m-d H:i",
-            enableTime: true,
-            time_24hr: true,
-            minTime: currentDate.getHours()+':'+currentDate.getMinutes(),
+        flatpickr('#dateD',{
+            dateFormat: "Y-m-d",
             enable:[
                 {
                     from: datenow,
-                    to: (parseInt(currentDate.getFullYear())+10)+'-'+monthnow+'-'+currentDate.getDate()
+                    to: (parseInt(currentDate.getFullYear())+1)+'-'+monthnow+'-'+currentDate.getDate()
                 }
             ]
         });
+        flatpickr('#timeD',{
+            enableTime:true,
+            noCalendar:true,
+            dateFormat:'H:i',
+            time_24hr:true,
+            minTime:currentDate.getHours()+':'+currentDate.getMinutes()
+        })
+        $('#timeD').on('focusout',function () {
+            let timeV = ($('#timeD').val() < currentDate.getHours()+':'+currentDate.getMinutes() ) ? currentDate.getHours()+':'+currentDate.getMinutes(): $('#timeD').val();
+            let timeDebut =($('#dateD').val() === $('#dateF')) ? timeV : "00:00";
+
+            flatpickr('#timeF',{
+                enableTime:true,
+                noCalendar:true,
+                dateFormat:'H:i',
+                time_24hr:true,
+                minTime:timeDebut
+            })
+        }).on('focus',function () {
+            $('#timeF').val('')
+        })
+
+        $('#dateD').on('focusout',function () {
+            let datedebut = ($('#dateD').val() < datenow) ? datenow : $('#dateD').val();
+            flatpickr('#dateF',{
+                dateFormat: "Y-m-d",
+                enable:[
+                    {
+                        from: datedebut,
+                        to: (parseInt(currentDate.getFullYear())+1)+'-'+monthnow+'-'+currentDate.getDate()
+                    }
+                ]
+            });
+        }).on('focus',function () {
+            $('#dateF').val('')
+        })
+
 
     }
     $(document).on('click','#btnAddVoiture',function () {

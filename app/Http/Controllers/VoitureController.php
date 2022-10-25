@@ -9,9 +9,9 @@ class VoitureController extends Controller
 {
     public function charge(Request $request){
         $user_type = Auth::user()->type;
+        $id = (isset($request->id)) ? $request->id : null ;
+        $voitureData = DB::select("select * from voiture where id='$id'");
         if ($user_type === 'admin'){
-            $id = (isset($request->id)) ? $request->id : null ;
-            $voitureData = DB::select("select * from voiture where id='$id'");
             $datas1 = DB::select("select * from assurance where id_voiture='$id'");
             $datas2 = DB::select("select * from consommation where id_voiture='$id'");
             $datas3 = DB::select("select * from entretiens where id_voiture='$id'");
@@ -22,7 +22,7 @@ class VoitureController extends Controller
             $json->nbEnt  = count($datas3);
             $json->nbRep  = count($datas4);
         }
-        return ($user_type !== 'admin') ? redirect('/home') : view('voiture',['voitureData'=>$voitureData,'assurance'=>$datas1,"consommation"=>$datas2,"entretiens"=>$datas3,"reparations"=>$datas4,'nbData'=>$json]);
+        return ($user_type !== 'admin') ? view('voiture',['voitureData'=>$voitureData]) : view('voiture',['voitureData'=>$voitureData,'assurance'=>$datas1,"consommation"=>$datas2,"entretiens"=>$datas3,"reparations"=>$datas4,'nbData'=>$json]);
     }
     public function getVoiture(Request $request){
         $id = $request->id;
