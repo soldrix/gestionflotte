@@ -23,6 +23,11 @@ return new class extends Migration
             $table->string('statut');
             $table->integer('puissance');
             $table->text('image');
+            $table->string('type');
+            $table->integer('nbPorte');
+            $table->integer('nbPlace');
+            $table->float('prix');
+            $table->foreignId('id_agence')->nullable()->references('id')->on('agence')->onDelete('null')->onUpdate('null');
         });
     }
 

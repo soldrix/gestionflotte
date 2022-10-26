@@ -45,6 +45,7 @@
                         <a href="{{url('/assurance')}}" class="mx-2 text-dark text-decoration-none">Assurance</a>
                         <a href="{{url('/reparations')}}" class="mx-2 text-dark text-decoration-none">Reparation</a>
                         <a href="{{url('/consommation')}}" class="mx-2 text-dark text-decoration-none">Consommation</a>
+                        <a href="{{url('/agence')}}" class="mx-2 text-dark text-decoration-none">Agence</a>
                     </ul>
 
                     <!-- Right Side Of Navbar -->

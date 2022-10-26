@@ -105,6 +105,8 @@ $(document).ready(function () {
         modal(urlName,'add')
         myModal3 = new bootstrap.Modal(document.getElementById( urlName.replace(urlName[0],urlName[0].toUpperCase())+'Modal'));
         myModal3.show();
+    }).on('click','#btnAddAgence',function () {
+        modal('agence')
     })
 
 })
@@ -126,10 +128,24 @@ $(window).on('load',function () {
 let myModal1 = new bootstrap.Modal(document.getElementById('AddModal'));
 
 function modal(name,type,url,dataid) {
-
-    let htmlModal = (name === "voiture") ?
+        let htmlModal = (name === "voiture") ?
         `
-
+                    <div class="d-flex flex-wrap align-items-baseline">
+                        <label class="me-2" for="typeVoiture">type de voiture :</label>
+                        <input type="text" name="typeVoiture" placeholder="type ex(berline)" class="mb-2 me-2 inputForm inputText"  required>
+                    </div>
+                    <div class="d-flex flex-wrap align-items-baseline">
+                        <label class="me-2" for="nbPorte">Nombre de porte :</label>
+                        <input type="text" name="nbPorte" placeholder="nombre de porte" class="mb-2 me-2 inputForm inputNumber"  required>
+                    </div>
+                     <div class="d-flex flex-wrap align-items-baseline">
+                        <label class="me-2" for="nbPlace">Nombre de siège :</label>
+                        <input type="text" name="nbPlace" placeholder="nombre de siège" class="mb-2 me-2 inputForm inputNumber"  required>
+                    </div>
+                    <div class="d-flex flex-wrap align-items-baseline">
+                        <label class="me-2" for="prix">prix pour une journée :</label>
+                        <input type="text" name="prix" placeholder="ex(100)" class="mb-2 me-2 inputForm inputNumber"  required>
+                    </div>
                     <div class="d-flex flex-wrap align-items-baseline">
                         <label class="me-2" for="marque">Marque :</label>
                         <input type="text" name="marque" placeholder="Marque" class="mb-2 me-2 inputForm inputText"  required>
@@ -159,6 +175,12 @@ function modal(name,type,url,dataid) {
                         <select name="status" id="voitureSatut" class="mb-2 me-2">
                             <option value="disponible">Disponible</option>
                             <option value="indisponible">Indisponible</option>
+                        </select>
+                    </div>
+                    <div class="d-flex flex-wrap align-items-baseline">
+                        <label class="me-2" for="agenceId">Agence :</label>
+                        <select name="id_agence" id="agenceId" class="mb-2 me-2">
+
                         </select>
                     </div>
                     <div class="d-flex flex-wrap align-items-baseline">
@@ -230,7 +252,7 @@ function modal(name,type,url,dataid) {
                     </div>
                     `
                     : (name === "consommation") ?
-                        `
+                            `
                     <div class="d-flex flex-wrap align-items-baseline">
                         <label class="me-2" for="montantCons">Montant :</label>
                         <input type="text" name="montantCons" placeholder="Montant total" class="inputForm inputNumber mb-2" required>
@@ -238,9 +260,18 @@ function modal(name,type,url,dataid) {
                     <div class="d-flex flex-wrap align-items-baseline">
                         <label class="me-2" for="litre">nombre de litres :</label>
                         <input type="text" name="litre" placeholder="Nombre de litre" class="inputForm inputNumber mb-2" required>
+                    </div>` : (name === "agence") ?
+                            `
+                    <div class="d-flex flex-wrap align-items-baseline">
+                        <label class="me-2" for="ville">Ville de l'agence :</label>
+                        <input type="text" name="ville" placeholder="Ville" class="inputForm mb-2" required>
+                    </div>
+                    <div class="d-flex flex-wrap align-items-baseline">
+                        <label class="me-2" for="rue">rue de l'agence :</label>
+                        <input type="text" name="rue" placeholder="Rue" class="inputForm mb-2" required>
                     </div>` : "";
 
-    if(window.location.pathname.match('voiture') && type === "add" || window.location.pathname.match('home') && type === "add" || type !== 'add'){
+    if(window.location.pathname.match('voiture') && type === "add" || window.location.pathname.match('home') && type === "add" || window.location.pathname.match('agence') && type === "add"  || type !== 'add'){
         myModal1.show();
         $('#AddModal').find('.modal-body').html(htmlModal)
         $('#AddModal').ready(function () {
@@ -263,7 +294,7 @@ function modal(name,type,url,dataid) {
 
     })
     if (type=== "edit"){
-        $('#AddModal .modal-header h3').html((name === 'entretiens' || name === 'assurance') ? "Modifier l' " + name : "Modifier la " + name)
+        $('#AddModal .modal-header h3').html((name === 'entretiens' || name === 'assurance' || name === 'agence') ? "Modifier l' " + name : "Modifier la " + name)
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -278,6 +309,10 @@ function modal(name,type,url,dataid) {
             url:url,
             success:function (dataRow) {
                 dataRow.forEach(datas =>{
+                    if(url === '/getAgence'){
+                        $('input[name=ville]').val(datas.ville);
+                        $('input[name=rue]').val(datas.rue);
+                    }
                     if(url === '/getConsommation'){
                         $('input[name=montantCons]').val(datas.montantCons);
                         $('input[name=litre]').val(datas.litre);
@@ -309,11 +344,36 @@ function modal(name,type,url,dataid) {
                         $('input[name=circulation]').val(reverseDate(datas.circulation));
                         $('input[name=carburant]').val(datas.carburant);
                         $('input[name=immatriculation]').val(datas.immatriculation);
+                        $('input[name=typeVoiture]').val(datas.type);
+                        $('input[name=nbPorte]').val(datas.nbPorte);
+                        $('input[name=nbPlace]').val(datas.nbPlace);
+                        $('input[name=prix]').val(datas.prix);
                         if(datas.statut === 'disponible'){
                             $('select[name=status]').children().first().prop('selected',true);
                         }else{
                             $('select[name=status]').children().last().prop('selected',true);
                         }
+
+                        $.ajaxSetup({
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            }
+                        })
+                        $.ajax({
+                            type:'post',
+                            url:'/loadAgence',
+                            dataType: 'json',
+                            success:function (rowdata) {
+                                rowdata.forEach(datas =>{
+                                    $('#agenceId').append(`
+                                    <option value="${datas.id}">${datas.ville} ${datas.rue}</option>
+                                    `)
+                                })
+                                $("select[name=id_agence] option[value='"+datas.id_agence+"']").prop('selected',true);
+                            }
+                        })
+
+
                     }
                 })
                 $('.btnModal').off().on('click',function () {
@@ -328,6 +388,27 @@ function modal(name,type,url,dataid) {
         })
     }
     if (type !== "edit"){
+        $('#AddModal').ready(function () {
+            if(window.location.pathname.match('home') || window.location.pathname.match('voiture')){
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                })
+                $.ajax({
+                    type:'post',
+                    url:'/loadAgence',
+                    dataType: 'json',
+                    success:function (rowdata) {
+                        rowdata.forEach(datas =>{
+                            $('#agenceId').append(`
+                    <option value="${datas.id}">${datas.ville} ${datas.rue}</option>
+                    `)
+                        })
+                    }
+                })
+            }
+        })
         $('#AddModal .modal-header h3').html((name === 'entretiens') ? "Ajouter un " + name : "Ajouter une " + name)
         $('.btnModal').off().on('click', function () {
             $(this).prop('disabled',true);
@@ -359,7 +440,7 @@ function supModal(row){
     myModal.show();
     $('#btnDelModal').on('click',function () {
 
-        let url  = (db === 'voiture') ? '/delVoiture': (db === 'consommation') ? '/delConsommation' : (db === 'entretiens') ? '/delEntretiens' :(db === 'reparations') ? '/delReparations' :(db === 'assurance') ? '/delAssurance' :'';
+        let url  = (db === 'voiture') ? '/delVoiture': (db === 'consommation') ? '/delConsommation' : (db === 'entretiens') ? '/delEntretiens' :(db === 'reparations') ? '/delReparations' :(db === 'assurance') ? '/delAssurance' : (db === 'agence') ? '/delAgence' :'';
         if(url !== '/delVoiture'){
             $("tr[data-voiture='"+data+"']").remove()
         }else{
@@ -460,7 +541,12 @@ function verifDatas(datas,page,type){
         let immatriculation = $('.modal.fade.show input[name=immatriculation]');
         let circulation = $('.modal.fade.show input[name=circulation]');
         let imageFile = $('.modal.fade.show input[name=file]');
-        if(marque.val() !=="" && model.val() !== "" && puissance.val() !== "" && carburant.val()!=="" && immatriculation.val()!=="" && circulation.val()!=="" && reverseDate(circulation) !== false){
+        let typeVoiture = $('.modal.fade.show input[name=typeVoiture]');
+        let nbPorte = $('.modal.fade.show input[name=nbPorte]');
+        let nbPlace = $('.modal.fade.show input[name=nbPlace]');
+        let prix = $('.modal.fade.show input[name=prix]');
+
+        if(marque.val() !=="" && model.val() !== "" && puissance.val() !== "" && carburant.val()!=="" && immatriculation.val()!=="" && circulation.val()!=="" && reverseDate(circulation) !== false && typeVoiture.val() !== "" && nbPorte.val() !== "" && nbPlace.val() !== "" && prix.val() !== ""){
             if (type === 'add' && imageFile[0].files.length <= 0){
                 if($('#error_image').length <= 0){
                     imageFile.addClass('active');
@@ -471,6 +557,7 @@ function verifDatas(datas,page,type){
             }else{
 
                 tab['id'] = (type === 'add') ? '' : datas;
+                tab['id_agence'] =$('#agenceId').val();
                 tab['marque'] = capitalizeFirstLetter(marque.val());
                 tab['model'] = model.val();
                 tab['puissance'] = puissance.val();
@@ -478,6 +565,10 @@ function verifDatas(datas,page,type){
                 tab['immatriculation'] = immatriculation.val().toUpperCase();
                 tab['circulation'] = reverseDate(circulation);
                 tab['status'] = capitalizeFirstLetter($('.modal.fade.show select[name=status]').val());
+                tab['typeVoiture'] = typeVoiture.val();
+                tab['nbPorte'] = nbPorte.val();
+                tab['nbPlace'] = nbPlace.val();
+                tab['prix']  = prix.val().replace(',','.');
             }
 
         }else{
@@ -495,6 +586,10 @@ function verifDatas(datas,page,type){
             draw_error(puissance,'error_puissance')
             draw_error(carburant,'error_carburant')
             draw_error(immatriculation,'error_immatricualtion')
+            draw_error(typeVoiture, 'error_type_voiture')
+            draw_error(nbPorte, 'error_nbPorte')
+            draw_error(nbPlace, 'error_nbPlace')
+            draw_error(prix,"error_prix",'nb')
         }
     }
     if (page === "assurance"){
@@ -585,6 +680,20 @@ function verifDatas(datas,page,type){
             draw_error(litre,'error_litre')
         }
     }
+    if (page === "agence"){
+        let ville = $('.modal.fade.show input[name=ville]');
+        let rue = $('.modal.fade.show input[name=rue]');
+        if(ville.val() !=="" && rue.val() !== ""){
+            tab['ville'] = ville.val();
+            tab['rue'] = rue.val();
+            if (type !== 'add'){
+                tab['id'] = datas;
+            }
+        }else{
+            draw_error(rue,'error_rue')
+            draw_error(ville,'error_ville')
+        }
+    }
     return tab;
 }
 var saveToastEl = document.getElementById('saveToast');
@@ -607,8 +716,43 @@ function updateDatas(datas,page,type){
         (type === 'add' && page === 'entretiens') ? '/addEntretiens' : (type !== 'add' && page === 'entretiens') ? '/updateEntretiens' :
         (type === 'add' && page === 'assurance') ? '/addAssurance' : (type !== 'add' && page === 'assurance') ? '/updateAssurance' :
         (type === 'add' && page === 'reparations') ? '/addReparations' : (type !== 'add' && page === 'reparations') ? '/updateReparations' :
-        (type === 'add' && page === 'voiture') ? '/addVoiture' : (type !== 'add' && page ==='voiture') ? '/updateVoiture' : '';
-    if (dataVerif['id'] !== undefined || dataVerif['id_voiture'] !== undefined){
+        (type === 'add' && page === 'voiture') ? '/addVoiture' : (type !== 'add' && page ==='voiture') ? '/updateVoiture' : (type === 'add' && page === 'agence') ? '/addAgence' : (type !== 'add' && page === 'agence') ? '/updateAgence' :'';
+    if (dataVerif['id'] !== undefined || dataVerif['id_voiture'] !== undefined || dataVerif['ville'] !== undefined){
+        if (page === 'agence'){
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $.ajax({
+                type:'POST',
+                data:dataVerif,
+                url: urlAjax,
+                dataType:'json',
+                success:function (rowData) {
+                    myModal1.hide();
+                    rowData.forEach(datas=>{
+                        let table = $('#DataTable_agence').DataTable();
+                        if(type !== 'add'){
+                            table.row($("tr[data-voiture='"+datas.id+"']"))
+                                .remove()
+                                .draw();
+                        }
+                        let tab = [datas.ville];
+                        tab.push(datas.rue+`<div class="divBtnTab">
+                            <button class="btn btn-info editButton text-white"><i class="fa-solid fa-pencil "></i></button>
+                            <button class="btn btn-danger delButton"><i class="fa-solid fa-trash-can"></i></button>
+                        </div>`)
+                        let row = table.row.add(tab).node();
+                        $(row).attr({"data-voiture":datas.id,"data-db":page})
+                        $(row).children().last().addClass('tdBtn');
+                        table.draw();
+                        eventModif();
+                    })
+                    saveToast.show();
+                }
+            })
+        }
         if (page === 'consommation'){
             $.ajaxSetup({
                 headers: {

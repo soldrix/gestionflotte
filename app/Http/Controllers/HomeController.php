@@ -36,7 +36,12 @@ class HomeController extends Controller
             'immatriculation' => 'required',
             'status' => 'required',
             'puissance' => 'required',
-            'file' => 'required'
+            'file' => 'required',
+            'prix' => 'required',
+            'nbPorte' => 'required',
+            'nbPlace' => 'required',
+            'id_agence' => 'required',
+            'typeVoiture' => 'required'
         ]);
         $file = $datas->file('file');
         // Generate a file name with extension
@@ -53,7 +58,12 @@ class HomeController extends Controller
             "statut" => $validation['status'],
             "carburant" => $validation['carburant'],
             "puissance" => $validation['puissance'],
-            'image' => $path
+            'nbPorte' => $validation['nbPorte'],
+            'type' => $validation['typeVoiture'],
+            'image' => $path,
+            'nbPlace' => $validation['nbPlace'],
+            'prix' => $validation['prix'],
+            'id_agence' => $validation['id_agence']
         ];
         return $tab;
     }
@@ -64,7 +74,7 @@ class HomeController extends Controller
     public function index()
     {
         $voiture = DB::select('select * from voiture');
-        return view('home',['voiture'=>$voiture]);
+        return view('home',(Auth::user()->type !== 'admin') ? ['voiture'=>$voiture,'type'=>DB::select('SELECT distinct type from voiture'),'nbVoiture'=>count($voiture)] : ['voiture'=>$voiture]);
     }
     public function deleteVoiture(Request $request):void{
         $id = $request->id;

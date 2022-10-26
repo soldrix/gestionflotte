@@ -1099,6 +1099,7 @@ td{
 }
 #containerVoiture{
     background-color: #F2F2F2;
+    min-height: calc(100vh - 60px);
 }
 .imageVoiture{
     background-color: black;
@@ -1119,5 +1120,33 @@ td{
 }
 .iconVoiture svg path{
     fill: white;
+}
+#blockSell{
+    height: -webkit-fit-content;
+    height: -moz-fit-content;
+    height: fit-content;
+}.textSell{
+    max-width: 90%;
+ }
+.taxeText{
+    font-size: 13px;
+}
+.franchiseP{
+    transform: scale(1.8);
+    margin-right:20px;
+    height: -webkit-fit-content;
+    height: -moz-fit-content;
+    height: fit-content;
+    align-self: center;
+    line-height: 15px;
+}
+.px-4-5{
+    padding-left: 2rem !important;
+    padding-right: 2rem !important;
+}
+.h-fit{
+    height: -webkit-fit-content;
+    height: -moz-fit-content;
+    height: fit-content;
 }
 

@@ -39,7 +39,12 @@ class VoitureController extends Controller
             'carburant' => 'required',
             'immatriculation' => 'required',
             'status' => 'required',
-            'puissance' => 'required'
+            'puissance' => 'required',
+            'typeVoiture' => 'required',
+            'nbPlace' => 'required',
+            'nbPorte' => 'required',
+            'id_agence' => 'required',
+            'prix' => 'required'
         ]);
         $id = $request->id;
         DB::table('voiture')->where('id',$id)->update([
@@ -50,6 +55,11 @@ class VoitureController extends Controller
             "statut" => $validation['status'],
             "carburant" => $validation['carburant'],
             "puissance" => $validation['puissance'],
+            'type' => $validation['typeVoiture'],
+            'nbPlace' => $validation['nbPlace'],
+            'nbPorte' => $validation['nbPorte'],
+            'prix' => $validation['prix'],
+            'id_agence' => $validation['id_agence']
         ]);
         if($request->file('file') !== null){
             $file = $request->file('file');
