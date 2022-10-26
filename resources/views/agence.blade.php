@@ -43,11 +43,11 @@
                 <div class="col-6 align-self-center modal-body d-flex flex-column">
                     <div class="d-flex flex-wrap align-items-baseline">
                         <label for="nomAssu">Ville de l'agence :</label>
-                        <input type="text" name="ville" class="inputForm inputAssu mb-2 inputText me-2" required>
+                        <input type="text" name="ville" class="inputForm inputAssu mb-2 me-2" required>
                     </div>
                     <div class="d-flex flex-wrap align-items-baseline">
                         <label for="debutAssu">Rue de l'agence :</label>
-                        <input type="text" name="rue" class="inputForm assuDateD mb-2 inputDate me-2" required>
+                        <input type="text" name="rue" class="inputForm assuDateD mb-2 me-2" required>
                     </div>
 
                 </div>
