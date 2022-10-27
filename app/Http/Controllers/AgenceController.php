@@ -26,7 +26,7 @@ class AgenceController extends Controller
             "rue" => "required"
         ]);
         $id = $request->id;
-        DB::table('assurance')->where('id',$id)->update([
+        DB::table('agence')->where('id',$id)->update([
             "ville" => $validation['ville'],
             "rue" => $validation['rue']
         ]);
@@ -47,7 +47,7 @@ class AgenceController extends Controller
         $row = $request->id;
         DB::delete("DELETE FROM `agence` WHERE id='$row'");
     }
-    public function getAssurance(Request $request){
+    public function getAgence(Request $request){
         $id = $request->id;
         $data =  DB::select("SELECT * from agence where id='$id'");
         return json_encode($data);
