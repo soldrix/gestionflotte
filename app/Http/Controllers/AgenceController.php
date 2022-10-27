@@ -43,7 +43,7 @@ class AgenceController extends Controller
         return ($user_type !== 'admin') ? redirect('/home') : view('/agence',['agence'=>$agence]);
     }
 
-    public function deleteAssurance(Request $request) : void{
+    public function delete(Request $request) : void{
         $row = $request->id;
         DB::delete("DELETE FROM `agence` WHERE id='$row'");
     }
