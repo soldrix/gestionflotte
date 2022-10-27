@@ -8,55 +8,66 @@ use Illuminate\Support\Facades\DB;
 
 class locationController extends Controller
 {
-    public function insertDatas(Request $request){
-        $validation = $request->validate([
+    public function verification($datas){
+        $validation = $datas->validate([
             "id_voiture" => "required",
             "id_agence" => "required",
-            "locationD" => "required",
-            "locationF" => "required"
+            "dateDebut" => "required",
+            "dateFin" => "required"
         ]);
         $tab = [
             "id_agence" => $validation['id_agence'],
             "id_voiture" => $validation['id_voiture'],
-            "locationD" => $validation['locationD'],
-            "locationF" => $validation['locationF']
+            "dateDebut" => $validation['dateDebut'],
+            "dateFin" => $validation['dateFin']
         ];
-        DB::table('location')->insert($tab);
-        return DB::table('location')->select('location.*','immatriculation')->join('voiture' , 'location.id_voiture', '=','voiture.id')->where($tab)->get();
+        return $tab;
+    }
+    public function insertDatas(Request $request){
+        DB::table('location')->insert($this->verification($request));
+        return DB::table('location')
+            ->select('location.*','immatriculation','rue','ville')
+            ->join('agence' , "agence.id", '=',"location.id_agence")
+            ->join('voiture','voiture.id','=','location.id_voiture')
+            ->where([
+                "agence.id" => $request->id_agence,
+                "id_voiture" => $request->id_voiture,
+                "dateDebut" => $request->dateDebut,
+                "dateFin" => $request->dateFin
+            ])
+            ->get();
     }
     public function updateDatas(Request $request){
-        $validation = $request->validate([
-            "typeEnt" => "required",
-            "dateEnt" => "required",
-            "montantEnt" => "required",
-            "garageEnt" => "required"
-        ]);
         $id = $request->id;
-        DB::table('entretiens')->where('id',$id)->update([
-            "typeEnt" => $validation['typeEnt'],
-            "dateEnt" => $validation['dateEnt'],
-            "montantEnt" => $validation['montantEnt'],
-            "garageEnt" => $validation['garageEnt'],
-            "noteEnt" => (isset($request->noteEnt)) ? $request->noteEnt : 'Aucune note'
-        ]);
-        return DB::table('entretiens')->select('entretiens.*','immatriculation')->join('voiture' , 'entretiens.id_voiture', '=','voiture.id')->where('entretiens.id',$id)->get();
+        DB::table('location')->where('id',$id)->update($this->verification($request));
+        return DB::table('location')
+            ->select('location.*','immatriculation','rue','ville')
+            ->join('agence' , "agence.id", '=',"location.id_agence")
+            ->join('voiture','voiture.id','=','location.id_voiture')
+            ->where([
+                "agence.id" => $request->id_agence,
+                "id_voiture" => $request->id_voiture,
+                "dateDebut" => $request->dateDebut,
+                "dateFin" => $request->dateFin
+            ])
+            ->get();
     }
     public function charge(){
         $user_type = Auth::user()->type;
         if ( $user_type === 'admin'){
-            $voiture = DB::select('select * from voiture');
-            $entretiens = DB::select('SELECT entretiens.*,voiture.immatriculation FROM `entretiens` INNER JOIN voiture ON voiture.id = entretiens.id_voiture ');
+            $agence = DB::table('agence')->get();
+            $voiture = Db::table('voiture')->select('id','immatriculation')->get();
+            $location = DB::select('SELECT location.*,immatriculation,ville,rue FROM `location` INNER JOIN voiture ON voiture.id = location.id_voiture inner join agence on agence.id = location.id_agence');
         }
-        return ($user_type !=='admin') ? redirect('/home') : view('/entretiens',['voiture'=>$voiture,'entretiens'=>$entretiens]);
+        return ($user_type !=='admin') ? redirect('/home') : view('/location',['location'=>$location,'agence'=>$agence,'voiture'=>$voiture]);
     }
-
-    public function deleteEntretiens(Request $request) : void{
+    public function delete(Request $request) : void{
         $row = $request->id;
-        DB::delete("DELETE FROM `entretiens` WHERE id='$row'");
+        DB::delete("DELETE FROM `location` WHERE id='$row'");
     }
-    public function getEntretiens(Request $request){
+    public function getLocation(Request $request){
         $id = $request->id;
-        $data =  DB::select("SELECT * from entretiens where id='$id'");
+        $data =  DB::select("SELECT * from location where id='$id'");
         return json_encode($data);
     }
 }

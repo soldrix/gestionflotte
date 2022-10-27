@@ -74,4 +74,7 @@ class VoitureController extends Controller
         $datasVoiture = $this->getVoiture($request);
         return $datasVoiture;
     }
+    public function loadVoiture(){
+        return json_encode(DB::select('select * from voiture'));
+    }
 }

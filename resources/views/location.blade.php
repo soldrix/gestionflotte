@@ -3,7 +3,7 @@
 @section('content')
     <div class="container-fluid">
         <!-- Button trigger modal -->
-        <button type="button" class="btn btn-primary float-end" id="btnAddAgence">
+        <button type="button" class="btn btn-primary float-end " id="btnAddLocation">
             Ajouter une location
         </button>
         <div class="container">
@@ -12,17 +12,17 @@
                 <thead>
                 <tr>
                     <th>agence</th>
-                    <th>Immatriculation</th>
                     <th>Date de début</th>
                     <th>Date de Fin</th>
+                    <th>Immatriculation</th>
                 </tr>
                 </thead>
                 <tbody>
                 @foreach($location as $datas)
                     <tr data-voiture="{{$datas->id}}" data-db="location">
                         <td>{{$datas->ville.' '.$datas->rue}}</td>
-                        <td>{{$datas->dateDebut}}</td>
-                        <td>{{$datas->dateFin}}</td>
+                        <td>{{date('d/m/Y H:i:s', strtotime($datas->dateDebut))}}</td>
+                        <td>{{date('d/m/Y H:i:s', strtotime($datas->dateFin))}}</td>
                         <td class="tdBtn">
                             {{$datas->immatriculation}}
                             <div class="divBtnTab d-flex flex-column flex-md-row">
@@ -61,14 +61,7 @@
                             @endforeach
                         </select>
                     </div>
-                    <div class="d-flex flex-wrap align-items-baseline">
-                        <label for="nomAssu">Date de debut :</label>
-                        <input type="text" name="locationD" class="inputForm assuDateD mb-2 inputDate me-2" required>
-                    </div>
-                    <div class="d-flex flex-wrap align-items-baseline">
-                        <label for="debutAssu">Date de fin :</label>
-                        <input type="text" name="locationF" class="inputForm assuDateF  mb-2 inputDate me-2" required>
-                    </div>
+
 
                 </div>
                 <div class="modal-footer">

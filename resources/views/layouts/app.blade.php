@@ -40,14 +40,16 @@
 
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
+                    @if(\Illuminate\Support\Facades\Auth::user())
                     <ul class="navbar-nav me-auto">
                         <a href="{{url('/entretiens')}}" class="mx-2 text-dark text-decoration-none">Entretiens</a>
                         <a href="{{url('/assurance')}}" class="mx-2 text-dark text-decoration-none">Assurance</a>
                         <a href="{{url('/reparations')}}" class="mx-2 text-dark text-decoration-none">Reparation</a>
                         <a href="{{url('/consommation')}}" class="mx-2 text-dark text-decoration-none">Consommation</a>
                         <a href="{{url('/agence')}}" class="mx-2 text-dark text-decoration-none">Agence</a>
+                        <a href="{{url('/location')}}" class="mx-2 text-dark text-decoration-none">Location</a>
                     </ul>
-
+                    @endif
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ms-auto">
                         <!-- Authentication Links -->
