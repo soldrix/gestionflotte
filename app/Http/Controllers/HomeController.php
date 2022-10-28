@@ -63,8 +63,9 @@ class HomeController extends Controller
             'image' => $path,
             'nbPlace' => $validation['nbPlace'],
             'prix' => $validation['prix'],
-            'id_agence' => $validation['id_agence']
+            'id_agence' => ($datas->id_agence !== null) ?  $validation['id_agence'] : 1
         ];
+
         return $tab;
     }
     public function insertData(Request $request){

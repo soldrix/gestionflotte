@@ -25,9 +25,23 @@
         <div class="container d-flex flex-column">
             <div class="col-auto d-flex position-relative bg-light">
                 <i class="fa-solid fa-magnifying-glass position-absolute" style="bottom: 7.5px"></i>
-                <div class="d-flex flex-column w-25">
+                <div class="d-flex flex-column w-25 position-relative">
                     <label for="searchBar" class="text-opacity-50 text-dark mb-2">Retrait et retour</label>
                     <input id="searchBar" type="search" autocomplete="off" placeholder="Trouver une agence" class="w-100 text-dark inputSearch ps-4" style="outline: none">
+                    <div id="divSearch" class="col-12 py-2 px-4  overflow-auto">
+                        <button class="bg-transparent border-0 text-start my-2 w-100"> <h2 class="m-0">ville rue</h2></button>
+                        <button class="bg-transparent border-0 text-start my-2 w-100"> <h2 class="m-0">ville rue</h2></button>
+                        <button class="bg-transparent border-0 text-start my-2 w-100"> <h2 class="m-0">ville rue</h2></button>
+                        <button class="bg-transparent border-0 text-start my-2 w-100"> <h2 class="m-0">ville rue</h2></button>
+                        <button class="bg-transparent border-0 text-start my-2 w-100"> <h2 class="m-0">ville rue</h2></button>
+                        <button class="bg-transparent border-0 text-start my-2 w-100"> <h2 class="m-0">ville rue</h2></button>
+                        <button class="bg-transparent border-0 text-start my-2 w-100"> <h2 class="m-0">ville rue</h2></button>
+                        <button class="bg-transparent border-0 text-start my-2 w-100"> <h2 class="m-0">ville rue</h2></button>
+                        <button class="bg-transparent border-0 text-start my-2 w-100"> <h2 class="m-0">ville rue</h2></button>
+                        <button class="bg-transparent border-0 text-start my-2 w-100"> <h2 class="m-0">ville rue</h2></button>
+                        <button class="bg-transparent border-0 text-start my-2 w-100"> <h2 class="m-0">ville rue</h2></button>
+                        <button class="bg-transparent border-0 text-start my-2 w-100"> <h2 class="m-0">ville rue</h2></button>
+                    </div>
                 </div>
 
                 <div class="d-flex flex-column mx-2">
@@ -64,6 +78,7 @@
                     </div>
                 </div>
             </div>
+
             <div id="offerList" class="col-12 p-0 d-flex flex-wrap">
                 @foreach($voiture as $datas)
                 <div class="col-4 p-0 d-flex flex-column bg-white m-2 p-3">

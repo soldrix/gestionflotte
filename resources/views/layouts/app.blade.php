@@ -12,7 +12,14 @@
 
     <!-- Scripts -->
     <script src="{{asset('js/fontawesome.js')}}" defer></script>
-    <script src="{{ asset('js/app.js') }}" defer></script>
+    @if(\Illuminate\Support\Facades\Auth::user())
+        @if(\Illuminate\Support\Facades\Auth::user()->type === 'admin')
+            <script src="{{ asset('js/app.js') }}" defer></script>
+            <link href="{{ asset('css/dataTables.bootstrap5.css') }}" rel="stylesheet">
+            @else
+                <script src="{{asset('js/main.js')}}" defer></script>
+        @endif
+    @endif
 
 
     <!-- Fonts -->
@@ -23,7 +30,7 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('css/style.css') }}" rel="stylesheet">
     <link href="{{ asset('css/all.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/dataTables.bootstrap5.css') }}" rel="stylesheet">
+
     <link href="{{ asset('css/CustomScrollbar.css') }}" rel="stylesheet">
 </head>
 <body>
@@ -41,14 +48,16 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     @if(\Illuminate\Support\Facades\Auth::user())
-                    <ul class="navbar-nav me-auto">
-                        <a href="{{url('/entretiens')}}" class="mx-2 text-dark text-decoration-none">Entretiens</a>
-                        <a href="{{url('/assurance')}}" class="mx-2 text-dark text-decoration-none">Assurance</a>
-                        <a href="{{url('/reparations')}}" class="mx-2 text-dark text-decoration-none">Reparation</a>
-                        <a href="{{url('/consommation')}}" class="mx-2 text-dark text-decoration-none">Consommation</a>
-                        <a href="{{url('/agence')}}" class="mx-2 text-dark text-decoration-none">Agence</a>
-                        <a href="{{url('/location')}}" class="mx-2 text-dark text-decoration-none">Location</a>
-                    </ul>
+                        @if(\Illuminate\Support\Facades\Auth::user()->type === 'admin')
+                            <ul class="navbar-nav me-auto">
+                                <a href="{{url('/entretiens')}}" class="mx-2 text-dark text-decoration-none">Entretiens</a>
+                                <a href="{{url('/assurance')}}" class="mx-2 text-dark text-decoration-none">Assurance</a>
+                                <a href="{{url('/reparations')}}" class="mx-2 text-dark text-decoration-none">Reparation</a>
+                                <a href="{{url('/consommation')}}" class="mx-2 text-dark text-decoration-none">Consommation</a>
+                                <a href="{{url('/agence')}}" class="mx-2 text-dark text-decoration-none">Agence</a>
+                                <a href="{{url('/location')}}" class="mx-2 text-dark text-decoration-none">Location</a>
+                            </ul>
+                        @endif
                     @endif
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ms-auto">
