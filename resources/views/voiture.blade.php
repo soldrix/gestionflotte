@@ -8,10 +8,10 @@
                 <div class="col-auto d-flex flex-column flex-lg-row">
 
                     <div class="col-12 col-lg-4 border-dark border-3 border-opacity-25 p-4 d-flex justify-content-center" style="border-right: solid">
-                        <img src="{{asset('storage/'.$datas->image)}}" alt="" class="w-100 rounded">
+                        <img id="imageVoiture" src="{{asset('storage/'.$datas->image)}}" alt="" class="w-100 rounded">
                     </div>
                     <div class="col-12 col-lg-8 px-2 mt-5" data-voiture="{{$datas->id}}" data-db="voiture">
-                        <h2 class="text-primary text-center text-lg-start">Immatriculation : <span class="text-muted">{{$datas->immatriculation}}</span></h2>
+                        <h2 class="text-primary text-center text-lg-start">Immatriculation : <span class="text-muted" id="immatriculation">{{$datas->immatriculation}}</span></h2>
                         <div class="d-flex mt-5">
 
                             <p class="mx-2"><i class="fa-solid fa-wrench fa-xl text-info"></i> <span id="nbEnt"> {{$nbData->nbEnt}} </span> entretiens</p>
@@ -31,17 +31,19 @@
                                 <h2 class="text-primary">Type : </h2>
                                 <h2 class="text-primary">nombre de siège : </h2>
                                 <h2 class="text-primary">nombre de porte : </h2>
+                                <h2 class="text-primary">Agence : </h2>
                             </div>
                             <div class="col-auto mx-2">
-                                <h2 class="text-muted">{{$datas->marque}}</h2>
-                                <h2 class="text-muted">{{$datas->model}}</h2>
-                                <h2 class="text-muted">{{$datas->circulation}}</h2>
-                                <h2 class="text-muted">{{$datas->statut}}</h2>
-                                <h2 class="text-muted">{{$datas->puissance}}</h2>
-                                <h2 class="text-muted">{{$datas->carburant}}</h2>
-                                <h2 class="text-muted">{{$datas->type}}</h2>
-                                <h2 class="text-muted">{{$datas->nbPlace}}</h2>
-                                <h2 class="text-muted">{{$datas->nbPorte}}</h2>
+                                <h2 class="text-muted" id="marque">{{$datas->marque}}</h2>
+                                <h2 class="text-muted" id="model">{{$datas->model}}</h2>
+                                <h2 class="text-muted" id="circulation">{{$datas->circulation}}</h2>
+                                <h2 class="text-muted" id="statut">{{$datas->statut}}</h2>
+                                <h2 class="text-muted" id="puissance">{{$datas->puissance}}</h2>
+                                <h2 class="text-muted" id="carburant">{{$datas->carburant}}</h2>
+                                <h2 class="text-muted" id="typeVoiture">{{$datas->type}}</h2>
+                                <h2 class="text-muted" id="nbPlace">{{$datas->nbPlace}}</h2>
+                                <h2 class="text-muted" id="nbPorte">{{$datas->nbPorte}}</h2>
+                                <h2 class="text-muted" id="agence">{{($datas->ville !== null) ? $datas->ville.' '.$datas->rue : 'vide'}}</h2>
                             </div>
                             <div class="col-auto mx-2 p-0  align-self-center">
                                 <button class="btn btn-info editButton ms-lg-5" style="height: fit-content">modifier</button>

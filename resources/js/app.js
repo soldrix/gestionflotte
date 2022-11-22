@@ -125,7 +125,7 @@ $(window).on('load',function () {
 })
 
 
-function loadDatas(table){
+function loadDatas(table,optSelect){
     let url = (table === 'agence') ? '/loadAgence' : (table === 'voiture') ? '/loadVoiture' : '';
     $.ajaxSetup({
         headers: {
@@ -138,14 +138,15 @@ function loadDatas(table){
         dataType: 'json',
         success:function (rowdata) {
             rowdata.forEach(datas =>{
+                let optionSelected =  (datas.id === optSelect) ? 'selected' : false;
                 if(table === 'agence'){
                     $('#agenceId').append(`
-                        <option value="${datas.id}">${datas.ville} ${datas.rue}</option>
+                        <option value="${datas.id}" selected="${optionSelected}">${datas.ville} ${datas.rue}</option>
                     `)
                 }
                 if(table==='voiture'){
                     $('#voitureId').append(`
-                        <option value="${datas.id}">${datas.immatriculation}</option>
+                        <option value="${datas.id}" selected="${optionSelected}">${datas.immatriculation}</option>
                     `)
                 }
 
@@ -200,7 +201,7 @@ function modal(name,type,url,dataid) {
             </div>
             <div class="d-flex flex-wrap align-items-baseline">
                 <label class="me-2" for="status">Status du véhicule :</label>
-                <select name="status" id="voitureSatut" class="mb-2 me-2">
+                <select name="status" id="voitureStatut" class="mb-2 me-2">
                     <option value="disponible">Disponible</option>
                     <option value="indisponible">Indisponible</option>
                 </select>
@@ -311,7 +312,7 @@ function modal(name,type,url,dataid) {
             <div class="d-flex flex-wrap align-items-baseline">
                 <label class="me-2" for="voitureId">Immatriculation :</label>
                 <select name="id_voiture" id="voitureId" class="mb-2 me-2">
-                      <option value="null">Vide</option>
+                      <option value="0">Vide</option>
                 </select>
             </div>` : "";
 
@@ -397,14 +398,12 @@ function modal(name,type,url,dataid) {
                         $('input[name=nbPorte]').val(datas.nbPorte);
                         $('input[name=nbPlace]').val(datas.nbPlace);
                         $('input[name=prix]').val(datas.prix);
-                        if(datas.statut === 'disponible'){
+                        if(datas.statut === 'Disponible'){
                             $('select[name=status]').children().first().prop('selected',true);
                         }else{
                             $('select[name=status]').children().last().prop('selected',true);
                         }
-                        loadDatas('agence');
-                        $("select[name=id_agence] option[value='"+datas.id_agence+"']").prop('selected',true);
-
+                        loadDatas('agence',datas.id_agence);
                     }
                     if(url === '/getLocation'){
                         $('input[name=locationD]').val(reverseDate(datas.dateDebut,'time'))
@@ -1066,14 +1065,15 @@ function updateDatas(datas,page,type){
                 success:function (rowData) {
                     if(type !== 'add'){
                         rowData.forEach(datas =>{
-                            $("div[data-voiture="+datas.id+"]").parent().children().first().children().attr('src','http://127.0.0.1:8000/storage/'+datas.image);
-                            $("div[data-voiture="+datas.id+"] h2 span").eq(0).html(datas.immatriculation);
-                            $("div[data-voiture="+datas.id+"]").children().last().children().eq(1).children().eq(0).html(datas.marque);
-                            $("div[data-voiture="+datas.id+"]").children().last().children().eq(1).children().eq(1).html(datas.model);
-                            $("div[data-voiture="+datas.id+"]").children().last().children().eq(1).children().eq(2).html(reverseDate(datas.circulation));
-                            $("div[data-voiture="+datas.id+"]").children().last().children().eq(1).children().eq(3).html(datas.statut);
-                            $("div[data-voiture="+datas.id+"]").children().last().children().eq(1).children().eq(4).html(datas.puissance);
-                            $("div[data-voiture="+datas.id+"]").children().last().children().eq(1).children().eq(5).html(datas.carburant);
+                            $('#imageVoiture').attr('src','http://127.0.0.1:8000/storage/'+datas.image);
+                            $('#immatriculation').html(datas.immatriculation);
+                            $('#marque').html(datas.marque);
+                            $('#model').html(datas.model);
+                            $('#circulation').html(reverseDate(datas.circulation));
+                            $('#statut').html(datas.statut);
+                            $('#puissance').html(datas.puissance);
+                            $('#carburant').html(datas.carburant);
+                            $('#agence').html(datas.ville+' '+datas.rue)
                         })
                     }
                     if(type === 'add'){

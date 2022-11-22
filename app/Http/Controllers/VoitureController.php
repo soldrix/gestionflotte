@@ -12,6 +12,19 @@ class VoitureController extends Controller
         $id = (isset($request->id)) ? $request->id : null ;
         $voitureData = DB::select("select * from voiture where id='$id'");
         if ($user_type === 'admin'){
+            foreach ($voitureData as $datas){
+                if ($datas->id_agence !== '' && $datas->id_agence !== null){
+                    $voitureData = DB::table('voiture')->select('voiture.*','agence.ville','agence.rue')
+                        ->join('agence', 'agence.id', '=', 'voiture.id_agence')
+                        ->where([
+                            'voiture.id' => $request->id
+                        ])->get();
+                }else{
+                    $voitureData = DB::select("select * from voiture where id='$id'");
+                    $voitureData[0]->ville = '';
+                    $voitureData[0]->rue = 'Aucune agence';
+                }
+            }
             $datas1 = DB::select("select * from assurance where id_voiture='$id'");
             $datas2 = DB::select("select * from consommation where id_voiture='$id'");
             $datas3 = DB::select("select * from entretiens where id_voiture='$id'");
@@ -22,12 +35,27 @@ class VoitureController extends Controller
             $json->nbEnt  = count($datas3);
             $json->nbRep  = count($datas4);
         }
-        return ($user_type !== 'admin') ? view('voiture',['voitureData'=>$voitureData]) : view('voiture',['voitureData'=>$voitureData,'assurance'=>$datas1,"consommation"=>$datas2,"entretiens"=>$datas3,"reparations"=>$datas4,'nbData'=>$json]);
+        return ($user_type !== 'admin') ?
+            view('voiture',['voitureData'=>$voitureData]) :
+            view('voiture',[
+                'voitureData'=>$voitureData,
+                'assurance'=>$datas1,"consommation"=>$datas2,"entretiens"=>$datas3,"reparations"=>$datas4,'nbData'=>$json]);
     }
     public function getVoiture(Request $request){
         $id = $request->id;
-        $data =  DB::select("SELECT * from voiture where id='$id'");
-        return json_encode($data);
+        $id_agence = strval($request->id_agence);
+            if ($id_agence !== '' && $id_agence !== 'null'){
+                $voitureData = DB::table('voiture')->select('voiture.*','agence.ville','agence.rue')
+                    ->join('agence', 'agence.id', '=', 'voiture.id_agence')
+                    ->where([
+                        'voiture.id' => $request->id
+                    ])->get();
+            }else{
+                $voitureData = DB::select("select * from voiture where id='$id'");
+                $voitureData[0]->ville = '';
+                $voitureData[0]->rue = 'Aucune agence';
+            }
+        return $voitureData;
     }
 
     public function updateDatas(Request $request){
@@ -59,7 +87,7 @@ class VoitureController extends Controller
             'nbPlace' => $validation['nbPlace'],
             'nbPorte' => $validation['nbPorte'],
             'prix' => $validation['prix'],
-            'id_agence' => $validation['id_agence']
+            'id_agence' => ($validation['id_agence'] === 'null') ? null :  $validation['id_agence']
         ]);
         if($request->file('file') !== null){
             $file = $request->file('file');
