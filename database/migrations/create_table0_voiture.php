@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('voiture', function (Blueprint $table) {
-            $table->id()->autoIncrement();
+            $table->id()->autoIncrement()->nullable();
             $table->string('marque');
             $table->string('model');
             $table->string('carburant');

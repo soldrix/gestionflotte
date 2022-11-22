@@ -138,15 +138,15 @@ function loadDatas(table,optSelect){
         dataType: 'json',
         success:function (rowdata) {
             rowdata.forEach(datas =>{
-                let optionSelected =  (datas.id === optSelect) ? 'selected' : false;
+                let optionSelected =  (datas.id === optSelect && optSelect !== null) ? 'selected="selected"' : '';
                 if(table === 'agence'){
                     $('#agenceId').append(`
-                        <option value="${datas.id}" selected="${optionSelected}">${datas.ville} ${datas.rue}</option>
+                        <option value="${datas.id}" ${optionSelected}>${datas.ville} ${datas.rue}</option>
                     `)
                 }
                 if(table==='voiture'){
                     $('#voitureId').append(`
-                        <option value="${datas.id}" selected="${optionSelected}">${datas.immatriculation}</option>
+                        <option value="${datas.id}" ${optionSelected}>${datas.immatriculation}</option>
                     `)
                 }
 
@@ -312,7 +312,7 @@ function modal(name,type,url,dataid) {
             <div class="d-flex flex-wrap align-items-baseline">
                 <label class="me-2" for="voitureId">Immatriculation :</label>
                 <select name="id_voiture" id="voitureId" class="mb-2 me-2">
-                      <option value="0">Vide</option>
+                      <option value="null">Vide</option>
                 </select>
             </div>` : "";
 

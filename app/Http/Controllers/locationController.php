@@ -42,11 +42,11 @@ class locationController extends Controller
         DB::table('location')->where('id',$id)->update($this->verification($request));
         return DB::table('location')
             ->select('location.*','immatriculation','rue','ville')
-            ->join('agence' , "agence.id", '=',"location.id_agence")
-            ->join('voiture','voiture.id','=','location.id_voiture')
+            ->leftjoin('agence' , "agence.id", '=',"location.id_agence")
+            ->leftjoin('voiture','voiture.id','=','location.id_voiture')
             ->where([
-                "agence.id" => $request->id_agence,
-                "id_voiture" => $request->id_voiture,
+                "agence.id" =>  ($request->id_agence !== 'null') ? $request->id_agence : null,
+                "id_voiture" =>  ($request->id_voiture !== 'null') ? $request->id_voiture : null,
                 "dateDebut" => $request->dateDebut,
                 "dateFin" => $request->dateFin
             ])
@@ -57,7 +57,8 @@ class locationController extends Controller
         if ( $user_type === 'admin'){
             $agence = DB::table('agence')->get();
             $voiture = Db::table('voiture')->select('id','immatriculation')->get();
-            $location = DB::select('SELECT location.*,immatriculation,ville,rue FROM `location` INNER JOIN voiture ON voiture.id = location.id_voiture inner join agence on agence.id = location.id_agence');
+
+            $location = DB::select('SELECT location.*,immatriculation,ville,rue FROM `location` left JOIN voiture ON voiture.id = location.id_voiture left join agence on agence.id = location.id_agence');
         }
         return ($user_type !=='admin') ? redirect('/home') : view('/location',['location'=>$location,'agence'=>$agence,'voiture'=>$voiture]);
     }
