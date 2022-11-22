@@ -16,8 +16,8 @@ class locationController extends Controller
             "dateFin" => "required"
         ]);
         $tab = [
-            "id_agence" => $validation['id_agence'],
-            "id_voiture" => $validation['id_voiture'],
+            "id_agence" => ($validation['id_agence'] !=='null') ? $validation['id_agence'] : null,
+            "id_voiture" => ($validation['id_voiture'] !== 'null') ? $validation['id_voiture']: null,
             "dateDebut" => $validation['dateDebut'],
             "dateFin" => $validation['dateFin']
         ];

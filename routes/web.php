@@ -63,5 +63,3 @@ Route::get('/agence',[App\Http\Controllers\AgenceController::class, 'charge']);
 Route::get('/location',[App\Http\Controllers\locationController::class, 'charge']);
 
 Route::get('/voiture/{id}', [App\Http\Controllers\VoitureController::class, 'charge'])->name('voitureData');
-
-

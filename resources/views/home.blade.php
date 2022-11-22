@@ -23,74 +23,65 @@
         </div>
     @else
         <div class="container d-flex flex-column">
+            {{--div agence search--}}
             <div class="col-auto d-flex position-relative bg-light">
                 <i class="fa-solid fa-magnifying-glass position-absolute" style="bottom: 7.5px"></i>
                 <div class="d-flex flex-column w-25 position-relative">
                     <label for="searchBar" class="text-opacity-50 text-dark mb-2">Retrait et retour</label>
                     <input id="searchBar" type="search" autocomplete="off" placeholder="Trouver une agence" class="w-100 text-dark inputSearch ps-4" style="outline: none">
+                    {{--list agence--}}
                     <div id="divSearch" class="col-12 py-2 px-4  overflow-auto">
-                        <button class="bg-transparent border-0 text-start my-2 w-100"> <h2 class="m-0">ville rue</h2></button>
-                        <button class="bg-transparent border-0 text-start my-2 w-100"> <h2 class="m-0">ville rue</h2></button>
-                        <button class="bg-transparent border-0 text-start my-2 w-100"> <h2 class="m-0">ville rue</h2></button>
-                        <button class="bg-transparent border-0 text-start my-2 w-100"> <h2 class="m-0">ville rue</h2></button>
-                        <button class="bg-transparent border-0 text-start my-2 w-100"> <h2 class="m-0">ville rue</h2></button>
-                        <button class="bg-transparent border-0 text-start my-2 w-100"> <h2 class="m-0">ville rue</h2></button>
-                        <button class="bg-transparent border-0 text-start my-2 w-100"> <h2 class="m-0">ville rue</h2></button>
-                        <button class="bg-transparent border-0 text-start my-2 w-100"> <h2 class="m-0">ville rue</h2></button>
-                        <button class="bg-transparent border-0 text-start my-2 w-100"> <h2 class="m-0">ville rue</h2></button>
-                        <button class="bg-transparent border-0 text-start my-2 w-100"> <h2 class="m-0">ville rue</h2></button>
-                        <button class="bg-transparent border-0 text-start my-2 w-100"> <h2 class="m-0">ville rue</h2></button>
-                        <button class="bg-transparent border-0 text-start my-2 w-100"> <h2 class="m-0">ville rue</h2></button>
+                        @foreach($agence as $datas)
+                        <button class="bg-transparent border-0 text-start my-2 w-100"> <h2 class="m-0">{{$datas->ville.' '.$datas->rue}}</h2></button>
+                        @endforeach
                     </div>
                 </div>
-
                 <div class="d-flex flex-column mx-2">
                     <label for="dateTime" class="text-opacity-50 text-dark mb-2">Date de départ</label>
                     <div class="d-flex">
-                        <input type="text" id="dateD" class="mx-2 inputSearch">
-                        <input type="text" id="timeD" class="inputSearch">
+                        <input type="text" id="dateD" class="mx-2 inputSearch" value="{{date('d/m/Y')}}">
+                        <input type="text" id="timeD" class="inputSearch" value="{{date('H:i',strtotime(' + 1 hours'))}}">
                     </div>
                 </div>
                 <div class="d-flex flex-column">
                     <label for="dateF" class="text-opacity-50 text-dark mb-2">Date de retour</label>
                     <div class="d-flex">
-                        <input type="text" id="dateF" class="mx-2 inputSearch">
-                        <input type="text" id="timeF" class="inputSearch">
+                        <input type="text" id="dateF" class="mx-2 inputSearch" value="{{date('d/m/Y',strtotime(' + 1 days'))}}">
+                        <input type="text" id="timeF" class="inputSearch" value="{{date('H:i',strtotime(' + 1 hours'))}}">
                     </div>
                 </div>
                 <button class="btn btn-outline-primary" id="btnOffre">
                     Voir les offres
                 </button>
             </div>
+            {{--div filter voiture--}}
             <div class='divFilter px-2'>
-                <p class="mb-0 align-self-center mx-2" style="font-weight: bold"><span id="nbOffre">0</span> Offres</p>
-                <div class='typeVoiture col-2'>
-                    <a class='m-2 text-end'> Type de voiture <i class="fas fa-chevron-down"></i></a>
-                    <div class='filterContent'>
+                <p class="mb-0 align-self-center mx-2" style="font-weight: bold"><span id="nbOffre">{{$nbVoiture ?? 0}}</span> Offres</p>
+                <div class="btn-group">
+                    <a class='m-2 text-end' id="dropdownfilter" data-bs-toggle="dropdown" aria-expanded="false"> Type de voiture <i class="fas fa-chevron-down"></i></a>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                         <div class='ligne-75'></div>
-                        <ul class='list-unstyled'>
-                            <li><input type="checkbox"> CABRIOLET</li>
-                            <li><input type="checkbox"> BERLINE</li>
-                            <li><input type="checkbox"> MINIBUS</li>
-                            <li><input type="checkbox"> COUPE</li>
-                            <li><input type="checkbox"> BREAK</li>
-                        </ul>
-                    </div>
+                            @foreach($type as $data)
+                                <li class="dropdown-item"><input type="checkbox"> {{strtoupper($data->type)}}</li>
+                            @endforeach
+                    </ul>
                 </div>
             </div>
 
             <div id="offerList" class="col-12 p-0 d-flex flex-wrap">
                 @foreach($voiture as $datas)
-                <div class="col-4 p-0 d-flex flex-column bg-white m-2 p-3">
-                    <h2>Fiat 500</h2>
-                    <p>ou similaire | Berline</p>
-                    <div class="imageDiv w-100 justify-content-center d-flex">
-                        <img src="{{asset('/storage/'.$datas->image)}}" alt="" class="w-75 rounded">
-                    </div>
-                    <p class="mt-2"><i class="fa-solid fa-check"></i> 250 kilomètre incl.</p>
-                    <div class="d-flex justify-content-between">
-                        <h3>90€ | <span>jour</span></h3>
-                        <a class="btn btn-outline-primary text-decoration-none" href="{{route('voitureData', $datas->id) }}">Sélectionner</a>
+                <div class="col-4 p-3">
+                    <div class="d-flex flex-column bg-white p-3">
+                        <h2>Fiat 500</h2>
+                        <p>ou similaire | Berline</p>
+                        <div class="imageDiv w-100 justify-content-center d-flex">
+                            <img src="{{asset('/storage/'.$datas->image)}}" alt="" class="w-75 rounded">
+                        </div>
+                        <p class="mt-2"><i class="fa-solid fa-check"></i> 250 kilomètre incl.</p>
+                        <div class="d-flex justify-content-between">
+                            <h3>90€ | <span>jour</span></h3>
+                            <a class="btn btn-outline-primary text-decoration-none" href="{{route('voitureData', $datas->id) }}">Sélectionner</a>
+                        </div>
                     </div>
                 </div>
                 @endforeach

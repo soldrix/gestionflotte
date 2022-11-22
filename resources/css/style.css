@@ -42,60 +42,22 @@ td{
     height: 50px;
     display:flex;
 }
-.typeVoiture{
-    padding:0;
-    align-self:center;
-    display:flex;
-    position:relative;
-}
-.typeVoiture a{
+
+#dropdownfilter{
     z-index :100;
     color:black;
     text-decoration:none;
     cursor:pointer;
     user-select:none;
     font-weight:bold;
+    height: fit-content;
+    align-self: center;
 }
-.filterContent{
-    z-index:10;
-    position:absolute;
-    width: 100%;
-    background:white;
-    top: 0;
-    padding:12% 5% 0% 5%;
-    align-items:center;
-    display:none;
-    flex-direction:column;
-}
-.filterContent.active{
-    display:flex;
-}
-.filterContent ul{
-    align-items:flex-start;
-    display: flex;
-    flex-direction:column;
-    width: 100%;
-}
-
-.filterContent ul li{
-    font-size:20px;
-    font-weight:bold;
-    text-align:end;
-    display: flex;
-    align-items: center;
-}
-
-.filterContent ul li input{
-    transform:scale(1.5);
-    border:3px solid black;
-    margin:0 15px;
-}
-
 .ligne-75{
     width: 75%;
     height:2px;
     background:black;
-    margin:10px 0;
+    margin:10px auto;
     opacity:50%;
 }
 #nbOffre{

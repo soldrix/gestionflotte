@@ -27,7 +27,7 @@ return new class extends Migration
             $table->integer('nbPorte');
             $table->integer('nbPlace');
             $table->float('prix');
-            $table->foreignId('id_agence')->nullable()->references('id')->on('agence')->onDelete('null')->onUpdate('null');
+            $table->integer('id_agence')->nullable();
         });
     }
 

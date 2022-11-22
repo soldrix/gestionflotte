@@ -32,10 +32,7 @@ function initDataTable(){
 
 }
 $(document).ready(function () {
-    $('.typeVoiture a').on('click',function(){
-        $(this).parent().find('.filterContent').toggleClass('active')
-        $(this).find('i').toggleClass('fa-chevron-up fa-chevron-down')
-    })
+
     initDataTable()
     if($('#dateD').length > 0){
         let currentDate = new Date();
@@ -211,7 +208,7 @@ function modal(name,type,url,dataid) {
             <div class="d-flex flex-wrap align-items-baseline">
                 <label class="me-2" for="agenceId">Agence :</label>
                 <select name="id_agence" id="agenceId" class="mb-2 me-2">
-
+                    <option value="null">Vide</option>
                 </select>
             </div>
             <div class="d-flex flex-wrap align-items-baseline">
@@ -308,13 +305,13 @@ function modal(name,type,url,dataid) {
             <div class="d-flex flex-wrap align-items-baseline">
                 <label class="me-2" for="agenceId">Agence :</label>
                 <select name="id_agence" id="agenceId" class="mb-2 me-2">
-
+                    <option value="null">Vide</option>
                 </select>
             </div>
             <div class="d-flex flex-wrap align-items-baseline">
                 <label class="me-2" for="voitureId">Immatriculation :</label>
                 <select name="id_voiture" id="voitureId" class="mb-2 me-2">
-
+                      <option value="null">Vide</option>
                 </select>
             </div>` : "";
 
