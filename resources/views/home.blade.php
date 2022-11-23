@@ -36,16 +36,7 @@
                         @endforeach
                     </div>
                 </div>
-                <div class="d-flex flex-column mx-2">
-                    <div class="d-flex ps-2">
-                        <label for="dateD" class="text-opacity-50 text-dark mb-2 me-5">Date de départ</label>
-                        <label for="dateF" class="text-opacity-50 text-dark mb-2 ms-5">Date de retour</label>
-                    </div>
-                    <div class="d-flex">
-                        <input type="text" id="dateD" class="mx-2 inputSearch" value="{{date('d/m/Y')}}">
-                        <input type="text" id="dateF" class="mx-2 inputSearch" value="{{date('d/m/Y',strtotime(' + 1 days'))}}">
-                    </div>
-                </div>
+
                 <button class="btn btn-outline-primary" id="btnOffre">
                     Voir les offres
                 </button>
@@ -68,15 +59,19 @@
                 @foreach($voiture as $datas)
                 <div class="col-4 p-3">
                     <div class="d-flex flex-column bg-white p-3">
-                        <h2>Fiat 500</h2>
-                        <p>ou similaire | Berline</p>
+                        <h2>{{$datas->marque.' '.$datas->model}}</h2>
+                        <p>ou similaire | {{$datas->type}}</p>
                         <div class="imageDiv w-100 justify-content-center d-flex">
                             <img src="{{asset('/storage/'.$datas->image)}}" alt="" class="w-75 rounded">
                         </div>
                         <p class="mt-2"><i class="fa-solid fa-check"></i> 250 kilomètre incl.</p>
                         <div class="d-flex justify-content-between">
-                            <h3>90€ | <span>jour</span></h3>
+                            <h3>{{$datas->prix}}€ | <span>jour</span></h3>
+                            @if($datas->statut !== 'Indisponible')
                             <a class="btn btn-outline-primary text-decoration-none" href="{{route('voitureData', $datas->id) }}">Sélectionner</a>
+                            @else
+                                <h2 class="text-capitalize">{{$datas->statut}}</h2>
+                            @endif
                         </div>
                     </div>
                 </div>

@@ -240,9 +240,19 @@
                     <div id="blockSell" class="col-4 p-3 bg-light rounded d-flex flex-column">
                         <h3 class="mb-3">{{{$datas->model.' '.$datas->marque}}}</h3>
                         <h4>Période de location</h4>
+                        <div class="d-flex flex-column mx-2 mt-2 mb-4">
+                            <div class="d-flex ps-2">
+                                <label for="dateD" class="text-opacity-50 text-dark mb-2 me-5">Date de départ</label>
+                                <label for="dateF" class="text-opacity-50 text-dark mb-2 ms-4">Date de retour</label>
+                            </div>
+                            <div class="d-flex" id="LocationDate">
+                                <input type="text" id="dateD" class="ms-2 inputSearch" placeholder="_ _ / _ _ / _ _ _ _" required>
+                                <input type="text" id="dateF" class="me-2 inputSearch" placeholder="_ _ / _ _ / _ _ _ _" required readonly>
+                            </div>
+                        </div>
                         <div class="w-100 d-flex justify-content-between px-4">
                             <p class="m-0 textSell">Durée de location</p>
-                            <p class="m-0" id="prixTimeLocation">150€</p>
+                            <p class="m-0" id="prixTimeLocation">0</p>
                         </div>
                         <h4>Frais</h4>
                         <div class="w-100 d-flex px-4 flex-column">
@@ -313,7 +323,7 @@
                     <div class="w-100 d-flex px-4-5 flex-column">
                         <h4 class="m-0">Protection des pneus et vitres</h4>
                         <div class="d-flex col-auto py-2 justify-content-around">
-                            <input type="checkbox" class="franchiseP" id="protecPneu">
+                            <input type="checkbox" class="franchisePneu" id="protecPneu">
                             <label for="protecPneu">Franchise à 0 EUR.</label>
                             <p class="m-0"> <span id="pneuPrice">10</span>€ | Jour</p>
                         </div>
@@ -332,14 +342,9 @@
                             <div class="d-flex w-100 justify-content-around my-2 align-items-baseline">
                                 <select name="addDriver" id="addDriver">
                                     <option value="0" selected>0</option>
-                                    <option value="1">1</option>
-                                    <option value="2">2</option>
-                                    <option value="3">3</option>
-                                    <option value="4">4</option>
-                                    <option value="5">5</option>
-                                    <option value="6">6</option>
-                                    <option value="7">7</option>
-                                    <option value="8">8</option>
+                                    @for($i=1;$i < 9;$i++)
+                                    <option value="{{$i}}">{{$i}}</option>
+                                    @endfor
                                 </select>
                                 <p class="mb-0"><span id="driverPrice">10</span>€ | Jour/Conducteur</p>
                             </div>
@@ -351,7 +356,10 @@
                             Systèmes de navigation <br> <span class="ms-5">garanti</span>
                         </h3>
                         <div class="p-4">
-                            <p class="mb-4">Trouvez le meilleur itinéraire avec le GPS</p>
+                            <p class="mb-4">
+                                <input type="checkbox" id="gps">
+                                Trouvez le meilleur itinéraire avec le GPS
+                            </p>
                             <p class="m-0"> <span id="navigationPrice">10</span>€ | jour</p>
                         </div>
                     </div>

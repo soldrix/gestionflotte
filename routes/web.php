@@ -64,4 +64,4 @@ Route::get('/location',[App\Http\Controllers\locationController::class, 'charge'
 
 Route::get('/voiture/{id}', [App\Http\Controllers\VoitureController::class, 'charge'])->name('voitureData');
 
-Route::post('/getLocation',[App\Http\Controllers\locationController::class, 'getLocationDate']);
+Route::post('/getLocationDate',[App\Http\Controllers\locationController::class, 'getLocationDate']);

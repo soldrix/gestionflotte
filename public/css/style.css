@@ -1095,7 +1095,7 @@ td{
 .taxeText{
     font-size: 13px;
 }
-.franchiseP{
+.franchiseP,#gps,#protecPneu,#chainesV{
     transform: scale(1.8);
     margin-right:20px;
     height: -webkit-fit-content;
