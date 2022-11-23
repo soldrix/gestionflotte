@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('entretiens', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('id_voiture')->references('id')->on('voiture')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreignId('id_voiture')->nullable()->references('id')->on('voiture')->onDelete('cascade')->onUpdate('cascade');
             $table->string('typeEnt',150);
             $table->date('dateEnt');
             $table->float('montantEnt');

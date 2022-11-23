@@ -71,4 +71,7 @@ class locationController extends Controller
         $data =  DB::select("SELECT * from location where id='$id'");
         return json_encode($data);
     }
+    public function getLocationDate(){
+       return DB::table('location')->get(['dateDebut','dateFin']);
+    }
 }

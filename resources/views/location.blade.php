@@ -20,11 +20,11 @@
                 <tbody>
                 @foreach($location as $datas)
                     <tr data-voiture="{{$datas->id}}" data-db="location">
-                        <td>{{$datas->ville.' '.$datas->rue}}</td>
-                        <td>{{date('d/m/Y H:i:s', strtotime($datas->dateDebut))}}</td>
-                        <td>{{date('d/m/Y H:i:s', strtotime($datas->dateFin))}}</td>
+                        <td>{{($datas->ville === null && $datas->rue === null) ? 'Vide' : $datas->ville.' '.$datas->rue}}</td>
+                        <td>{{date('d/m/Y', strtotime($datas->dateDebut))}}</td>
+                        <td>{{date('d/m/Y', strtotime($datas->dateFin))}}</td>
                         <td class="tdBtn">
-                            {{$datas->immatriculation}}
+                            {{($datas->immatriculation === null) ? 'Vide' :$datas->immatriculation}}
                             <div class="divBtnTab d-flex flex-column flex-md-row">
                                 <button class="btn btn-info editButton text-white"><i class="fa-solid fa-pencil "></i></button>
                                 <button class="btn btn-danger delButton"><i class="fa-solid fa-trash-can"></i></button>

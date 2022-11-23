@@ -7,9 +7,9 @@
             <button type="button" class="btn btn-primary float-end"  id="btnAddVoiture">
                 Launch demo modal
             </button>
-            <div class="container d-flex flex-wrap pt-5 justify-content-center">
+            <div class="col-9 d-flex flex-wrap pt-5 justify-content-center mx-auto">
                 @foreach($voiture as $data)
-                <div class="col-12 col-lg-3 col-xxl-4 d-flex flex-column  p-2 rounded m-2 blockVoiture" style="background: #e4e4e4" data-voiture="{{$data->id}}" data-db="voiture">
+                <div class="col-12 col-lg-3 col-xxl-2 d-flex flex-column  p-2 rounded m-2 blockVoiture" style="background: #e4e4e4" data-voiture="{{$data->id}}" data-db="voiture">
                     <img src="{{asset("/storage/".$data->image)}}" alt="{{asset("/storage/".$data->image)}}" class="rounded">
                     <p class="text-center my-1">Marque : {{$data->marque}}</p>
                     <p class="text-center m-0">Model : {{$data->model}}</p>
@@ -26,7 +26,7 @@
             {{--div agence search--}}
             <div class="col-auto d-flex position-relative bg-light">
                 <i class="fa-solid fa-magnifying-glass position-absolute" style="bottom: 7.5px"></i>
-                <div class="d-flex flex-column w-25 position-relative">
+                <div class="d-flex flex-column w-50 position-relative">
                     <label for="searchBar" class="text-opacity-50 text-dark mb-2">Retrait et retour</label>
                     <input id="searchBar" type="search" autocomplete="off" placeholder="Trouver une agence" class="w-100 text-dark inputSearch ps-4" style="outline: none">
                     {{--list agence--}}
@@ -37,17 +37,13 @@
                     </div>
                 </div>
                 <div class="d-flex flex-column mx-2">
-                    <label for="dateTime" class="text-opacity-50 text-dark mb-2">Date de départ</label>
+                    <div class="d-flex ps-2">
+                        <label for="dateD" class="text-opacity-50 text-dark mb-2 me-5">Date de départ</label>
+                        <label for="dateF" class="text-opacity-50 text-dark mb-2 ms-5">Date de retour</label>
+                    </div>
                     <div class="d-flex">
                         <input type="text" id="dateD" class="mx-2 inputSearch" value="{{date('d/m/Y')}}">
-                        <input type="text" id="timeD" class="inputSearch" value="{{date('H:i',strtotime(' + 1 hours'))}}">
-                    </div>
-                </div>
-                <div class="d-flex flex-column">
-                    <label for="dateF" class="text-opacity-50 text-dark mb-2">Date de retour</label>
-                    <div class="d-flex">
                         <input type="text" id="dateF" class="mx-2 inputSearch" value="{{date('d/m/Y',strtotime(' + 1 days'))}}">
-                        <input type="text" id="timeF" class="inputSearch" value="{{date('H:i',strtotime(' + 1 hours'))}}">
                     </div>
                 </div>
                 <button class="btn btn-outline-primary" id="btnOffre">

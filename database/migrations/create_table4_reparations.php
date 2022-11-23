@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('reparations', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('id_voiture')->references('id')->on('voiture')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreignId('id_voiture')->nullable()->references('id')->on('voiture')->onDelete('cascade')->onUpdate('cascade');
             $table->string('typeRep',150);
             $table->date('dateRep');
             $table->float('montantRep');

@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('consommation', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('id_voiture')->references('id')->on('voiture')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreignId('id_voiture')->nullable()->references('id')->on('voiture')->onDelete('cascade')->onUpdate('cascade');
             $table->float('montantCons');
             $table->float('litre');
         });

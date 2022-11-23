@@ -297,11 +297,11 @@ function modal(name,type,url,dataid) {
         : (name === 'location') ?
             `<div class="d-flex flex-wrap align-items-baseline">
                 <label for="nomAssu">Date de debut :</label>
-                <input type="text" name="locationD" id="locationD" class="inputForm assuDateD mb-2 inputDateTime me-2" required>
+                <input type="text" name="locationD" id="locationD" class="inputForm assuDateD mb-2 me-2" required>
             </div>
             <div class="d-flex flex-wrap align-items-baseline">
                 <label for="debutAssu">Date de fin :</label>
-                <input type="text" name="locationF" id="locationF" class="inputForm assuDateF  mb-2 inputDateTime me-2" required>
+                <input type="text" name="locationF" id="locationF" class="inputForm assuDateF  mb-2 me-2" required>
             </div>
             <div class="d-flex flex-wrap align-items-baseline">
                 <label class="me-2" for="agenceId">Agence :</label>
@@ -325,12 +325,20 @@ function modal(name,type,url,dataid) {
         })
     }
     $('#AddModal').ready(function () {
-        $('.inputDate').mask('00/00/0000', {placeholder: "__/__/____"});
-        flatpickr('.inputDateTime',{
-            enableTime:true,
-            dateFormat:'d/m/Y H:i:S',
-            time_24hr:true
-        })
+        flatpickr('.inputDate',{
+            minDate: "today",
+            dateFormat : 'd/m/Y'
+        });
+        flatpickr('#locationD',{
+            mode: "range",
+            minDate: "today",
+            dateFormat: "d/m/Y",
+            onClose: function(selectedDates, dateStr){
+                let allDate = dateStr.replace(' to ', ',').split(',');
+                $('#locationD').val(allDate[0])
+                $('#locationF').val(allDate[1])
+            }
+        });
         let bigregex = "A";
         for (let i = 0; i < 99; i++) {
             bigregex = bigregex + "A";
@@ -406,8 +414,8 @@ function modal(name,type,url,dataid) {
                         loadDatas('agence',datas.id_agence);
                     }
                     if(url === '/getLocation'){
-                        $('input[name=locationD]').val(reverseDate(datas.dateDebut,'time'))
-                        $('input[name=locationF]').val(reverseDate(datas.dateFin,'time'))
+                        $('input[name=locationD]').val(reverseDate(datas.dateDebut))
+                        $('input[name=locationF]').val(reverseDate(datas.dateFin))
                         loadDatas('agence',datas.id_agence);
                         $("select[name=id_agence] option[value='"+datas.id_agence+"']").prop('selected',true);
                         loadDatas('voiture',datas.id_voiture);
@@ -553,15 +561,6 @@ function verifDatas(datas,page,type){
         }
         if(t === 'dateDebut' || t === 'dateFin'){
             if($('#'+i).length <= 0 && reverseDate(o) >= reverseDate(s) || reverseDate(s) === false ) {
-                s.addClass('active')
-                let html = (t === 'dateDebut') ? 'Champ requis ,doit être plus petite que la date de fin et doit être une date valide' : 'Champ requis ,doit être plus grand que la date de début et doit être une date valide';
-                s.parent().append(`
-                    <p id='${i}' class='text-danger'> ${html}</p>
-                `)
-            }
-        }
-        if(t === 'dateTimeDebut' || t === 'dateTimeFin'){
-            if($('#'+i).length <= 0 && reverseDate(o,'time') >= reverseDate(s,'time') || reverseDate(s,'time') === false ) {
                 s.addClass('active')
                 let html = (t === 'dateDebut') ? 'Champ requis ,doit être plus petite que la date de fin et doit être une date valide' : 'Champ requis ,doit être plus grand que la date de début et doit être une date valide';
                 s.parent().append(`
@@ -744,15 +743,15 @@ function verifDatas(datas,page,type){
     if(page === 'location'){
         let locationF = $('.modal.fade.show input[name=locationF]');
         let locationD = $('.modal.fade.show input[name=locationD]');
-        if(locationD.val() !== "" && reverseDate(locationD,'time') !== false && locationF.val() !== "" && reverseDate(locationF,'time') !== false && reverseDate(locationD,'time') < reverseDate(locationF,'time')){
-            tab['dateDebut'] = reverseDate(locationD,'time');
-            tab['dateFin'] = reverseDate(locationF,'time');
+        if(locationD.val() !== "" && reverseDate(locationD) !== false && locationF.val() !== "" && reverseDate(locationF) !== false && reverseDate(locationD) < reverseDate(locationF)){
+            tab['dateDebut'] = reverseDate(locationD);
+            tab['dateFin'] = reverseDate(locationF);
             tab['id_agence'] = $('.modal.fade.show select[name=id_agence]').val();
             tab['id_voiture'] = $('.modal.fade.show select[name=id_voiture]').val();
             tab['id'] = (type !== 'add') ? datas : ' ';
         }else{
-            draw_error(locationD,'error_locationD','dateTimeDebut',locationF);
-            draw_error(locationF,'error_locationF','dateTimeFin',locationD);
+            draw_error(locationD,'error_locationD','dateDebut',locationF);
+            draw_error(locationF,'error_locationF','dateFin',locationD);
         }
     }
     return tab;
@@ -832,7 +831,7 @@ function updateDatas(datas,page,type){
                                 .remove()
                                 .draw();
                         }
-                        let tab = [datas.ville+' '+datas.rue,reverseDate(datas.dateDebut,'time'),reverseDate(datas.dateFin,'time')];
+                        let tab = [datas.ville+' '+datas.rue,reverseDate(datas.dateDebut),reverseDate(datas.dateFin)];
                         tab.push(datas.immatriculation+`<div class="divBtnTab">
                             <button class="btn btn-info editButton text-white"><i class="fa-solid fa-pencil "></i></button>
                             <button class="btn btn-danger delButton"><i class="fa-solid fa-trash-can"></i></button>

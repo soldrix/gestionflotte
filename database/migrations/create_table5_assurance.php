@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('assurance', function (Blueprint $table) {
             $table->id();
             $table->string('nomAssu');
-            $table->foreignId('id_voiture')->references('id')->on('voiture')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreignId('id_voiture')->nullable()->references('id')->on('voiture')->onDelete('cascade')->onUpdate('cascade');
             $table->date('debutAssu');
             $table->float('frais');
             $table->date('finAssu');
