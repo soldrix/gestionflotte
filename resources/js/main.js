@@ -45,11 +45,8 @@ $(document).ready(function () {
                     if(rowdata !== null){
                         rowdata.forEach(datas =>{
                             $('#divSearch').append(`
-                                <button class="bg-transparent border-0 text-start my-2 w-100 btnAgence" data-agence="${datas.id}"> <h2 class="m-0">${datas.ville+' '+datas.rue}</h2></button>
+                                <a class="bg-transparent border-0 text-start my-2 w-100 btnAgence text-dark text-decoration-none" href="/locationVoiture/${datas.id}"> <h2 class="m-0">${datas.ville+' '+datas.rue}</h2></a>
                             `);
-                        })
-                        $('.btnAgence').on('click',function () {
-                            window.location.href = '/locationVoiture/'+$(this).attr('data-agence');
                         })
                     }else{
                         $('#divSearch').append(`
