@@ -109,12 +109,14 @@ $(document).ready(function () {
             dataType: 'json',
             success:function (rowdata) {
                 var disableDate=[];
-                rowdata.forEach(datas =>{
-                    disableDate.push({
-                        "from" : reverseDate(datas.dateDebut),
-                        "to" : reverseDate(datas.dateFin)
+                if (rowdata[0].dateDebut !== undefined){
+                    rowdata.forEach(datas =>{
+                        disableDate.push({
+                            "from" : reverseDate(datas.dateDebut),
+                            "to" : reverseDate(datas.dateFin)
+                        })
                     })
-                })
+                }
                 prixPJ  = parseInt(rowdata[0].prix);
                 function changePrix(dateDebut,dateFin){
                     var Days = '';

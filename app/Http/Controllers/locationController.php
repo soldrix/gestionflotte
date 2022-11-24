@@ -64,10 +64,18 @@ class locationController extends Controller
         return json_encode($data);
     }
     public function getLocationDate(Request $request){
-       return DB::table('location')->select('location.dateDebut','location.dateFin','voiture.prix')->leftJoin('voiture', 'location.id_voiture', '=', 'voiture.id')
+       $voiture = DB::table('voiture')->where([
+           'id' => $request->id_voiture
+       ])->get('prix');
+       $Date =  DB::table('location')
            ->where([
-           'location.id_voiture' => $request->id_voiture
+           'id_voiture' => $request->id_voiture
        ])->get(['dateDebut','dateFin']);
+       if ((count($Date) >=1)){
+           $voiture[0]->dateDebut = $Date[0]->dateDebut;
+           $voiture[0]->dateFin = $Date[0]->dateFin;
+       }
+       return $voiture;
     }
 
     public function chargeVoiture(Request $request){
