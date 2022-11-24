@@ -11,7 +11,6 @@
             <table id="DataTable_location" class="table table-striped dataTable table-responsive" style="width: 100%">
                 <thead>
                 <tr>
-                    <th>agence</th>
                     <th>Date de début</th>
                     <th>Date de Fin</th>
                     <th>Immatriculation</th>
@@ -20,7 +19,6 @@
                 <tbody>
                 @foreach($location as $datas)
                     <tr data-voiture="{{$datas->id}}" data-db="location">
-                        <td>{{($datas->ville === null && $datas->rue === null) ? 'Vide' : $datas->ville.' '.$datas->rue}}</td>
                         <td>{{date('d/m/Y', strtotime($datas->dateDebut))}}</td>
                         <td>{{date('d/m/Y', strtotime($datas->dateFin))}}</td>
                         <td class="tdBtn">
@@ -46,14 +44,6 @@
                 </div>
                 <div class="col-6 align-self-center modal-body d-flex flex-column">
                     <div class="d-flex flex-wrap align-items-baseline">
-                        <label for="agenceLocation">L'agence :</label>
-                        <select name="id_agence" id="agenceLocation">
-                            @foreach($agence as $datas)
-                                <option value="{{$datas->id}}">{{$datas->ville.' '.$datas->rue}}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="d-flex flex-wrap align-items-baseline">
                         <label for="imLocation">L'immatriculation :</label>
                         <select name="id_voiture" id="imLocation">
                             @foreach($voiture as $datas)
@@ -61,8 +51,6 @@
                             @endforeach
                         </select>
                     </div>
-
-
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>

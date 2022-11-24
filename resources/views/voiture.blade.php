@@ -252,7 +252,7 @@
                         </div>
                         <div class="w-100 d-flex justify-content-between px-4">
                             <p class="m-0 textSell">Durée de location</p>
-                            <p class="m-0" id="prixTimeLocation">0</p>
+                            <p class="m-0" id="prixTimeLocation">1 jour</p>
                         </div>
                         <h4>Frais</h4>
                         <div class="w-100 d-flex px-4 flex-column">
@@ -270,14 +270,18 @@
                         <div class="d-flex w-100 justify-content-between">
                             <h3>Total</h3>
                             <div class="d-flex flex-column">
-                                <h3 id="priceVoiture" class="m-0">500€</h3>
+                                <h3 id="priceVoiture" class="m-0">{{$datas->prix + 40}}€</h3>
                                 <span class="taxeText">Taxes incluse</span>
                             </div>
                         </div>
-                        <button class="btn btn-outline-primary mt-3">Continuer</button>
+                        <button class="btn btn-outline-primary mt-3" id="validationBtn">Continuer</button>
                     </div>
                 @endforeach
             </div>
+            <h5>
+                Le véhicule peut être récuperer à partir de 8h et doit être remis à l'agence avant 22h.
+            </h5>
+
             <h2 class="my-5">Choisissez votre protection et vos options</h2>
             <div class="d-flex w-100">
                 <div class="col-4 d-flex flex-column bg-white p-2 rounded h-fit">
@@ -302,21 +306,21 @@
                                 <input type="radio" id="fp2" class="franchiseP" name="protection">
                                 <label for="fp2">3000€ de franchise</label>
                             </div>
-                            <p><span id="pPrice1">10</span>€ | jour</p>
+                            <p><span id="pPrice1">{{(($datas->prix*5)/100) * 1.5}}</span>€ | jour</p>
                         </div>
                         <div class="d-flex justify-content-between">
                             <div class="col-auto p-0">
                                 <input type="radio" id="fp3" class="franchiseP" name="protection">
                                 <label for="fp3">1500€ de franchise</label>
                             </div>
-                            <p><span id="pPrice2">30</span>€ | jour</p>
+                            <p><span id="pPrice2">{{(($datas->prix*10)/100) * 1.5}}</span>€ | jour</p>
                         </div>
                         <div class="d-flex justify-content-between">
                             <div class="col-auto p-0">
                                 <input type="radio" id="fp4" class="franchiseP" name="protection">
                                 <label for="fp4">0€ de franchise</label>
                             </div>
-                            <p><span id="pPrice3">40</span>€ | jour</p>
+                            <p><span id="pPrice3">{{(($datas->prix*15)/100) * 1.5}}</span>€ | jour</p>
                         </div>
                     </div>
                     <div class="ligne-75 align-self-center my-2"></div>

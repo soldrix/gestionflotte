@@ -304,12 +304,6 @@ function modal(name,type,url,dataid) {
                 <input type="text" name="locationF" id="locationF" class="inputForm assuDateF  mb-2 me-2" required>
             </div>
             <div class="d-flex flex-wrap align-items-baseline">
-                <label class="me-2" for="agenceId">Agence :</label>
-                <select name="id_agence" id="agenceId" class="mb-2 me-2">
-                    <option value="null">Vide</option>
-                </select>
-            </div>
-            <div class="d-flex flex-wrap align-items-baseline">
                 <label class="me-2" for="voitureId">Immatriculation :</label>
                 <select name="id_voiture" id="voitureId" class="mb-2 me-2">
                       <option value="null">Vide</option>
@@ -416,8 +410,6 @@ function modal(name,type,url,dataid) {
                     if(url === '/getLocation'){
                         $('input[name=locationD]').val(reverseDate(datas.dateDebut))
                         $('input[name=locationF]').val(reverseDate(datas.dateFin))
-                        loadDatas('agence',datas.id_agence);
-                        $("select[name=id_agence] option[value='"+datas.id_agence+"']").prop('selected',true);
                         loadDatas('voiture',datas.id_voiture);
                         $("select[name=id_voiture] option[value='"+datas.id_voiture+"']").prop('selected',true);
                     }
@@ -746,7 +738,6 @@ function verifDatas(datas,page,type){
         if(locationD.val() !== "" && reverseDate(locationD) !== false && locationF.val() !== "" && reverseDate(locationF) !== false && reverseDate(locationD) < reverseDate(locationF)){
             tab['dateDebut'] = reverseDate(locationD);
             tab['dateFin'] = reverseDate(locationF);
-            tab['id_agence'] = $('.modal.fade.show select[name=id_agence]').val();
             tab['id_voiture'] = $('.modal.fade.show select[name=id_voiture]').val();
             tab['id'] = (type !== 'add') ? datas : ' ';
         }else{
@@ -831,7 +822,7 @@ function updateDatas(datas,page,type){
                                 .remove()
                                 .draw();
                         }
-                        let tab = [datas.ville+' '+datas.rue,reverseDate(datas.dateDebut),reverseDate(datas.dateFin)];
+                        let tab = [reverseDate(datas.dateDebut),reverseDate(datas.dateFin)];
                         tab.push(datas.immatriculation+`<div class="divBtnTab">
                             <button class="btn btn-info editButton text-white"><i class="fa-solid fa-pencil "></i></button>
                             <button class="btn btn-danger delButton"><i class="fa-solid fa-trash-can"></i></button>

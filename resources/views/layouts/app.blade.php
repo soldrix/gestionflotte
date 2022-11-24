@@ -140,7 +140,15 @@
                     Les données ont été supprimé
                 </div>
             </div>
-
+            <div id="toastLocation" class="toast" role="alert">
+                <div class="toast-header">
+                    <strong class="me-auto">Location véhicule</strong>
+                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+                <div class="toast-body">
+                    La location a été réalié avec succès.
+                </div>
+            </div>
         </div>
 
 
