@@ -52,4 +52,11 @@ class AgenceController extends Controller
         $data =  DB::select("SELECT * from agence where id='$id'");
         return json_encode($data);
     }
+    public function getAgenceSearch(Request $request){
+        $research = '%'.$request->search.'%';
+         $agence =  DB::table('agence')->where('ville','like',$research)
+            ->orWhere('rue','like',$research)
+            ->get();
+         return ((count($agence) >= 1 ) ? $agence : json_encode(null));
+    }
 }

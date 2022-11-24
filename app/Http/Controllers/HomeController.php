@@ -76,7 +76,6 @@ class HomeController extends Controller
     public function index()
     {
         $voiture = DB::select('select * from voiture');
-
         return view('home',(Auth::user()->type !== 'admin') ? ['voiture'=>$voiture,'agence'=>DB::select('SELECT * from agence') ,'type'=> DB::select('SELECT distinct type from voiture'),'nbVoiture'=>count($voiture)] : ['voiture'=>$voiture]);
     }
     public function deleteVoiture(Request $request):void{

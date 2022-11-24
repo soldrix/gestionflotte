@@ -69,4 +69,12 @@ class locationController extends Controller
            'location.id_voiture' => $request->id_voiture
        ])->get(['dateDebut','dateFin']);
     }
+
+    public function chargeVoiture(Request $request){
+        $voiture = DB::table('voiture')->where([
+            'id_agence' => $request->id_agence
+        ])->get();
+        $type = DB::select('SELECT distinct type from voiture');
+        return ((count($voiture) >=1) ? view('/locationVoiture',['voiture' => $voiture,'type' => $type]) : redirect('/home'));
+    }
 }

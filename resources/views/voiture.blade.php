@@ -4,7 +4,7 @@
 @section('content')
     @if(Auth::user()->type === 'admin')
         @foreach( $voitureData ?? '' as $datas)
-            <div class="container-fluid">
+            <div class="container-fluid py-4">
                 <div class="col-auto d-flex flex-column flex-lg-row">
 
                     <div class="col-12 col-lg-4 border-dark border-3 border-opacity-25 p-4 d-flex justify-content-center" style="border-right: solid">
@@ -211,7 +211,7 @@
             </div>
         @endforeach
     @else
-        <div id="containerVoiture" class="container p-5 d-flex flex-column">
+        <div id="containerVoiture" class="container my-4 p-5 d-flex flex-column">
             <div class="w-100 d-flex justify-content-between">
                 @foreach($voitureData as $datas)
                     <div class="col-7 p-3 imageVoiture" style="background-image: url({{asset('/storage/'.$datas->image)}});">

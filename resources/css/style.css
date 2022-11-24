@@ -131,3 +131,14 @@ td{
 #dateD.active,#dateF.active{
     border: 2px red solid;
 }
+.textHome{
+    font-size: 20px;
+}
+.titreHome{
+    font-size: 2.5rem;
+}
+.fondHome{
+    background-color: #0000005e;
+    width: 100%;
+    height: 100%;
+}

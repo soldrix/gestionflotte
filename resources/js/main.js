@@ -8,6 +8,63 @@ let prixPJ;//prix par jours
 
 
 $(document).ready(function () {
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    })
+    //setup before functions
+    var typingTimer;                //timer identifier
+    var doneTypingInterval = 1500;  //time in ms, 5 seconds for example
+
+//on keyup, start the countdown
+    $('#searchBar').on('keyup', function () {
+        clearTimeout(typingTimer);
+        typingTimer = setTimeout(doneTyping, doneTypingInterval);
+    });
+
+//on keydown, clear the countdown
+    $('#searchBar').on('keydown', function () {
+        clearTimeout(typingTimer);
+    });
+    $('#searchBar').on('focusout',function () {
+        setTimeout(()=>{
+            $('#divSearch').hide()
+        },100)
+    })
+//user is "finished typing," do something
+    function doneTyping () {
+        if($('#searchBar').val() !== ''){
+            $.ajax({
+                type:'post',
+                url:'/getAgenceSearch',
+                data:{"search": $('#searchBar').val()},
+                dataType: 'json',
+                success:function (rowdata) {
+                    $('#divSearch').html('');
+                    if(rowdata !== null){
+                        rowdata.forEach(datas =>{
+                            $('#divSearch').append(`
+                                <button class="bg-transparent border-0 text-start my-2 w-100 btnAgence" data-agence="${datas.id}"> <h2 class="m-0">${datas.ville+' '+datas.rue}</h2></button>
+                            `);
+                        })
+                        $('.btnAgence').on('click',function () {
+                            window.location.href = '/locationVoiture/'+$(this).attr('data-agence');
+                        })
+                    }else{
+                        $('#divSearch').append(`
+                           <h2>Malheureusement, aucun résultat n'a été trouvé. <br> Veuillez vérifier l'orthographe et réessayer.</h2>
+                        `);
+                    }
+
+                }
+            })
+        }
+        $(this).focus().prop('readonly',true)
+        $('#divSearch').show()
+    }
+
+
     function reverseDate(data){
         if(data !== undefined){
             let d = data.split('-');
@@ -46,11 +103,7 @@ $(document).ready(function () {
     var locationToast = bootstrap.Toast.getOrCreateInstance(locaToastEl);
     let nbClick = 0;
 
-    $.ajaxSetup({
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        }
-    })
+
     if(window.location.pathname.match('voiture')){
         $.ajax({
             type:'post',
@@ -164,9 +217,4 @@ $(document).ready(function () {
     $('#dropdownfilter').on('click',function(){
         $(this).find('i').toggleClass('fa-chevron-up fa-chevron-down')
     })
-}).on('click','#searchBar',function () {
-    $(this).focus().prop('readonly',true)
-    $('#divSearch').show()
-}).on('focusout','#searchBar',function () {
-    $('#divSearch').hide()
 })
