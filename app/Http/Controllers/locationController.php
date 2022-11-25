@@ -54,7 +54,7 @@ class locationController extends Controller
             $data['title'] = '404';
             $data['name'] = 'Page not found';
         }
-        return ($user_type !=='admin') ? response()->view('errors.404',$data,404) : view('/location',['location'=>$location,'voiture'=>$voiture]);
+        return ($user_type !=='admin') ? view('/location') : view('/location',['location'=>$location,'voiture'=>$voiture]);
     }
     public function delete(Request $request) : void{
         $row = $request->id;
