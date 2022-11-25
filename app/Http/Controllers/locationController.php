@@ -50,10 +50,14 @@ class locationController extends Controller
             $voiture = Db::table('voiture')->select('id','immatriculation')->get();
             $location = DB::select('SELECT location.*,immatriculation FROM `location` left JOIN voiture ON voiture.id = location.id_voiture');
         }
-        else {
-            $data['title'] = '404';
-            $data['name'] = 'Page not found';
-        }
+//        else{
+//            $location = DB::table('location')->select('location.*','voiture.marque','voiture.model')
+//            ->leftJoin('voiture','location.id_voiture', '=' ,'voiture.id')
+//            ->where([
+//                'id_user' => $request->id_user
+//            ])
+//            ->get();
+//        }
         return ($user_type !=='admin') ? view('/location') : view('/location',['location'=>$location,'voiture'=>$voiture]);
     }
     public function delete(Request $request) : void{
