@@ -14,6 +14,7 @@
                     <th>Date de début</th>
                     <th>Date de Fin</th>
                     <th>Immatriculation</th>
+                    <th>Montant</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -21,8 +22,9 @@
                     <tr data-voiture="{{$datas->id}}" data-db="location">
                         <td>{{date('d/m/Y', strtotime($datas->dateDebut))}}</td>
                         <td>{{date('d/m/Y', strtotime($datas->dateFin))}}</td>
+                        <td>{{($datas->immatriculation === null) ? 'Vide' :$datas->immatriculation}}</td>
                         <td class="tdBtn">
-                            {{($datas->immatriculation === null) ? 'Vide' :$datas->immatriculation}}
+                            {{$datas->montant}}
                             <div class="divBtnTab d-flex flex-column flex-md-row">
                                 <button class="btn btn-info editButton text-white"><i class="fa-solid fa-pencil "></i></button>
                                 <button class="btn btn-danger delButton"><i class="fa-solid fa-trash-can"></i></button>

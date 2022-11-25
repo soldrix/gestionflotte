@@ -17,6 +17,7 @@ class CreateLocation extends Migration
             $table->id();
             $table->date('dateDebut');
             $table->date('dateFin');
+            $table->float('montant');
             $table->foreignId('id_voiture')->nullable()->references('id')->on('voiture')->onDelete('null')->onUpdate('null');
         });
     }

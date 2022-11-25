@@ -211,7 +211,7 @@
             </div>
         @endforeach
     @else
-        <div id="containerVoiture" class="container my-4 p-5 d-flex flex-column">
+        <div id="containerVoiture" class="container  px-5 py-4 d-flex flex-column">
             <div class="w-100 d-flex justify-content-between">
                 @foreach($voitureData as $datas)
                     <div class="col-7 p-3 imageVoiture" style="background-image: url({{asset('/storage/'.$datas->image)}});">
@@ -279,7 +279,8 @@
                 @endforeach
             </div>
             <h5>
-                Le véhicule peut être récuperer à partir de 8h et doit être remis à l'agence avant 22h.
+                Le véhicule peut être récuperer à partir de 8h et doit être remis à l'agence avant 22h. <br>
+                L'annulation peut être gratuite jusqu'à 24 heures avant le début de la location.
             </h5>
 
             <h2 class="my-5">Choisissez votre protection et vos options</h2>

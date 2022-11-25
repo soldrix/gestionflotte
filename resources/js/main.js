@@ -22,7 +22,6 @@ $(document).ready(function () {
         clearTimeout(typingTimer);
         typingTimer = setTimeout(doneTyping, doneTypingInterval);
     });
-
 //on keydown, clear the countdown
     $('#searchBar').on('keydown', function () {
         clearTimeout(typingTimer);
@@ -32,6 +31,24 @@ $(document).ready(function () {
             $('#divSearch').hide()
         },100)
     })
+    $('.dropdown-item').on('click',function () {
+        var checkBoxes = $(this).children();
+        checkBoxes.prop("checked", !checkBoxes.prop("checked"));
+        showCar(checkBoxes);
+    })
+    $('.typeCheck').on('click',function () {
+        $(this).prop("checked", !$(this).prop("checked"));
+    })
+    function showCar(s){
+        let type = s.attr('data-type');
+        if(s.prop('checked') === true){
+            $('.voiture[data-type="'+type+'"]').show();
+        }else{
+            $('.voiture[data-type="'+type+'"]').hide();
+        }
+    }
+
+
 //user is "finished typing," do something
     function doneTyping () {
         if($('#searchBar').val() !== ''){
@@ -95,11 +112,22 @@ $(document).ready(function () {
         let location = pj * Days;
         let prix = protection + protecPneu + driver + hiver + gps + 40 + location;
         $('#priceVoiture').html(prix+'€');
+        return prix;
     }
     var locaToastEl = document.getElementById('toastLocation');
     var locationToast = bootstrap.Toast.getOrCreateInstance(locaToastEl);
     let nbClick = 0;
-
+    function changePrix(dateDebut,dateFin){
+        var Days = '';
+        if(dateDebut !== "" && dateFin !== ""){
+            let date1 = new Date(reverseDateEng(dateDebut));
+            let date2 = new Date(reverseDateEng(dateFin));
+            let Time = date2.getTime() - date1.getTime();
+            Days = (Time / (1000 * 3600 * 24)) + 1;//nombre de jour entre date 1 et 2
+            $('#prixTimeLocation').html((Days > 1) ? Days+' Jour/s' : Days+' jour')
+        }
+        return (Days !== '') ? Days : 1;
+    }
 
     if(window.location.pathname.match('voiture')){
         $.ajax({
@@ -118,17 +146,7 @@ $(document).ready(function () {
                     })
                 }
                 prixPJ  = parseInt(rowdata[0].prix);
-                function changePrix(dateDebut,dateFin){
-                    var Days = '';
-                    if(dateDebut !== "" && dateFin !== ""){
-                        let date1 = new Date(reverseDateEng(dateDebut));
-                        let date2 = new Date(reverseDateEng(dateFin));
-                        let Time = date2.getTime() - date1.getTime();
-                        Days = (Time / (1000 * 3600 * 24)) + 1;//nombre de jour entre date 1 et 2
-                        $('#prixTimeLocation').html((Days > 1) ? Days+' Jour/s' : Days+' jour')
-                    }
-                    return (Days !== '') ? Days : 1;
-                }
+
 
                 if($('#dateD').val() !== '' && $('#dateF').val() !== ''){
                     verifPrix(prixPJ,changePrix($('#dateD').val(),$('#dateF').val()))
@@ -191,7 +209,9 @@ $(document).ready(function () {
                 url:'/addLocation',
                 data:{
                     "id_voiture":window.location.pathname.split('/')[2],
-                    "dateDebut":reverseDateEng(dateDebut.val()),"dateFin":reverseDateEng(dateFin.val())
+                    "dateDebut":reverseDateEng(dateDebut.val()),
+                    "dateFin":reverseDateEng(dateFin.val()),
+                    "montant" : verifPrix(prixPJ,changePrix(dateDebut.val(),dateFin.val()))
                 },
                 dataType: 'json',
                 success:function () {

@@ -57,6 +57,10 @@
                                 <a href="{{url('/agence')}}" class="mx-2 text-dark text-decoration-none">Agence</a>
                                 <a href="{{url('/location')}}" class="mx-2 text-dark text-decoration-none">Location</a>
                             </ul>
+                            @else
+                            <ul class="navbar-nav me-auto">
+                                <a href="{{url('/location')}}" class="mx-2 text-dark text-decoration-none">Mes locations</a>
+                            </ul>
                         @endif
                     @endif
                     <!-- Right Side Of Navbar -->

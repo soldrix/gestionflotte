@@ -301,7 +301,11 @@ function modal(name,type,url,dataid) {
             </div>
             <div class="d-flex flex-wrap align-items-baseline">
                 <label for="debutAssu">Date de fin :</label>
-                <input type="text" name="locationF" id="locationF" class="inputForm assuDateF  mb-2 me-2" required>
+                <input type="text" name="locationF" id="locationF" class="inputForm assuDateF mb-2 me-2" required>
+            </div>
+            <div class="d-flex flex-wrap align-items-baseline">
+                <label for="debutAssu">Montant :</label>
+                <input type="text" name="montantLoca" id="montantLoca" class="inputForm inputNumber mb-2 me-2" required>
             </div>
             <div class="d-flex flex-wrap align-items-baseline">
                 <label class="me-2" for="voitureId">Immatriculation :</label>
@@ -410,6 +414,7 @@ function modal(name,type,url,dataid) {
                     if(url === '/getLocation'){
                         $('input[name=locationD]').val(reverseDate(datas.dateDebut))
                         $('input[name=locationF]').val(reverseDate(datas.dateFin))
+                        $('input[name=montantLoca]').val(datas.montant)
                         loadDatas('voiture',datas.id_voiture);
                         $("select[name=id_voiture] option[value='"+datas.id_voiture+"']").prop('selected',true);
                     }
@@ -735,14 +740,17 @@ function verifDatas(datas,page,type){
     if(page === 'location'){
         let locationF = $('.modal.fade.show input[name=locationF]');
         let locationD = $('.modal.fade.show input[name=locationD]');
-        if(locationD.val() !== "" && reverseDate(locationD) !== false && locationF.val() !== "" && reverseDate(locationF) !== false && reverseDate(locationD) < reverseDate(locationF)){
+        let montant = $('.modal.fade.show input[name=montantLoca]');
+        if(locationD.val() !== "" && reverseDate(locationD) !== false && locationF.val() !== "" && reverseDate(locationF) !== false && reverseDate(locationD) < reverseDate(locationF) && montant.val() !== '' && typeof montant.val() === 'number'){
             tab['dateDebut'] = reverseDate(locationD);
             tab['dateFin'] = reverseDate(locationF);
+            tab['montant'] = montant.val()
             tab['id_voiture'] = $('.modal.fade.show select[name=id_voiture]').val();
             tab['id'] = (type !== 'add') ? datas : ' ';
         }else{
             draw_error(locationD,'error_locationD','dateDebut',locationF);
             draw_error(locationF,'error_locationF','dateFin',locationD);
+            draw_error(montant,'error_montantLoca','nb');
         }
     }
     return tab;
@@ -822,8 +830,8 @@ function updateDatas(datas,page,type){
                                 .remove()
                                 .draw();
                         }
-                        let tab = [reverseDate(datas.dateDebut),reverseDate(datas.dateFin)];
-                        tab.push(datas.immatriculation+`<div class="divBtnTab">
+                        let tab = [reverseDate(datas.dateDebut),reverseDate(datas.dateFin),datas.immatriculation];
+                        tab.push(datas.montant+`<div class="divBtnTab">
                             <button class="btn btn-info editButton text-white"><i class="fa-solid fa-pencil "></i></button>
                             <button class="btn btn-danger delButton"><i class="fa-solid fa-trash-can"></i></button>
                         </div>`)

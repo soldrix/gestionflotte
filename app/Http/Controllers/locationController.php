@@ -12,24 +12,24 @@ class locationController extends Controller
         $validation = $datas->validate([
             "id_voiture" => "required",
             "dateDebut" => "required",
-            "dateFin" => "required"
+            "dateFin" => "required",
+            'montant' => 'required'
         ]);
         $tab = [
             "id_voiture" => ($validation['id_voiture'] !== 'null') ? $validation['id_voiture']: null,
             "dateDebut" => $validation['dateDebut'],
-            "dateFin" => $validation['dateFin']
+            "dateFin" => $validation['dateFin'],
+            "montant" => $validation['montant']
         ];
         return $tab;
     }
     public function insertDatas(Request $request){
-        DB::table('location')->insert($this->verification($request));
+        $id = DB::table('location')->insertGetId($this->verification($request));
         return DB::table('location')
             ->select('location.*','immatriculation')
             ->join('voiture','voiture.id','=','location.id_voiture')
             ->where([
-                "id_voiture" => $request->id_voiture,
-                "dateDebut" => $request->dateDebut,
-                "dateFin" => $request->dateFin
+                "location.id" => $id,
             ])
             ->get();
     }
@@ -40,9 +40,7 @@ class locationController extends Controller
             ->select('location.*','immatriculation')
             ->leftjoin('voiture','voiture.id','=','location.id_voiture')
             ->where([
-                "id_voiture" =>  ($request->id_voiture !== 'null') ? $request->id_voiture : null,
-                "dateDebut" => $request->dateDebut,
-                "dateFin" => $request->dateFin
+                'location.id' => $id
             ])
             ->get();
     }
@@ -82,7 +80,11 @@ class locationController extends Controller
         $voiture = DB::table('voiture')->where([
             'id_agence' => $request->id_agence
         ])->get();
+        $agence = DB::table('agence')->where([
+            'id'=> $request->id_agence
+        ])->get();
         $type = DB::select('SELECT distinct type from voiture');
-        return ((count($voiture) >=1) ? view('/locationVoiture',['voiture' => $voiture,'type' => $type]) : redirect('/home'));
+        $voiture =(count($voiture) >=1) ?  $voiture : json_encode(null);
+        return  view('/locationVoiture',['voiture' => $voiture,'type' => $type,'agence' => $agence,'nbVoiture' => count($voiture)]);
     }
 }
