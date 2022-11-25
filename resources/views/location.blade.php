@@ -63,6 +63,7 @@
             </div>
         </div>
         @else
+        {{\Illuminate\Support\Facades\Auth::id()}}
          <div class="container Containerlocation py-4">
             <h2>mes locations</h2>
              <div class="col-auto pt-5 location">
