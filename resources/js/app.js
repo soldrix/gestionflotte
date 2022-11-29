@@ -320,11 +320,13 @@ function modal(name,type,url,dataid) {
         $('#AddModal').ready(function () {
             $('input[name=puissance]').mask('00000');
             $('input[name=immatriculation]').mask('SS-000-SS');
+            $('input[name=nbPorte]').mask('0');
+            $('input[name=nbPlace]').mask('0');
+            $('input[name=prix]').mask('0000000');
         })
     }
     $('#AddModal').ready(function () {
         flatpickr('.inputDate',{
-            minDate: "today",
             dateFormat : 'd/m/Y'
         });
         flatpickr('#locationD',{
@@ -525,8 +527,7 @@ function verifDatas(datas,page,type){
             d = d.val().split('/');
             let date_time = d[2].split(' ');
             let date =(t !== 'time')? d[2]+'-'+d[1]+'-'+d[0] : date_time[0]+'-'+d[1]+'-'+d[0]+' '+date_time[1];
-            let verifDate  = new Date().getFullYear() - 122;
-            return ( (t !== 'time') ? (new Date(date) instanceof Date && !isNaN(new Date(date)) && d[2] >= verifDate) : (date.match(/^([1-2]\d{3}-([0]?[1-9]|1[0-2])-([0-2]?[0-9]|3[0-1])) (20|21|22|23|[0-1]?\d{1}):([0-5]?\d{1}):([0-5]?\d{1})$/g) && date_time[0] >= verifDate) ) ? date : false;
+            return ( (t !== 'time') ? (new Date(date) instanceof Date && !isNaN(new Date(date))) : (date.match(/^([1-2]\d{3}-([0]?[1-9]|1[0-2])-([0-2]?[0-9]|3[0-1])) (20|21|22|23|[0-1]?\d{1}):([0-5]?\d{1}):([0-5]?\d{1})$/g)) ) ? date : false;
         }else{
             d = d.split('-');
             let date_time = d[2].split(' ');
@@ -741,15 +742,15 @@ function verifDatas(datas,page,type){
         let locationF = $('.modal.fade.show input[name=locationF]');
         let locationD = $('.modal.fade.show input[name=locationD]');
         let montant = $('.modal.fade.show input[name=montantLoca]');
-        if(locationD.val() !== "" && reverseDate(locationD) !== false && locationF.val() !== "" && reverseDate(locationF) !== false && reverseDate(locationD) < reverseDate(locationF) && montant.val() !== '' && typeof montant.val() === 'number'){
+        if(locationD.val() !== "" && reverseDate(locationD) !== false && locationF.val() !== "" && reverseDate(locationF) !== false && montant.val().replaceAll(',','.') > 0 && !isNaN(montant.val().replaceAll(',','.')) ){
             tab['dateDebut'] = reverseDate(locationD);
             tab['dateFin'] = reverseDate(locationF);
-            tab['montant'] = montant.val()
+            tab['montant'] = montant.val().replaceAll(',','.');
             tab['id_voiture'] = $('.modal.fade.show select[name=id_voiture]').val();
             tab['id'] = (type !== 'add') ? datas : ' ';
         }else{
-            draw_error(locationD,'error_locationD','dateDebut',locationF);
-            draw_error(locationF,'error_locationF','dateFin',locationD);
+            draw_error(locationD,'error_locationD','date');
+            draw_error(locationF,'error_locationF','date');
             draw_error(montant,'error_montantLoca','nb');
         }
     }
@@ -1076,10 +1077,11 @@ function updateDatas(datas,page,type){
                     }
                     if(type === 'add'){
                         rowData.forEach(datas=>{
-                            $('.container.d-flex').append(`
-                         <div class="col-12 col-lg-3 col-xxl-4 d-flex flex-column  p-2 rounded m-2 blockVoiture" style="background: #e4e4e4" data-voiture="${datas.id}" data-db="${page}">
+                            $('.containerVoiture').append(`
+                         <div class="col-12 col-lg-3 col-xxl-2 d-flex flex-column  p-2 rounded m-2 blockVoiture" style="background: #e4e4e4" data-voiture="${datas.id}" data-db="${page}">
                             <img src="http://127.0.0.1:8000/storage/${datas.image}" alt="" class="rounded">
-                            <p class="text-center">${datas.model}</p>
+                            <p class="text-center">Marque : ${datas.marque}</p>
+                            <p class="text-center">Model : ${datas.model}</p>
                             <a  class="btn btn-primary w-75 align-self-center mt-3 btn-info-car" href="http://127.0.0.1:8000/voiture/${datas.id}">
                                 En savoir plus
                             </a>
