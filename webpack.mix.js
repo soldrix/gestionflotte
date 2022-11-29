@@ -13,8 +13,12 @@ const mix = require('laravel-mix');
 
 mix.autoload({
     jquery: ['$', 'window.jQuery']
-})
+}).webpackConfig({
+    stats: {
+        children: true,
+    },})
     .js('resources/js/app.js', 'public/js')
+    .js('resources/js/main.js','public/js')
     .js('node_modules/jquery/dist/jquery.js','public/js')
     .js('node_modules/@fortawesome/fontawesome-free/js/fontawesome.js','public/js')
     .css('node_modules/@fortawesome/fontawesome-free/css/all.css','public/css')

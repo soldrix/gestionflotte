@@ -12,7 +12,15 @@
 
     <!-- Scripts -->
     <script src="{{asset('js/fontawesome.js')}}" defer></script>
-    <script src="{{ asset('js/app.js') }}" defer></script>
+    @if(\Illuminate\Support\Facades\Auth::user())
+        @if(\Illuminate\Support\Facades\Auth::user()->type === 'admin')
+            <script src="{{ asset('js/app.js') }}" defer></script>
+            <link href="{{ asset('css/dataTables.bootstrap5.css') }}" rel="stylesheet">
+            @else
+                <script src="{{asset('js/main.js')}}" defer></script>
+        @endif
+    @endif
+
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
@@ -22,7 +30,7 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('css/style.css') }}" rel="stylesheet">
     <link href="{{ asset('css/all.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/dataTables.bootstrap5.css') }}" rel="stylesheet">
+
     <link href="{{ asset('css/CustomScrollbar.css') }}" rel="stylesheet">
 </head>
 <body>
@@ -39,13 +47,22 @@
 
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
-                    <ul class="navbar-nav me-auto">
-                        <a href="{{url('/entretiens')}}" class="mx-2 text-dark text-decoration-none">Entretiens</a>
-                        <a href="{{url('/assurance')}}" class="mx-2 text-dark text-decoration-none">Assurance</a>
-                        <a href="{{url('/reparations')}}" class="mx-2 text-dark text-decoration-none">Reparation</a>
-                        <a href="{{url('/consommation')}}" class="mx-2 text-dark text-decoration-none">Consommation</a>
-                    </ul>
-
+                    @if(\Illuminate\Support\Facades\Auth::user())
+                        @if(\Illuminate\Support\Facades\Auth::user()->type === 'admin')
+                            <ul class="navbar-nav me-auto">
+                                <a href="{{url('/entretiens')}}" class="mx-2 text-dark text-decoration-none">Entretiens</a>
+                                <a href="{{url('/assurance')}}" class="mx-2 text-dark text-decoration-none">Assurance</a>
+                                <a href="{{url('/reparations')}}" class="mx-2 text-dark text-decoration-none">Reparation</a>
+                                <a href="{{url('/consommation')}}" class="mx-2 text-dark text-decoration-none">Consommation</a>
+                                <a href="{{url('/agence')}}" class="mx-2 text-dark text-decoration-none">Agence</a>
+                                <a href="{{url('/location')}}" class="mx-2 text-dark text-decoration-none">Location</a>
+                            </ul>
+                            @else
+                            <ul class="navbar-nav me-auto">
+                                <a href="{{url('/location')}}" class="mx-2 text-dark text-decoration-none">Mes locations</a>
+                            </ul>
+                        @endif
+                    @endif
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ms-auto">
                         <!-- Authentication Links -->
@@ -84,7 +101,7 @@
             </div>
         </nav>
 
-        <main class="py-4">
+        <main>
             @yield('content')
         </main>
     </div>
@@ -127,7 +144,15 @@
                     Les données ont été supprimé
                 </div>
             </div>
-
+            <div id="toastLocation" class="toast" role="alert">
+                <div class="toast-header">
+                    <strong class="me-auto">Location véhicule</strong>
+                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+                <div class="toast-body">
+                    La location a été réalié avec succès.
+                </div>
+            </div>
         </div>
 
 

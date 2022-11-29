@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
+use PHPUnit\Util\Json;
 
 class HomeController extends Controller
 {
@@ -35,7 +37,12 @@ class HomeController extends Controller
             'immatriculation' => 'required',
             'status' => 'required',
             'puissance' => 'required',
-            'file' => 'required'
+            'file' => 'required',
+            'prix' => 'required',
+            'nbPorte' => 'required',
+            'nbPlace' => 'required',
+            'id_agence' => 'required',
+            'typeVoiture' => 'required'
         ]);
         $file = $datas->file('file');
         // Generate a file name with extension
@@ -52,8 +59,14 @@ class HomeController extends Controller
             "statut" => $validation['status'],
             "carburant" => $validation['carburant'],
             "puissance" => $validation['puissance'],
-            'image' => $path
+            'nbPorte' => $validation['nbPorte'],
+            'type' => $validation['typeVoiture'],
+            'image' => $path,
+            'nbPlace' => $validation['nbPlace'],
+            'prix' => $validation['prix'],
+            'id_agence' => ($validation['id_agence'] !== "null") ?  $validation['id_agence'] : null
         ];
+        error_log(json_encode($validation['id_agence']));
         return $tab;
     }
     public function insertData(Request $request){
@@ -63,7 +76,7 @@ class HomeController extends Controller
     public function index()
     {
         $voiture = DB::select('select * from voiture');
-        return view('home',['voiture'=>$voiture]);
+        return view('home',(Auth::user()->type !== 'admin') ? ['voiture'=>$voiture,'agence'=>DB::select('SELECT * from agence') ,'type'=> DB::select('SELECT distinct type from voiture'),'nbVoiture'=>count($voiture)] : ['voiture'=>$voiture]);
     }
     public function deleteVoiture(Request $request):void{
         $id = $request->id;
@@ -77,4 +90,5 @@ class HomeController extends Controller
         }
         DB::delete("DELETE FROM `voiture` WHERE id='$id'");
     }
+
 }

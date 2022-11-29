@@ -1,7 +1,8 @@
 require('datatables.net-bs5');
 require( 'datatables.net-responsive-bs5' );
 window.bootstrap = require('bootstrap/dist/js/bootstrap.bundle.js');
-require('jquery-mask-plugin/dist/jquery.mask.js')
+require('jquery-mask-plugin/dist/jquery.mask.js');
+import flatpickr from "flatpickr";
 let myModal3;
 function initDataTable(){
 
@@ -31,7 +32,61 @@ function initDataTable(){
 
 }
 $(document).ready(function () {
+
     initDataTable()
+    if($('#dateD').length > 0){
+        let currentDate = new Date();
+        let monthnow = parseInt(currentDate.getUTCMonth()) +1;
+        monthnow = (monthnow < 10) ? '0'+monthnow: monthnow;
+        let datenow = currentDate.getFullYear()+'-'+monthnow+'-'+currentDate.getDate();
+        flatpickr('#dateD',{
+            dateFormat: "Y-m-d",
+            enable:[
+                {
+                    from: datenow,
+                    to: (parseInt(currentDate.getFullYear())+1)+'-'+monthnow+'-'+currentDate.getDate()
+                }
+            ]
+        });
+        flatpickr('#timeD',{
+            enableTime:true,
+            noCalendar:true,
+            dateFormat:'H:i',
+            time_24hr:true,
+            minTime:currentDate.getHours()+':'+currentDate.getMinutes()
+        })
+        $('#timeD').on('focusout',function () {
+            let timeV = ($('#timeD').val() < currentDate.getHours()+':'+currentDate.getMinutes() ) ? currentDate.getHours()+':'+currentDate.getMinutes(): $('#timeD').val();
+            let timeDebut =($('#dateD').val() === $('#dateF')) ? timeV : "00:00";
+
+            flatpickr('#timeF',{
+                enableTime:true,
+                noCalendar:true,
+                dateFormat:'H:i',
+                time_24hr:true,
+                minTime:timeDebut
+            })
+        }).on('focus',function () {
+            $('#timeF').val('')
+        })
+
+        $('#dateD').on('focusout',function () {
+            let datedebut = ($('#dateD').val() < datenow) ? datenow : $('#dateD').val();
+            flatpickr('#dateF',{
+                dateFormat: "Y-m-d",
+                enable:[
+                    {
+                        from: datedebut,
+                        to: (parseInt(currentDate.getFullYear())+1)+'-'+monthnow+'-'+currentDate.getDate()
+                    }
+                ]
+            });
+        }).on('focus',function () {
+            $('#dateF').val('')
+        })
+
+
+    }
     $(document).on('click','#btnAddVoiture',function () {
         modal('voiture')
     }).on('click',"#btnAddAssurance",function () {
@@ -47,6 +102,10 @@ $(document).ready(function () {
         modal(urlName,'add')
         myModal3 = new bootstrap.Modal(document.getElementById( urlName.replace(urlName[0],urlName[0].toUpperCase())+'Modal'));
         myModal3.show();
+    }).on('click','#btnAddAgence',function () {
+        modal('agence')
+    }).on('click','#btnAddLocation',function () {
+        modal('location')
     })
 
 })
@@ -57,7 +116,7 @@ function eventModif(){
     $('.editButton').off().on('click',function () {
         let db = $(this).parent().parent().parent().attr('data-db');
         let dataid = $(this).parent().parent().parent().attr('data-voiture');
-        let url  = (db === 'voiture') ? '/getVoiture': (db === 'consommation') ? '/getConsommation' : (db === 'entretiens') ? '/getEntretiens' :(db === 'reparations') ? '/getReparations' :(db === 'assurance') ? '/getAssurance' :'';
+        let url  = (db === 'voiture') ? '/getVoiture': (db === 'consommation') ? '/getConsommation' : (db === 'entretiens') ? '/getEntretiens' :(db === 'reparations') ? '/getReparations' :(db === 'assurance') ? '/getAssurance' : (db === 'agence') ? '/getAgence' : (db === 'location') ? '/getLocation' :'';
         modal(db,'edit',url,dataid);
     })
 }
@@ -65,124 +124,197 @@ $(window).on('load',function () {
     eventModif();
 })
 
+
+function loadDatas(table,optSelect){
+    let url = (table === 'agence') ? '/loadAgence' : (table === 'voiture') ? '/loadVoiture' : '';
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    })
+    $.ajax({
+        type:'post',
+        url:url,
+        dataType: 'json',
+        success:function (rowdata) {
+            rowdata.forEach(datas =>{
+                let optionSelected =  (datas.id === optSelect && optSelect !== null) ? 'selected="selected"' : '';
+                if(table === 'agence'){
+                    $('#agenceId').append(`
+                        <option value="${datas.id}" ${optionSelected}>${datas.ville} ${datas.rue}</option>
+                    `)
+                }
+                if(table==='voiture'){
+                    $('#voitureId').append(`
+                        <option value="${datas.id}" ${optionSelected}>${datas.immatriculation}</option>
+                    `)
+                }
+
+            })
+        }
+    })
+}
+
+
 let myModal1 = new bootstrap.Modal(document.getElementById('AddModal'));
-
 function modal(name,type,url,dataid) {
-
-    let htmlModal = (name === "voiture") ?
-        `
-
-                    <div class="d-flex flex-wrap align-items-baseline">
-                        <label class="me-2" for="marque">Marque :</label>
-                        <input type="text" name="marque" placeholder="Marque" class="mb-2 me-2 inputForm inputText"  required>
-                    </div>
-                    <div class="d-flex flex-wrap align-items-baseline">
-                        <label class="me-2" for="model">Model :</label>
-                        <input type="text" name="model" placeholder="Model" class="mb-2 inputForm inputText" required>
-                    </div>
-                    <div class="d-flex flex-wrap align-items-baseline">
-                        <label class="me-2" for="carburant">Type de carburant :</label>
-                        <input type="text" name="carburant" placeholder="Carburant ex:(diesel)" class="mb-2 me-2 inputText inputForm" required>
-                    </div>
-                    <div class="d-flex flex-wrap align-items-baseline">
-                        <label class="me-2" for="cicrculation">Mise en circulation :</label>
-                        <input type="text" name="circulation" placeholder="Date circulation" class="mb-2 inputCirc inputDate inputForm" required>
-                    </div>
-                    <div class="d-flex flex-wrap align-items-baseline">
-                        <label class="me-2" for="immatriculation">Immatriculation du véhicule :</label>
-                        <input type="text" name="immatriculation" placeholder="Immatriculation" class="mb-2 me-2 inputIm inputForm" required>
-                    </div>
-                    <div class="d-flex flex-wrap align-items-baseline">
-                        <label class="me-2" for="puissance">Nombre de chevaux :</label>
-                        <input type="text" name="puissance" placeholder="Puissance ex:(100cc)" class="mb-2 inputPuissance inputForm" required>
-                    </div>
-                    <div class="d-flex flex-wrap align-items-baseline">
-                        <label class="me-2" for="status">Status du véhicule :</label>
-                        <select name="status" id="voitureSatut" class="mb-2 me-2">
-                            <option value="disponible">Disponible</option>
-                            <option value="indisponible">Indisponible</option>
-                        </select>
-                    </div>
-                    <div class="d-flex flex-wrap align-items-baseline">
-                        <label class="me-2" for="file">Image du véhicule :</label>
-                        <input type="file" name="file" accept="image/png, image/jpeg, image/jpg" class="mb-2 inputFile inputForm" required>
-                    </div>
-                   `
+        let htmlModal = (name === "voiture") ?
+            `<div class="d-flex flex-wrap align-items-baseline">
+                <label class="me-2" for="typeVoiture">type de voiture :</label>
+                <input type="text" name="typeVoiture" placeholder="type ex(berline)" class="mb-2 me-2 inputForm inputText"  required>
+            </div>
+            <div class="d-flex flex-wrap align-items-baseline">
+                <label class="me-2" for="nbPorte">Nombre de porte :</label>
+                <input type="text" name="nbPorte" placeholder="nombre de porte" class="mb-2 me-2 inputForm inputNumber"  required>
+            </div>
+             <div class="d-flex flex-wrap align-items-baseline">
+                <label class="me-2" for="nbPlace">Nombre de siège :</label>
+                <input type="text" name="nbPlace" placeholder="nombre de siège" class="mb-2 me-2 inputForm inputNumber"  required>
+            </div>
+            <div class="d-flex flex-wrap align-items-baseline">
+                <label class="me-2" for="prix">prix pour une journée :</label>
+                <input type="text" name="prix" placeholder="ex(100)" class="mb-2 me-2 inputForm inputNumber"  required>
+            </div>
+            <div class="d-flex flex-wrap align-items-baseline">
+                <label class="me-2" for="marque">Marque :</label>
+                <input type="text" name="marque" placeholder="Marque" class="mb-2 me-2 inputForm inputText"  required>
+            </div>
+            <div class="d-flex flex-wrap align-items-baseline">
+                <label class="me-2" for="model">Model :</label>
+                <input type="text" name="model" placeholder="Model" class="mb-2 inputForm inputText" required>
+            </div>
+            <div class="d-flex flex-wrap align-items-baseline">
+                <label class="me-2" for="carburant">Type de carburant :</label>
+                <input type="text" name="carburant" placeholder="Carburant ex:(diesel)" class="mb-2 me-2 inputText inputForm" required>
+            </div>
+            <div class="d-flex flex-wrap align-items-baseline">
+                <label class="me-2" for="cicrculation">Mise en circulation :</label>
+                <input type="text" name="circulation" placeholder="Date circulation" class="mb-2 inputCirc inputDate inputForm" required>
+            </div>
+            <div class="d-flex flex-wrap align-items-baseline">
+                <label class="me-2" for="immatriculation">Immatriculation du véhicule :</label>
+                <input type="text" name="immatriculation" placeholder="Immatriculation" class="mb-2 me-2 inputIm inputForm" required>
+            </div>
+            <div class="d-flex flex-wrap align-items-baseline">
+                <label class="me-2" for="puissance">Nombre de chevaux :</label>
+                <input type="text" name="puissance" placeholder="Puissance ex:(100cc)" class="mb-2 inputPuissance inputForm" required>
+            </div>
+            <div class="d-flex flex-wrap align-items-baseline">
+                <label class="me-2" for="status">Status du véhicule :</label>
+                <select name="status" id="voitureStatut" class="mb-2 me-2">
+                    <option value="disponible">Disponible</option>
+                    <option value="indisponible">Indisponible</option>
+                </select>
+            </div>
+            <div class="d-flex flex-wrap align-items-baseline">
+                <label class="me-2" for="agenceId">Agence :</label>
+                <select name="id_agence" id="agenceId" class="mb-2 me-2">
+                    <option value="null">Vide</option>
+                </select>
+            </div>
+            <div class="d-flex flex-wrap align-items-baseline">
+                <label class="me-2" for="file">Image du véhicule :</label>
+                <input type="file" name="file" accept="image/png, image/jpeg, image/jpg" class="mb-2 inputFile inputForm" required>
+            </div>
+           `
         : (name === "assurance") ?
-            `
-                    <div class="d-flex flex-wrap align-items-baseline">
-                        <label class="me-2" for="nomAssu">Nom de l'assurance :</label>
-                        <input type="text" name="nomAssu" placeholder="Nom assurance" class="inputForm inputText mb-2" required>
-                    </div>
-                    <div class="d-flex flex-wrap align-items-baseline">
-                        <label class="me-2" for="debutAssu">Date de début :</label>
-                        <input type="text" name="debutAssu" placeholder="Debut assurance" class="inputForm inputDate assuDateD mb-2" required>
-                    </div>
-                    <div class="d-flex flex-wrap align-items-baseline">
-                        <label class="me-2" for="finAssu">Date de fin :</label>
-                        <input type="text" name="finAssu" placeholder="Fin assurance"  class="inputForm inputDate assuDateF mb-2" required>
-                    </div>
-                    <div class="d-flex">
-                        <label class="me-2" for="frais">Frais de l'assurance :</label>
-                        <input type="text" name="frais" placeholder="Frais assurance" class="inputForm  inputNumber mb-2" required>
-                    </div>`
-            : (name === "entretiens") ?
-                `
-                    <div class="d-flex flex-wrap align-items-baseline">
-                        <label class="me-2" for="typeEnt">Type d'entretien :</label>
-                        <input type="text" name="typeEnt" placeholder="Type ex:(vidange)" class="inputForm inputText mb-2" required>
-                    </div>
-                    <div class="d-flex flex-wrap align-items-baseline">
-                        <label class="me-2" for="dateEnt">Date de l'entretien :</label>
-                        <input type="text" name="dateEnt" placeholder="Date Entretiens" class="inputForm inputDate mb-2" required>
-                    </div>
-                    <div class="d-flex flex-wrap align-items-baseline">
-                        <label class="me-2" for="montantEnt">Montant de l'entretien :</label>
-                        <input type="text" name="montantEnt" placeholder="Montant total" class="inputForm inputNumber mb-2" required>
-                    </div>
-                    <div class="d-flex flex-wrap align-items-baseline">
-                        <label class="me-2" for="garageEnt">Nom du garage :</label>
-                        <input type="text" name="garageEnt" placeholder="Garage" class="inputForm inputText  mb-2" required>
-                    </div>
-                    <div class="d-flex flex-column">
-                        <label class="me-2" for="noteEnt">Note supplémentaire :</label>
-                        <textarea name="noteEnt" id="noteEnt" cols="30" rows="4" class="inputForm mb-2"></textarea>
-                    </div>`
-                : (name === "reparations") ?
+            `<div class="d-flex flex-wrap align-items-baseline">
+                <label class="me-2" for="nomAssu">Nom de l'assurance :</label>
+                <input type="text" name="nomAssu" placeholder="Nom assurance" class="inputForm inputText mb-2" required>
+            </div>
+            <div class="d-flex flex-wrap align-items-baseline">
+                <label class="me-2" for="debutAssu">Date de début :</label>
+                <input type="text" name="debutAssu" placeholder="Debut assurance" class="inputForm inputDate assuDateD mb-2" required>
+            </div>
+            <div class="d-flex flex-wrap align-items-baseline">
+                <label class="me-2" for="finAssu">Date de fin :</label>
+                <input type="text" name="finAssu" placeholder="Fin assurance"  class="inputForm inputDate assuDateF mb-2" required>
+            </div>
+            <div class="d-flex">
+                <label class="me-2" for="frais">Frais de l'assurance :</label>
+                <input type="text" name="frais" placeholder="Frais assurance" class="inputForm  inputNumber mb-2" required>
+            </div>`
+        : (name === "entretiens") ?
+            `<div class="d-flex flex-wrap align-items-baseline">
+                <label class="me-2" for="typeEnt">Type d'entretien :</label>
+                <input type="text" name="typeEnt" placeholder="Type ex:(vidange)" class="inputForm inputText mb-2" required>
+            </div>
+            <div class="d-flex flex-wrap align-items-baseline">
+                <label class="me-2" for="dateEnt">Date de l'entretien :</label>
+                <input type="text" name="dateEnt" placeholder="Date Entretiens" class="inputForm inputDate mb-2" required>
+            </div>
+            <div class="d-flex flex-wrap align-items-baseline">
+                <label class="me-2" for="montantEnt">Montant de l'entretien :</label>
+                <input type="text" name="montantEnt" placeholder="Montant total" class="inputForm inputNumber mb-2" required>
+            </div>
+            <div class="d-flex flex-wrap align-items-baseline">
+                <label class="me-2" for="garageEnt">Nom du garage :</label>
+                <input type="text" name="garageEnt" placeholder="Garage" class="inputForm inputText  mb-2" required>
+            </div>
+            <div class="d-flex flex-column">
+                <label class="me-2" for="noteEnt">Note supplémentaire :</label>
+                <textarea name="noteEnt" id="noteEnt" cols="30" rows="4" class="inputForm mb-2"></textarea>
+            </div>`
+        : (name === "reparations") ?
+            `<div class="d-flex flex-wrap align-items-baseline">
+                <label class="me-2" for="typeRep">Type de réparation :</label>
+                <input type="text" name="typeRep" placeholder="Type ex:(vidange)" class="inputForm inputText mb-2" required>
+            </div>
+            <div class="d-flex flex-wrap align-items-baseline">
+                <label class="me-2" for="dateRep">Date de la réparation :</label>
+                <input type="text" name="dateRep" placeholder="Date Reparations" class="inputForm inputDate mb-2" required>
+            </div>
+            <div class="d-flex flex-wrap align-items-baseline">
+                <label class="me-2" for="montantRep">Montant de la réparation :</label>
+                <input type="text" name="montantRep" placeholder="Montant total" class="inputForm inputNumber mb-2" required>
+            </div>
+            <div class="d-flex flex-wrap align-items-baseline">
+                <label class="me-2" for="garageRep">Nom du garage :</label>
+                <input type="text" name="garageRep" placeholder="Garage" class="inputForm inputText mb-2" required>
+            </div>
+            <div class="d-flex flex-column">
+                <label class="me-2" for="noteRep">Note supplémentaire :</label>
+                <textarea name="noteRep" id="noteRep" cols="30" rows="4" class="inputForm mb-2"></textarea>
+            </div>`
+        : (name === "consommation") ?
+            `<div class="d-flex flex-wrap align-items-baseline">
+                <label class="me-2" for="montantCons">Montant :</label>
+                <input type="text" name="montantCons" placeholder="Montant total" class="inputForm inputNumber mb-2" required>
+            </div>
+            <div class="d-flex flex-wrap align-items-baseline">
+                <label class="me-2" for="litre">nombre de litres :</label>
+                <input type="text" name="litre" placeholder="Nombre de litre" class="inputForm inputNumber mb-2" required>
+            </div>` : (name === "agence") ?
                     `
-                    <div class="d-flex flex-wrap align-items-baseline">
-                        <label class="me-2" for="typeRep">Type de réparation :</label>
-                        <input type="text" name="typeRep" placeholder="Type ex:(vidange)" class="inputForm inputText mb-2" required>
-                    </div>
-                    <div class="d-flex flex-wrap align-items-baseline">
-                        <label class="me-2" for="dateRep">Date de la réparation :</label>
-                        <input type="text" name="dateRep" placeholder="Date Reparations" class="inputForm inputDate mb-2" required>
-                    </div>
-                    <div class="d-flex flex-wrap align-items-baseline">
-                        <label class="me-2" for="montantRep">Montant de la réparation :</label>
-                        <input type="text" name="montantRep" placeholder="Montant total" class="inputForm inputNumber mb-2" required>
-                    </div>
-                    <div class="d-flex flex-wrap align-items-baseline">
-                        <label class="me-2" for="garageRep">Nom du garage :</label>
-                        <input type="text" name="garageRep" placeholder="Garage" class="inputForm inputText mb-2" required>
-                    </div>
-                    <div class="d-flex flex-column">
-                        <label class="me-2" for="noteRep">Note supplémentaire :</label>
-                        <textarea name="noteRep" id="noteRep" cols="30" rows="4" class="inputForm mb-2"></textarea>
-                    </div>
-                    `
-                    : (name === "consommation") ?
-                        `
-                    <div class="d-flex flex-wrap align-items-baseline">
-                        <label class="me-2" for="montantCons">Montant :</label>
-                        <input type="text" name="montantCons" placeholder="Montant total" class="inputForm inputNumber mb-2" required>
-                    </div>
-                    <div class="d-flex flex-wrap align-items-baseline">
-                        <label class="me-2" for="litre">nombre de litres :</label>
-                        <input type="text" name="litre" placeholder="Nombre de litre" class="inputForm inputNumber mb-2" required>
-                    </div>` : "";
+            <div class="d-flex flex-wrap align-items-baseline">
+                <label class="me-2" for="ville">Ville de l'agence :</label>
+                <input type="text" name="ville" placeholder="Ville" class="inputForm mb-2" required>
+            </div>
+            <div class="d-flex flex-wrap align-items-baseline">
+                <label class="me-2" for="rue">rue de l'agence :</label>
+                <input type="text" name="rue" placeholder="Rue" class="inputForm mb-2" required>
+            </div>`
+        : (name === 'location') ?
+            `<div class="d-flex flex-wrap align-items-baseline">
+                <label for="nomAssu">Date de debut :</label>
+                <input type="text" name="locationD" id="locationD" class="inputForm assuDateD mb-2 me-2" required>
+            </div>
+            <div class="d-flex flex-wrap align-items-baseline">
+                <label for="debutAssu">Date de fin :</label>
+                <input type="text" name="locationF" id="locationF" class="inputForm assuDateF mb-2 me-2" required>
+            </div>
+            <div class="d-flex flex-wrap align-items-baseline">
+                <label for="debutAssu">Montant :</label>
+                <input type="text" name="montantLoca" id="montantLoca" class="inputForm inputNumber mb-2 me-2" required>
+            </div>
+            <div class="d-flex flex-wrap align-items-baseline">
+                <label class="me-2" for="voitureId">Immatriculation :</label>
+                <select name="id_voiture" id="voitureId" class="mb-2 me-2">
+                      <option value="null">Vide</option>
+                </select>
+            </div>` : "";
 
-    if(window.location.pathname.match('voiture') && type === "add" || window.location.pathname.match('home') && type === "add" || type !== 'add'){
+    if(window.location.pathname.match('voiture') && type === "add" || window.location.pathname.match('home') && type === "add" || window.location.pathname.match('agence') && type === "add"  || type !== 'add'){
         myModal1.show();
         $('#AddModal').find('.modal-body').html(htmlModal)
         $('#AddModal').ready(function () {
@@ -191,7 +323,20 @@ function modal(name,type,url,dataid) {
         })
     }
     $('#AddModal').ready(function () {
-        $('.inputDate').mask('00/00/0000', {placeholder: "__/__/____"});
+        flatpickr('.inputDate',{
+            minDate: "today",
+            dateFormat : 'd/m/Y'
+        });
+        flatpickr('#locationD',{
+            mode: "range",
+            minDate: "today",
+            dateFormat: "d/m/Y",
+            onClose: function(selectedDates, dateStr){
+                let allDate = dateStr.replace(' to ', ',').split(',');
+                $('#locationD').val(allDate[0])
+                $('#locationF').val(allDate[1])
+            }
+        });
         let bigregex = "A";
         for (let i = 0; i < 99; i++) {
             bigregex = bigregex + "A";
@@ -205,7 +350,7 @@ function modal(name,type,url,dataid) {
 
     })
     if (type=== "edit"){
-        $('#AddModal .modal-header h3').html((name === 'entretiens' || name === 'assurance') ? "Modifier l' " + name : "Modifier la " + name)
+        $('#AddModal .modal-header h3').html((name === 'entretiens' || name === 'assurance' || name === 'agence') ? "Modifier l' " + name : "Modifier la " + name)
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -220,6 +365,10 @@ function modal(name,type,url,dataid) {
             url:url,
             success:function (dataRow) {
                 dataRow.forEach(datas =>{
+                    if(url === '/getAgence'){
+                        $('input[name=ville]').val(datas.ville);
+                        $('input[name=rue]').val(datas.rue);
+                    }
                     if(url === '/getConsommation'){
                         $('input[name=montantCons]').val(datas.montantCons);
                         $('input[name=litre]').val(datas.litre);
@@ -251,11 +400,23 @@ function modal(name,type,url,dataid) {
                         $('input[name=circulation]').val(reverseDate(datas.circulation));
                         $('input[name=carburant]').val(datas.carburant);
                         $('input[name=immatriculation]').val(datas.immatriculation);
-                        if(datas.statut === 'disponible'){
+                        $('input[name=typeVoiture]').val(datas.type);
+                        $('input[name=nbPorte]').val(datas.nbPorte);
+                        $('input[name=nbPlace]').val(datas.nbPlace);
+                        $('input[name=prix]').val(datas.prix);
+                        if(datas.statut === 'Disponible'){
                             $('select[name=status]').children().first().prop('selected',true);
                         }else{
                             $('select[name=status]').children().last().prop('selected',true);
                         }
+                        loadDatas('agence',datas.id_agence);
+                    }
+                    if(url === '/getLocation'){
+                        $('input[name=locationD]').val(reverseDate(datas.dateDebut))
+                        $('input[name=locationF]').val(reverseDate(datas.dateFin))
+                        $('input[name=montantLoca]').val(datas.montant)
+                        loadDatas('voiture',datas.id_voiture);
+                        $("select[name=id_voiture] option[value='"+datas.id_voiture+"']").prop('selected',true);
                     }
                 })
                 $('.btnModal').off().on('click',function () {
@@ -270,6 +431,15 @@ function modal(name,type,url,dataid) {
         })
     }
     if (type !== "edit"){
+        $('#AddModal').ready(function () {
+            if(window.location.pathname.match('home') || window.location.pathname.match('voiture')){
+                loadDatas('agence');
+            }
+            if(window.location.pathname.match('location') || window.location.pathname.match('voiture')){
+                loadDatas('voiture');
+                loadDatas('agence');
+            }
+        })
         $('#AddModal .modal-header h3').html((name === 'entretiens') ? "Ajouter un " + name : "Ajouter une " + name)
         $('.btnModal').off().on('click', function () {
             $(this).prop('disabled',true);
@@ -301,7 +471,7 @@ function supModal(row){
     myModal.show();
     $('#btnDelModal').on('click',function () {
 
-        let url  = (db === 'voiture') ? '/delVoiture': (db === 'consommation') ? '/delConsommation' : (db === 'entretiens') ? '/delEntretiens' :(db === 'reparations') ? '/delReparations' :(db === 'assurance') ? '/delAssurance' :'';
+        let url  = (db === 'voiture') ? '/delVoiture': (db === 'consommation') ? '/delConsommation' : (db === 'entretiens') ? '/delEntretiens' :(db === 'reparations') ? '/delReparations' :(db === 'assurance') ? '/delAssurance' : (db === 'agence') ? '/delAgence' : (db === 'location') ? 'delLocation' :'';
         if(url !== '/delVoiture'){
             $("tr[data-voiture='"+data+"']").remove()
         }else{
@@ -340,17 +510,30 @@ function supModal(row){
     })
 
 }
-
+//pour inverser une date
+function reverseDate(d,t){
+    d = d.split('-');
+    let date_time = d[2].split(' ');
+    return (t !== 'time')? d[2]+'/'+d[1]+'/'+d[0] : date_time[0]+'/'+d[1]+'/'+d[0]+' '+date_time[1];
+}
 function verifDatas(datas,page,type){
     function capitalizeFirstLetter(string) {
         return string.charAt(0).toUpperCase() + string.slice(1);
     }
-     //pour inverser une date
-    function reverseDate(d){
-        d = d.val().split('/');
-        let date =d[2]+'-'+d[1]+'-'+d[0];
-        return (new Date(date) instanceof Date && !isNaN(new Date(date)) && d[2] >= new Date().getFullYear() - 122) ? date : false;
+    function reverseDate(d,t){
+        if(d.val().match('/') || d.match('/') ){
+            d = d.val().split('/');
+            let date_time = d[2].split(' ');
+            let date =(t !== 'time')? d[2]+'-'+d[1]+'-'+d[0] : date_time[0]+'-'+d[1]+'-'+d[0]+' '+date_time[1];
+            let verifDate  = new Date().getFullYear() - 122;
+            return ( (t !== 'time') ? (new Date(date) instanceof Date && !isNaN(new Date(date)) && d[2] >= verifDate) : (date.match(/^([1-2]\d{3}-([0]?[1-9]|1[0-2])-([0-2]?[0-9]|3[0-1])) (20|21|22|23|[0-1]?\d{1}):([0-5]?\d{1}):([0-5]?\d{1})$/g) && date_time[0] >= verifDate) ) ? date : false;
+        }else{
+            d = d.split('-');
+            let date_time = d[2].split(' ');
+            return (t !== 'time')? d[2]+'-'+d[1]+'-'+d[0] : date_time[0]+'-'+d[1]+'-'+d[0]+' '+date_time[1];
+        }
     }
+
     //function pour ajouter message erreur
     function draw_error(s,i,t,o){
         //s = selector
@@ -402,7 +585,12 @@ function verifDatas(datas,page,type){
         let immatriculation = $('.modal.fade.show input[name=immatriculation]');
         let circulation = $('.modal.fade.show input[name=circulation]');
         let imageFile = $('.modal.fade.show input[name=file]');
-        if(marque.val() !=="" && model.val() !== "" && puissance.val() !== "" && carburant.val()!=="" && immatriculation.val()!=="" && circulation.val()!=="" && reverseDate(circulation) !== false){
+        let typeVoiture = $('.modal.fade.show input[name=typeVoiture]');
+        let nbPorte = $('.modal.fade.show input[name=nbPorte]');
+        let nbPlace = $('.modal.fade.show input[name=nbPlace]');
+        let prix = $('.modal.fade.show input[name=prix]');
+
+        if(marque.val() !=="" && model.val() !== "" && puissance.val() !== "" && carburant.val()!=="" && immatriculation.val()!=="" && circulation.val()!=="" && reverseDate(circulation) !== false && typeVoiture.val() !== "" && nbPorte.val() !== "" && nbPlace.val() !== "" && prix.val() !== ""){
             if (type === 'add' && imageFile[0].files.length <= 0){
                 if($('#error_image').length <= 0){
                     imageFile.addClass('active');
@@ -413,6 +601,7 @@ function verifDatas(datas,page,type){
             }else{
 
                 tab['id'] = (type === 'add') ? '' : datas;
+                tab['id_agence'] =$('#agenceId').val();
                 tab['marque'] = capitalizeFirstLetter(marque.val());
                 tab['model'] = model.val();
                 tab['puissance'] = puissance.val();
@@ -420,6 +609,10 @@ function verifDatas(datas,page,type){
                 tab['immatriculation'] = immatriculation.val().toUpperCase();
                 tab['circulation'] = reverseDate(circulation);
                 tab['status'] = capitalizeFirstLetter($('.modal.fade.show select[name=status]').val());
+                tab['typeVoiture'] = typeVoiture.val();
+                tab['nbPorte'] = nbPorte.val();
+                tab['nbPlace'] = nbPlace.val();
+                tab['prix']  = prix.val().replace(',','.');
             }
 
         }else{
@@ -437,6 +630,10 @@ function verifDatas(datas,page,type){
             draw_error(puissance,'error_puissance')
             draw_error(carburant,'error_carburant')
             draw_error(immatriculation,'error_immatricualtion')
+            draw_error(typeVoiture, 'error_type_voiture')
+            draw_error(nbPorte, 'error_nbPorte')
+            draw_error(nbPlace, 'error_nbPlace')
+            draw_error(prix,"error_prix",'nb')
         }
     }
     if (page === "assurance"){
@@ -527,15 +724,40 @@ function verifDatas(datas,page,type){
             draw_error(litre,'error_litre')
         }
     }
+    if (page === "agence"){
+        let ville = $('.modal.fade.show input[name=ville]');
+        let rue = $('.modal.fade.show input[name=rue]');
+        if(ville.val() !=="" && rue.val() !== ""){
+            tab['ville'] = ville.val();
+            tab['rue'] = rue.val();
+            tab['id'] = (type !== 'add') ? datas : '';
+
+        }else{
+            draw_error(rue,'error_rue')
+            draw_error(ville,'error_ville')
+        }
+    }
+    if(page === 'location'){
+        let locationF = $('.modal.fade.show input[name=locationF]');
+        let locationD = $('.modal.fade.show input[name=locationD]');
+        let montant = $('.modal.fade.show input[name=montantLoca]');
+        if(locationD.val() !== "" && reverseDate(locationD) !== false && locationF.val() !== "" && reverseDate(locationF) !== false && reverseDate(locationD) < reverseDate(locationF) && montant.val() !== '' && typeof montant.val() === 'number'){
+            tab['dateDebut'] = reverseDate(locationD);
+            tab['dateFin'] = reverseDate(locationF);
+            tab['montant'] = montant.val()
+            tab['id_voiture'] = $('.modal.fade.show select[name=id_voiture]').val();
+            tab['id'] = (type !== 'add') ? datas : ' ';
+        }else{
+            draw_error(locationD,'error_locationD','dateDebut',locationF);
+            draw_error(locationF,'error_locationF','dateFin',locationD);
+            draw_error(montant,'error_montantLoca','nb');
+        }
+    }
     return tab;
 }
 var saveToastEl = document.getElementById('saveToast');
 var saveToast = bootstrap.Toast.getOrCreateInstance(saveToastEl);
-function reverseDate(d){
-    //d = date
-    d = d.split('-');
-    return d[2]+'/'+d[1]+'/'+d[0];
-}
+
 function countData(s,t){
     if(t==='a'){
         $(s).html(parseInt($(s).html()) + 1)
@@ -549,8 +771,81 @@ function updateDatas(datas,page,type){
         (type === 'add' && page === 'entretiens') ? '/addEntretiens' : (type !== 'add' && page === 'entretiens') ? '/updateEntretiens' :
         (type === 'add' && page === 'assurance') ? '/addAssurance' : (type !== 'add' && page === 'assurance') ? '/updateAssurance' :
         (type === 'add' && page === 'reparations') ? '/addReparations' : (type !== 'add' && page === 'reparations') ? '/updateReparations' :
-        (type === 'add' && page === 'voiture') ? '/addVoiture' : (type !== 'add' && page ==='voiture') ? '/updateVoiture' : '';
+        (type === 'add' && page === 'voiture') ? '/addVoiture' : (type !== 'add' && page ==='voiture') ? '/updateVoiture' :
+        (type === 'add' && page === 'agence') ? '/addAgence' : (type !== 'add' && page === 'agence') ? '/updateAgence' :
+        (type === 'add' && page === 'location') ? '/addLocation' : (type !== 'add' && page === 'location') ? '/updateLocation' : '';
     if (dataVerif['id'] !== undefined || dataVerif['id_voiture'] !== undefined){
+        if (page === 'agence'){
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $.ajax({
+                type:'POST',
+                data:dataVerif,
+                url: urlAjax,
+                dataType:'json',
+                success:function (rowData) {
+                    myModal1.hide();
+                    rowData.forEach(datas=>{
+                        let table = $('#DataTable_agence').DataTable();
+                        if(type !== 'add'){
+                            table.row($("tr[data-voiture='"+datas.id+"']"))
+                                .remove()
+                                .draw();
+                        }
+                        let tab = [datas.ville];
+                        tab.push(datas.rue+`<div class="divBtnTab">
+                            <button class="btn btn-info editButton text-white"><i class="fa-solid fa-pencil "></i></button>
+                            <button class="btn btn-danger delButton"><i class="fa-solid fa-trash-can"></i></button>
+                        </div>`)
+                        let row = table.row.add(tab).node();
+                        $(row).attr({"data-voiture":datas.id,"data-db":page})
+                        $(row).children().last().addClass('tdBtn');
+                        table.draw();
+                        eventModif();
+                    })
+                    saveToast.show();
+                }
+            })
+        }
+        if (page === 'location'){
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $.ajax({
+                type:'POST',
+                data:dataVerif,
+                url: urlAjax,
+                dataType:'json',
+                success:function (rowData) {
+                    myModal1.hide();
+                    rowData.forEach(datas=>{
+                        let table = $('#DataTable_location').DataTable();
+                        if(type !== 'add'){
+                            table.row($("tr[data-voiture='"+datas.id+"']"))
+                                .remove()
+                                .draw();
+                        }
+                        let tab = [reverseDate(datas.dateDebut),reverseDate(datas.dateFin),datas.immatriculation];
+                        tab.push(datas.montant+`<div class="divBtnTab">
+                            <button class="btn btn-info editButton text-white"><i class="fa-solid fa-pencil "></i></button>
+                            <button class="btn btn-danger delButton"><i class="fa-solid fa-trash-can"></i></button>
+                        </div>`)
+                        let row = table.row.add(tab).node();
+                        $(row).attr({"data-voiture":datas.id,"data-db":page})
+                        $(row).children().last().addClass('tdBtn');
+                        table.draw();
+                        eventModif();
+                    })
+                    saveToast.show();
+                }
+            })
+        }
+
         if (page === 'consommation'){
             $.ajaxSetup({
                 headers: {
@@ -768,14 +1063,15 @@ function updateDatas(datas,page,type){
                 success:function (rowData) {
                     if(type !== 'add'){
                         rowData.forEach(datas =>{
-                            $("div[data-voiture="+datas.id+"]").parent().children().first().children().attr('src','http://127.0.0.1:8000/storage/'+datas.image);
-                            $("div[data-voiture="+datas.id+"] h2 span").eq(0).html(datas.immatriculation);
-                            $("div[data-voiture="+datas.id+"]").children().last().children().eq(1).children().eq(0).html(datas.marque);
-                            $("div[data-voiture="+datas.id+"]").children().last().children().eq(1).children().eq(1).html(datas.model);
-                            $("div[data-voiture="+datas.id+"]").children().last().children().eq(1).children().eq(2).html(reverseDate(datas.circulation));
-                            $("div[data-voiture="+datas.id+"]").children().last().children().eq(1).children().eq(3).html(datas.statut);
-                            $("div[data-voiture="+datas.id+"]").children().last().children().eq(1).children().eq(4).html(datas.puissance);
-                            $("div[data-voiture="+datas.id+"]").children().last().children().eq(1).children().eq(5).html(datas.carburant);
+                            $('#imageVoiture').attr('src','http://127.0.0.1:8000/storage/'+datas.image);
+                            $('#immatriculation').html(datas.immatriculation);
+                            $('#marque').html(datas.marque);
+                            $('#model').html(datas.model);
+                            $('#circulation').html(reverseDate(datas.circulation));
+                            $('#statut').html(datas.statut);
+                            $('#puissance').html(datas.puissance);
+                            $('#carburant').html(datas.carburant);
+                            $('#agence').html(datas.ville+' '+datas.rue)
                         })
                     }
                     if(type === 'add'){

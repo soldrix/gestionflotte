@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('voiture', function (Blueprint $table) {
-            $table->id()->autoIncrement();
+            $table->id()->autoIncrement()->nullable();
             $table->string('marque');
             $table->string('model');
             $table->string('carburant');
@@ -23,6 +23,11 @@ return new class extends Migration
             $table->string('statut');
             $table->integer('puissance');
             $table->text('image');
+            $table->string('type');
+            $table->integer('nbPorte');
+            $table->integer('nbPlace');
+            $table->float('prix');
+            $table->integer('id_agence')->nullable();
         });
     }
 

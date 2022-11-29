@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="container-fluid">
+    <div class="container-fluid py-4">
         <!-- Button trigger modal -->
         <button type="button" class="btn btn-primary float-end btnAddModal">
             Ajouter Reparation

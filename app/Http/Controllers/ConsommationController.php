@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class ConsommationController extends Controller
@@ -34,9 +35,12 @@ class ConsommationController extends Controller
         return DB::table('consommation')->select('consommation.*','immatriculation')->join('voiture' , 'consommation.id_voiture', '=','voiture.id')->where('consommation.id',$id)->get();
     }
     public function charge(){
-        $voiture = DB::select('select * from voiture');
-        $consommation = DB::select('SELECT consommation.*,voiture.immatriculation FROM `consommation` INNER JOIN voiture ON voiture.id = consommation.id_voiture ');
-        return  view('/consommation',['voiture'=>$voiture,'consommation'=>$consommation]);
+        $user_type = Auth::user()->type;
+        if ($user_type === 'admin'){
+            $voiture = DB::select('select * from voiture');
+            $consommation = DB::select('SELECT consommation.*,voiture.immatriculation FROM `consommation` INNER JOIN voiture ON voiture.id = consommation.id_voiture ');
+        }
+        return ($user_type !== 'admin') ? redirect('/home') : view('/consommation',['voiture'=>$voiture,'consommation'=>$consommation]);
     }
     public function delete(Request $request) : void{
         $row = $request->id;
