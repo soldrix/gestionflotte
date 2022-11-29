@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
+class Assurance extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('entretiens', function (Blueprint $table) {
+        Schema::create('assurance', function (Blueprint $table) {
             $table->id();
+            $table->string('nomAssu');
             $table->foreignId('id_voiture')->nullable()->references('id')->on('voiture')->onDelete('cascade')->onUpdate('cascade');
-            $table->string('typeEnt',150);
-            $table->date('dateEnt');
-            $table->float('montantEnt');
-            $table->string('garageEnt',150);
-            $table->text('noteEnt')->nullable();
-
+            $table->date('debutAssu');
+            $table->float('frais');
+            $table->date('finAssu');
         });
     }
 
@@ -32,7 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('entretiens');
+        Schema::dropIfExists('assurance');
     }
-};
-
+}

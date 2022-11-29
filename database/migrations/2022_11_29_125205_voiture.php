@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
+class Voiture extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('voiture', function (Blueprint $table) {
-            $table->id()->autoIncrement()->nullable();
+            $table->id()->autoIncrement();
             $table->string('marque');
             $table->string('model');
             $table->string('carburant');
@@ -40,4 +40,4 @@ return new class extends Migration
     {
         Schema::dropIfExists('voiture');
     }
-};
+}

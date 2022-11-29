@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
+class VoitureLocation extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('consommation', function (Blueprint $table) {
+        Schema::create('location', function (Blueprint $table) {
             $table->id();
+            $table->date('dateDebut');
+            $table->date('dateFin');
+            $table->float('montant');
             $table->foreignId('id_voiture')->nullable()->references('id')->on('voiture')->onDelete('cascade')->onUpdate('cascade');
-            $table->float('montantCons');
-            $table->float('litre');
         });
     }
 
@@ -28,8 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('consommation');
+        Schema::dropIfExists('location');
     }
-};
-
-
+}
