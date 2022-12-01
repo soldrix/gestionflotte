@@ -19,7 +19,8 @@ class locationController extends Controller
             "id_voiture" => ($validation['id_voiture'] !== 'null') ? $validation['id_voiture']: null,
             "dateDebut" => $validation['dateDebut'],
             "dateFin" => $validation['dateFin'],
-            "montant" => $validation['montant']
+            "montant" => $validation['montant'],
+            'id_users' => Auth::id()
         ];
         return $tab;
     }
@@ -54,11 +55,11 @@ class locationController extends Controller
             $location = DB::table('location')->select('location.*','voiture.marque','voiture.model')
             ->leftJoin('voiture','location.id_voiture', '=' ,'voiture.id')
             ->where([
-                'id_user' => Auth::id()
+                'id_users' => Auth::id()
             ])
             ->get();
         }
-        return ($user_type !=='admin') ? view('/location') : view('/location',['location'=>$location,'voiture'=>$voiture]);
+        return ($user_type !=='admin') ? view('/location',['location'=>$location]) : view('/location',['location'=>$location,'voiture'=>$voiture]);
     }
     public function delete(Request $request) : void{
         $row = $request->id;

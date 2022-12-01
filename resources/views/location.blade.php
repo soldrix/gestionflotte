@@ -63,7 +63,6 @@
             </div>
         </div>
         @else
-        {{\Illuminate\Support\Facades\Auth::id()}}
          <div class="container Containerlocation py-4">
             <h2>mes locations</h2>
              <div class="col-auto pt-5 location">
@@ -85,19 +84,21 @@
                      @foreach($location as $datas)
                          <div class="w-100 d-flex bg-dark bg-opacity-50 text-white">
                              <div class="col-3 p-2 cellLocation d-flex">
-                                 <p class="m-auto">text</p>
+                                 <p class="m-auto">{{date('d/m/Y', strtotime($datas->dateDebut))}}</p>
                              </div>
                              <div class="col-3 p-2 cellLocation d-flex">
-                                 <p class="m-auto">text</p>
+                                 <p class="m-auto">{{date('d/m/Y', strtotime($datas->dateFin))}}</p>
                              </div>
                              <div class="col-3 p-2 cellLocation d-flex">
-                                 <p class="m-auto">text</p>
+                                 <p class="m-auto">{{$datas->montant.'€'}}</p>
                              </div>
                              <div class="col-3 p-2 cellLocation d-flex">
-                                 <p class="m-auto">text</p>
-                                 <button class="btn btn-outline-danger">
-                                     Annuler
-                                 </button>
+                                 <a class="m-auto text-decoration-none text-white" href="/voiture/{{$datas->id_voiture}}">{{$datas->marque.' '.$datas->model}}</a>
+                                 @if(date_format(date_create($datas->dateDebut), 'Y-m-d') > date('Y-m-d'))
+                                     <button class="btn btn-outline-danger annulLocation" data-location="{{$datas->id}}">
+                                         Annuler
+                                     </button>
+                                 @endif
                              </div>
                          </div>
                      @endforeach

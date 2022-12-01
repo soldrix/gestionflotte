@@ -8,6 +8,36 @@ let prixPJ;//prix par jours
 
 
 $(document).ready(function () {
+    var myModal = new bootstrap.Modal(document.getElementById('annulModal'));
+    var annulToastEl = document.getElementById('toastAnnul');
+    var annulToast = bootstrap.Toast.getOrCreateInstance(annulToastEl);
+    function annulModal(row){
+        let data = $(row).attr('data-location');
+        myModal.show();
+        $('#btnAnnulModal').on('click',function () {
+            $(row).parent().parent().remove();
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $.ajax({
+                type:"POST",
+                data:{id:data},
+                url:'/delLocation',
+                success:function () {
+                    myModal.hide();
+                    annulToast.show();
+                }
+            })
+        })
+
+    }
+    if(window.location.pathname.match('location')){
+        $('.annulLocation').off().on('click',function () {
+            annulModal(this)
+        })
+    }
     $.ajaxSetup({
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
