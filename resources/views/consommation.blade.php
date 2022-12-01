@@ -50,7 +50,7 @@
                     </div>
                     <div class="d-flex flex-wrap align-items-baseline">
                         <label for="litre">Nombre de litre :</label>
-                        <input type="text" name="litre" placeholder="Nombre de litre" class="inputForm inputDate mb-2 inputNumber" required>
+                        <input type="text" name="litre" placeholder="Nombre de litre" class="inputForm  mb-2 inputNumber" required>
                     </div>
                     <div class="d-flex flex-wrap align-items-baseline">
                         <label for="id_voiture">Immatriculation du véhicule :</label>

@@ -301,7 +301,7 @@ function modal(name,type,url,dataid) {
             </div>
             <div class="d-flex flex-wrap align-items-baseline">
                 <label for="debutAssu">Date de fin :</label>
-                <input type="text" name="locationF" id="locationF" class="inputForm assuDateF mb-2 me-2" required>
+                <input type="text" name="locationF" id="locationF" class="inputForm assuDateF mb-2 me-2" required disabled>
             </div>
             <div class="d-flex flex-wrap align-items-baseline">
                 <label for="debutAssu">Montant :</label>
@@ -677,7 +677,7 @@ function verifDatas(datas,page,type){
             tab['dateEnt'] = reverseDate(dateEnt);
             tab['montantEnt'] = montantEnt.val().replaceAll(',','.');
             tab['garageEnt'] = capitalizeFirstLetter(garageEnt.val());
-            tab['noteEnt'] = (noteEnt.val() !=="") ? capitalizeFirstLetter(noteEnt.val()) : 'Aucune note';
+            tab['noteEnt'] = (noteEnt.val() !== "" && noteEnt.val() !== undefined) ? capitalizeFirstLetter(noteEnt.val()) : 'Aucune note';
         }else{
             draw_error(typeEnt,'error_typeEnt')
             draw_error(dateEnt,'error_dateEnt','date')
@@ -701,7 +701,7 @@ function verifDatas(datas,page,type){
             tab['dateRep'] = reverseDate(dateRep);
             tab['montantRep'] = montantRep.val().replace(',','.');
             tab['garageRep'] = capitalizeFirstLetter(garageRep.val());
-            tab['noteRep'] = (noteRep.val() !=="") ? capitalizeFirstLetter(noteRep.val()) : 'Aucune note';
+            tab['noteRep'] = (noteRep.val() !=="" && noteRep.val() !== undefined) ? capitalizeFirstLetter(noteRep.val()) : 'Aucune note';
         }else{
             draw_error(typeRep,'error_typeRep');
             draw_error(dateRep,'error_dateRep','date');
