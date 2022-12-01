@@ -153,10 +153,19 @@
                     La location a été réalié avec succès.
                 </div>
             </div>
+            <div id="toastAnnul" class="toast" role="alert">
+                <div class="toast-header">
+                    <strong class="me-auto">Annulation de location</strong>
+                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+                <div class="toast-body">
+                    La location a été annuler.
+                </div>
+            </div>
         </div>
 
 
-    <div class="modal" tabindex="-1" id="delModal" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal" tabindex="-1" id="delModal" data-bs-backdrop="static">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
@@ -166,6 +175,20 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
                     <button type="button" class="btn btn-primary" id="btnDelModal">Supprimer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal" tabindex="-1" id="annulModal" data-bs-backdrop="static">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Êtes-vous sûr de vouloir Annuler ?</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                    <button type="button" class="btn btn-primary" id="btnAnnulModal">Valider</button>
                 </div>
             </div>
         </div>
