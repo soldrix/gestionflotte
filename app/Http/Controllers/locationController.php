@@ -92,7 +92,7 @@ class locationController extends Controller
             'id'=> $request->id_agence
         ])->get();
         $type = DB::select('SELECT distinct type from voiture');
-        $voiture =(count($voiture) >=1) ?  $voiture : json_encode(null);
+        $voiture =(!empty($voiture)) ?  $voiture : json_encode(null);
         return  view('/locationVoiture',['voiture' => $voiture,'type' => $type,'agence' => $agence,'nbVoiture' => count($voiture)]);
     }
 }

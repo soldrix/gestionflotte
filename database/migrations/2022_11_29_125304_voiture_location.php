@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateLocation extends Migration
+class VoitureLocation extends Migration
 {
     /**
      * Run the migrations.
@@ -18,7 +18,8 @@ class CreateLocation extends Migration
             $table->date('dateDebut');
             $table->date('dateFin');
             $table->float('montant');
-            $table->foreignId('id_voiture')->nullable()->references('id')->on('voiture')->onDelete('null')->onUpdate('null');
+            $table->foreignId('id_voiture')->nullable()->references('id')->on('voiture')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreignId('id_users')->nullable()->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 

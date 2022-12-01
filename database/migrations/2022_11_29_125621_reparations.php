@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
+class Reparations extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,14 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('entretiens', function (Blueprint $table) {
+        Schema::create('reparations', function (Blueprint $table) {
             $table->id();
             $table->foreignId('id_voiture')->nullable()->references('id')->on('voiture')->onDelete('cascade')->onUpdate('cascade');
-            $table->string('typeEnt',150);
-            $table->date('dateEnt');
-            $table->float('montantEnt');
-            $table->string('garageEnt',150);
-            $table->text('noteEnt')->nullable();
-
+            $table->string('typeRep',150);
+            $table->date('dateRep');
+            $table->float('montantRep');
+            $table->string('garageRep',150);
+            $table->text('noteRep')->nullable();
         });
     }
 
@@ -32,7 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('entretiens');
+        Schema::dropIfExists('reparation');
     }
-};
-
+}
