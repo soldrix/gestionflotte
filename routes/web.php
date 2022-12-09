@@ -67,3 +67,10 @@ Route::get('/voiture/{id}', [App\Http\Controllers\VoitureController::class, 'cha
 Route::post('/getLocationDate',[App\Http\Controllers\locationController::class, 'getLocationDate']);
 Route::post('/getAgenceSearch', [App\Http\Controllers\AgenceController::class, 'getAgenceSearch']);
 Route::get('/locationVoiture/{id_agence}',[App\Http\Controllers\locationController::class,'chargeVoiture']);
+
+Route::get('/profil',[App\Http\Controllers\UserController::class, 'charge']);
+
+Route::post('/updateEmail',[App\Http\Controllers\UserController::class, 'updateEmail'])->name('updateEmail');
+Route::post('/updateName',[App\Http\Controllers\UserController::class, 'updateName'])->name('updateName');
+Route::post('/updatePassword',[App\Http\Controllers\UserController::class, 'updatePassword'])->name('updatePassword');
+Route::post('/deleteProfile',[App\Http\Controllers\UserController::class, 'delete'])->name('delprofil');

@@ -4,6 +4,11 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
+            @if(session()->get('message'))
+                <div class="alert alert-success" role="alert">
+                    <strong>Succès: </strong>{{session()->get('message')}}
+                </div>
+            @endif
             <div class="card">
                 <div class="card-header">{{ __('Login') }}</div>
 
@@ -70,4 +75,5 @@
         </div>
     </div>
 </div>
+
 @endsection
