@@ -32,7 +32,186 @@ function initDataTable(){
 
 }
 $(document).ready(function () {
+    //profil
+    var profilEmail = new bootstrap.Modal(document.getElementById('modifEmailmodal'));
+    var profilName = new bootstrap.Modal(document.getElementById('modifNamemodal'));
+    var profilPassword = new bootstrap.Modal(document.getElementById('modifPasswordmodal'));
+    var emailModal = document.getElementById('modifEmailmodal');
+    var nameModal = document.getElementById('modifNamemodal');
+    var passwordModal = document.getElementById('modifPasswordmodal');
+    emailModal.addEventListener('shown.bs.modal', function () {
+        $('.modal.fade.show .passwordProfil,.emailProfil').on('keyup',function (e) {
+            if (e.key === 'Enter' || e.keyCode === 13) {
+                $('#btnProfilEmail').click();
+            }
+        });
+    });
+    nameModal.addEventListener('shown.bs.modal', function () {
+        $('.modal.fade.show .passwordProfil,#nameProfil').on('keyup',function (e) {
+            if (e.key === 'Enter' || e.keyCode === 13) {
+                $('#btnProfilName').click();
+            }
+        });
+    });
+    passwordModal.addEventListener('shown.bs.modal', function () {
+        $('.modal.fade.show .passwordProfil,#newPassword').on('keyup',function (e) {
+            if (e.key === 'Enter' || e.keyCode === 13) {
+                $('#btnProfilPassword').click();
+            }
+        });
+    });
 
+    $('#btnProfilEmail').on('click',function () {
+        var emailS = $('.modal.fade.show .emailProfil');
+        var passwordS = $('.modal.fade.show .passwordProfil');
+        $('.emailProfil').removeClass('is-invalid');
+        $('.passwordProfil').removeClass('is-invalid');
+        $('.errormsg').html('');
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        $.ajax({
+            url:'/updateEmail',
+            type:'post',
+            data:{
+                'email' : emailS.val(),
+                'password' : passwordS.val()
+            },
+            success:function (datas) {
+                passwordS.val('');
+                $('#textEmail').html(emailS.val())
+                profilEmail.hide();
+                $('#profilContent').html(`
+                    <div class="alert alert-success" role="alert">
+                        <strong>Succès: </strong> ${datas}
+                    </div>
+                `)
+            },
+            error: function(xhr) {
+                var err = eval("(" + xhr.responseText + ")");
+                if(err.errors.email !== undefined){
+                    emailS.addClass('is-invalid')
+                    $('#errorEmail').html(`
+                     <span class="invalid-feedback d-flex" role="alert">
+                        <strong>${err.errors.email[0]}</strong>
+                     </span>
+                   `)
+                }
+                if(err.errors.password !== undefined){
+                    passwordS.addClass('is-invalid')
+                    $('.modal.fade.show .errorPassword').html(`
+                     <span class="invalid-feedback d-flex" role="alert">
+                        <strong>${err.errors.password[0]}</strong>
+                     </span>
+                   `)
+                }
+
+            }
+        })
+    })
+    $('#btnProfilName').on('click',function () {
+        var emailS = $('.modal.fade.show .emailProfil');
+        var passwordS = $('.modal.fade.show .passwordProfil');
+        $('#nameProfil').removeClass('is-invalid');
+        $('.passwordProfil').removeClass('is-invalid');
+        $('.errormsg').html('');
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        $.ajax({
+            url:'/updateName',
+            type:'post',
+            data:{
+                'name' : $('#nameProfil').val(),
+                'password' : passwordS.val()
+            },
+            success:function (datas) {
+                passwordS.val('');
+                $('#textName').html(passwordS.val());
+                profilName.hide();
+                $('#profilContent').html(`
+                    <div class="alert alert-success" role="alert">
+                        <strong>Succès: </strong> ${datas}
+                    </div>
+                `)
+            },
+            error: function(xhr) {
+                var err = eval("(" + xhr.responseText + ")");
+                if(err.errors.email !== undefined){
+                    $('#nameProfil').addClass('is-invalid')
+                    $('#errorName').html(`
+                     <span class="invalid-feedback d-flex" role="alert">
+                        <strong>${err.errors.name[0]}</strong>
+                     </span>
+                   `)
+                }
+                if(err.errors.password !== undefined){
+                    passwordS.addClass('is-invalid')
+                    $('.modal.fade.show .errorPassword').html(`
+                     <span class="invalid-feedback d-flex" role="alert">
+                        <strong>${err.errors.password[0]}</strong>
+                     </span>
+                   `)
+                }
+
+            }
+        })
+    })
+    $('#btnProfilPassword').on('click',function () {
+        var passwordS = $('.modal.fade.show .passwordProfil');
+        var newPasswordS = $('#newPassword');
+        $('.passwordProfil').removeClass('is-invalid');
+        newPasswordS.removeClass('is-invalid');
+        $('.errormsg').html('');
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        $.ajax({
+            url:'/updatePassword',
+            type:'post',
+            data:{
+                'password' : passwordS.val(),
+                'newPassword' : newPasswordS.val()
+            },
+            success:function (datas) {
+                passwordS.val('');
+                newPasswordS.val('');
+                profilPassword.hide();
+                $('#profilContent').html(`
+                    <div class="alert alert-success" role="alert">
+                        <strong>Succès: </strong> ${datas}
+                    </div>
+                `)
+            },
+            error: function(xhr) {
+                var err = eval("(" + xhr.responseText + ")");
+                if(err.errors.password !== undefined){
+                    passwordS.addClass('is-invalid')
+                    $('.modal.fade.show .errorPassword').html(`
+                     <span class="invalid-feedback d-flex" role="alert">
+                        <strong>${err.errors.password[0]}</strong>
+                     </span>
+                   `)
+                }
+                if(err.errors.newPassword !== undefined){
+                    newPasswordS.addClass('is-invalid')
+                    $('.modal.fade.show .errorNewPassword').html(`
+                     <span class="invalid-feedback d-flex" role="alert">
+                        <strong>${err.errors.newPassword[0]}</strong>
+                     </span>
+                   `)
+                }
+
+            }
+        })
+    })
+    // / profil
     initDataTable()
     if($('#dateD').length > 0){
         let currentDate = new Date();
