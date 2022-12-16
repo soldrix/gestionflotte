@@ -66,7 +66,6 @@ class HomeController extends Controller
             'prix' => $validation['prix'],
             'id_agence' => ($validation['id_agence'] !== "null") ?  $validation['id_agence'] : null
         ];
-        error_log(json_encode($validation['id_agence']));
         return $tab;
     }
     public function insertData(Request $request){
