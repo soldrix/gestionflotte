@@ -80,16 +80,19 @@
                             @endif
                         @else
                             <li class="nav-item dropdown">
+                                @if(\Illuminate\Support\Facades\Auth::user())
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                    {{ Auth::user()->name }}
+                                    {{ \Illuminate\Support\Facades\Auth::user()->name }}
                                 </a>
+                                @endif
                                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" href="{{url('/profil')}}" role="button">Profil</a>
+
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
                                         {{ __('Déconnexion') }}
                                     </a>
-
                                     <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                                         @csrf
                                     </form>
@@ -162,6 +165,16 @@
                     La location a été annuler.
                 </div>
             </div>
+
+            <div id="toastUpdateProfil" class="toast" role="alert">
+                <div class="toast-header">
+                    <strong class="me-auto">Modification de données </strong>
+                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+                <div class="toast-body">
+                    Les données ont été modifié.
+                </div>
+            </div>
         </div>
 
 
@@ -193,7 +206,117 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="deluser" aria-hidden="true" aria-labelledby="exampleModalToggleLabel2" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Êtes-vous sûr de vouloir supprimer votre compte ?</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" data-bs-target="#exampleModalToggle" data-bs-toggle="modal" data-bs-dismiss="modal">Annuler</button>
+                    <button type="button" class="btn btn-primary" id="btnAnnulModal" onclick="event.preventDefault();
+                                                     document.getElementById('delProfil-form').submit();">
+                        Valider
+                    </button>
+                    <form id="delProfil-form" action="{{route('delprofil') }}" method="POST" class="d-none">
+                        @csrf
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="modifEmailmodal" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalToggleLabel">Mon profil</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        @if(\Illuminate\Support\Facades\Auth::user())
+                            <div class="flex-column w-100 d-flex">
+                                <label for="emailProfil">Email :</label>
+                                <input id="emailProfil" type="email" class="form-control emailProfil" name="email" value="{{auth()->user()->email}}" required autocomplete="email" autofocus>
+                                <div id="errorEmail" class="errormsg">
 
+                                </div>
+                                <label for="passwordE">Mot de passe actuel :</label>
+                                <input id="passwordE" type="password" class="form-control passwordProfil" name="password" required>
+                                <div class="errormsg errorPassword">
+
+                                </div>
+                            </div>
+                        @endif
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-primary" data-bs-dismiss="modal">Annuler</button>
+                        <button class="btn btn-outline-success mx-2" type="button" id="btnProfilEmail">valider</button>
+                    </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="modifNamemodal" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalToggleLabel">Changer prenom</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        @if(\Illuminate\Support\Facades\Auth::user())
+                            <div class="flex-column w-100 d-flex">
+                                <label for="nameProfil">Prenom :</label>
+                                <input id="nameProfil" type="text" class="form-control" name="name" value="{{ Auth::user()->name }}" required autocomplete="name" autofocus>
+                                <div id="errorName" class="errormsg">
+
+                                </div>
+                                <label for="password">Mot de passe actuel :</label>
+                                <input id="password" type="password" class="form-control passwordProfil" name="password" required autocomplete="current-password">
+                                <div class="errormsg errorPassword">
+
+                                </div>
+                            </div>
+                        @endif
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-primary" data-bs-dismiss="modal">Annuler</button>
+                        <button class="btn btn-outline-success mx-2" id="btnProfilName">valider</button>
+                    </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modifPasswordmodal" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalToggleLabel">Changer de mot de passe</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        @if(\Illuminate\Support\Facades\Auth::user())
+                            <div class="flex-column w-100 d-flex">
+                                <label for="password">Mot de passe actuel :</label>
+                                <input id="password" type="password" class="form-control passwordProfil" name="password" required autocomplete="current-password">
+                                <div class="errormsg errorPassword">
+
+                                </div>
+                                <label for="newPassword">Nouveau mot de passe :</label>
+                                <input id="newPassword" type="password" class="form-control" name="newPassword" required>
+                                <div class="errormsg errorNewPassword">
+
+                                </div>
+                            </div>
+                        @endif
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-primary" data-bs-dismiss="modal">Annuler</button>
+                        <button class="btn btn-outline-success mx-2" id="btnProfilPassword">valider</button>
+                    </div>
+            </div>
+        </div>
+    </div>
 
 </body>
 </html>
