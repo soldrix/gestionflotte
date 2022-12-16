@@ -242,7 +242,7 @@
 
                                 </div>
                                 <label for="passwordE">Mot de passe actuel :</label>
-                                <input id="passwordE" type="password" class="form-control passwordProfil" name="password" required autocomplete="current-password">
+                                <input id="passwordE" type="password" class="form-control passwordProfil" name="password" required>
                                 <div class="errormsg errorPassword">
 
                                 </div>
